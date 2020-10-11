@@ -1,5 +1,10 @@
 import React from 'react'
-import Document, { DocumentContext } from 'next/document' // eslint-disable-line no-shadow
+import Document, {
+  DocumentContext,
+  Html,
+  Main,
+  NextScript,
+} from 'next/document' // eslint-disable-line no-shadow
 import { ServerStyleSheet } from 'styled-components'
 
 export default class MyDocument extends Document {
@@ -27,5 +32,16 @@ export default class MyDocument extends Document {
     } finally {
       sheet.seal()
     }
+  }
+
+  render() {
+    return (
+      <Html>
+        <body>
+          <Main />
+          <NextScript />
+        </body>
+      </Html>
+    )
   }
 }

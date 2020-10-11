@@ -15,8 +15,10 @@
     "next": "^9.5.1",
     "react": "^16.12.0",
     "react-dom": "^16.13.1",
+    "react-focus-lock": "^2.4.1",
     "rect": "^1.2.1",
-    "styled-components": "^5.1.1"
+    "styled-components": "^5.1.1",
+    "styled-sanitize": "^1.1.2"
   },
   "devDependencies": {
     "@strv/eslint-config-react": "^3.1.2",

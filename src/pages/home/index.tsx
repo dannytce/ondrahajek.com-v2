@@ -1,19 +1,17 @@
 import React from 'react'
 import { NextPage } from 'next'
 
-import { SEO } from '~/components/seo'
-import { Logo } from '~/components/logo'
+import { Page } from '~/components/Page'
+import { Portfolio } from '~/components/Portfolio'
 
-import { Page } from './style'
+type iProps = {
+  portfolioUrl?: string
+}
 
-export const Home: NextPage = () => {
+export const Home: NextPage<iProps> = ({ portfolioUrl = '' }) => {
   return (
-    <Page>
-      <SEO
-        title="Next.js app"
-        description="change me before going to production"
-      />
-      <Logo />
+    <Page title="Aerial" subTitle="Video, Photography" isHomepage>
+      <Portfolio portfolioUrl={portfolioUrl} />
     </Page>
   )
 }
