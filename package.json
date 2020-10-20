@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
+    "export": "next export",
     "start": "next start",
     "type-check": "tsc",
     "lint": "eslint src --ext .ts,.tsx",
@@ -14,6 +15,7 @@
   "dependencies": {
     "next": "^9.5.1",
     "react": "^16.12.0",
+    "react-datocms": "^1.2.6",
     "react-dom": "^16.13.1",
     "react-focus-lock": "^2.4.1",
     "rect": "^1.2.1",
@@ -50,9 +52,6 @@
   "lint-staged": {
     "*.{js,ts,tsx}": [
       "eslint --fix",
-      "prettier --write"
-    ],
-    "*.css": [
       "stylelint",
       "prettier --write"
     ],
