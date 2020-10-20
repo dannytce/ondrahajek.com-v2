@@ -2,6 +2,7 @@ import React from 'react'
 import Document, {
   DocumentContext,
   Html,
+  Head,
   Main,
   NextScript,
 } from 'next/document' // eslint-disable-line no-shadow
@@ -37,6 +38,7 @@ export default class MyDocument extends Document {
   render() {
     return (
       <Html>
+        <Head />
         <body>
           <Main />
           <NextScript />
