@@ -26,11 +26,6 @@ export const ListItem = styled.li`
   }
 `
 
-export const Image = styled.img`
-  height: auto;
-  width: 100%;
-`
-
 export const ImageWrapper = styled.div`
   position: relative;
   z-index: -1;

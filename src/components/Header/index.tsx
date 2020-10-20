@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 
 import { Nav } from '~/components/Nav'
-import { PlayShowreel } from '~/pages/home/components/PlayShowreel'
+import { PlayShowreel } from '~/components/PlayShowreel'
 import { TrustedBy } from '~/pages/about/components/TrustedBy'
 import { Container } from '~/components/Page/styled'
 

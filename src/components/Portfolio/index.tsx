@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 import { useRouter } from 'next/router'
+import { Image } from 'react-datocms'
 import NextLink from 'next/link'
 
 import { Modal } from '~/components/Modal'
@@ -10,27 +11,16 @@ import {
   List,
   ListItem,
   Link,
-  Image,
   ImageWrapper,
   Title,
   Description,
 } from './styled'
 import portfolios from './data'
 
-type Props = {
-  openModal: void
-  isModalOpen?: boolean
-  portfolioUrl?: string
-}
-
 const getPlayerProps = (portfolioUrl) =>
   portfolios.find((item) => item.href === portfolioUrl)
 
-export const Portfolio: FC<Props> = ({
-  isModalOpen,
-  portfolioUrl,
-  openModal,
-}) => {
+export const Portfolio = ({ isModalOpen, portfolios }) => {
   const router = useRouter()
 
   return (
@@ -41,26 +31,24 @@ export const Portfolio: FC<Props> = ({
         </Modal>
       )}
       <List>
-        {portfolios.map((item, key) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <ListItem key={key}>
+        {portfolios.map((portfolio) => (
+          <ListItem key={portfolio.slug}>
             <NextLink
-              href={`/portfolio/${item.href}`}
-              as={`/portfolio/${item.href}`}
+              href="/portfolio/[slug]"
+              as={`/portfolio/${portfolio.slug}`}
               passHref
             >
               <Link>
                 <ImageWrapper>
                   <Image
-                    src={`/portfolio/${item.href}.jpg`}
-                    srcSet={`/portfolio/${item.href}.jpg 1x, /portfolio/${item.href}@2x.jpg 2x`}
-                    width={418}
-                    height={230}
-                    alt={item.title}
+                    data={{
+                      ...portfolio.thumbnail.responsiveImage,
+                      alt: `Cover Image for ${portfolio.title}. ${portfolio.thumbnail.smartTags}`,
+                    }}
                   />
                 </ImageWrapper>
-                <Title>{item.title}</Title>
-                <Description>{item.description}</Description>
+                <Title>{portfolio.title}</Title>
+                <Description>{portfolio.subtitle}</Description>
               </Link>
             </NextLink>
           </ListItem>
