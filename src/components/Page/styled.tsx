@@ -23,7 +23,7 @@ export const Main = styled.main`
     content: '';
     position: absolute;
     left: 0;
-    top: 0;
+    top: 2px;
     width: 100%;
     height: 45vh;
     transform: translateY(-100%);
