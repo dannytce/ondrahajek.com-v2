@@ -29,10 +29,8 @@ export const Figcaption = styled.figcaption`
   margin: -0.45em 0 0 20px;
   line-height: 1;
   text-transform: uppercase;
-`
-
-export const Img = styled.img`
-  width: 100%;
+  position: relative;
+  z-index: 1;
 `
 
 export const Description = styled.span`

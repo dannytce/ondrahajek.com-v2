@@ -74,3 +74,25 @@ export async function getAllPortfolios() {
 
   return data?.allPortfolios
 }
+
+export async function getAllGalleries() {
+  const data = await fetchAPI(`
+    {
+      allGalleries {
+        photos {
+          id
+          alt
+          title
+          responsiveImage(imgixParams: {h: "600", w: "1077", fit: crop }) {
+            ...responsiveImageFragment
+          }
+          smartTags
+        }
+      }
+    }
+    ${responsiveImageFragment}
+  `)
+
+  // TODO: refactor query to match one gallery
+  return data?.allGalleries[0].photos
+}
