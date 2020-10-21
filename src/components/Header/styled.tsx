@@ -1,3 +1,4 @@
+import React from 'react'
 import styled, { css } from 'styled-components'
 
 import { Container } from '~/components/Page/styled'
@@ -5,9 +6,13 @@ import { font, zIndex, sizes } from '~/styles/variables'
 import { mq } from '~/styles/mq'
 
 const backgroundImage = ({ title }) =>
-  css`background-image: url('/header-${title}.jpg');`
+  css`
+    background-image: url('/header-${title}.jpg');
+  `
 
-export const StyledHeader = styled.header`
+export const StyledHeader = styled(({ title, ...rest }) => (
+  <header {...rest} />
+))`
   top: 0;
   width: 100%;
   height: ${sizes.header.height};
@@ -46,12 +51,13 @@ export const HeaderGroup = styled.div`
 
 export const H1 = styled.h1`
   font-size: 6rem;
-  ${mq.tablet}
+  ${mq.tablet} {
     font-size: 10rem;
-  };
+  }
 
   ${font.Teko};
   ${font.semibold};
+
   text-transform: uppercase;
   margin: 0;
   padding: 0;

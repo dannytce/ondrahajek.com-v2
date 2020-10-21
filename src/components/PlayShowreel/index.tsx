@@ -28,7 +28,7 @@ export const PlayShowreel: FC = () => {
           <StyledPlayIcon />
         </Circle>
       </A>
-      <Modal isOpen={isShown} hide={toggle}>
+      <Modal isOpen={isShown} onRequestClose={toggle}>
         <Player
           src="https://player.vimeo.com/video/245268560"
           title="Showreel"

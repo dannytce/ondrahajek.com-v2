@@ -1,9 +1,10 @@
-import React, { FC } from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { Image } from 'react-datocms'
 import NextLink from 'next/link'
 
 import { Modal } from '~/components/Modal'
+// import Modal from '~/components/ReactModal'
 import Player from '~/components/Player'
 import { Container } from '~/components/Page/styled'
 
@@ -15,27 +16,32 @@ import {
   Title,
   Description,
 } from './styled'
-import portfolios from './data'
 
-const getPlayerProps = (portfolioUrl) =>
-  portfolios.find((item) => item.href === portfolioUrl)
+const getPlayerProps = (portfolios, slug) =>
+  portfolios.find((item) => item.slug === slug)
 
-export const Portfolio = ({ isModalOpen, portfolios }) => {
+export const Portfolio = ({ slug, isModalOpen, portfolios }) => {
   const router = useRouter()
+
+  // const [isOpen, setIsOpen] = useState(Boolean(slug))
+
+  // function handleClick(event: MouseEvent) {
+  //   event.preventDefault()
+  // }
 
   return (
     <Container>
-      {isModalOpen && (
+      {slug && (
         <Modal isOpen onRequestClose={() => router.push('/')}>
-          <Player {...getPlayerProps(portfolioUrl)} />
+          <Player {...getPlayerProps(portfolios, slug)} />
         </Modal>
       )}
       <List>
         {portfolios.map((portfolio) => (
           <ListItem key={portfolio.slug}>
             <NextLink
-              href="/portfolio/[slug]"
-              as={`/portfolio/${portfolio.slug}`}
+              href={`/portfolio/${portfolio.slug}`}
+              scroll={false}
               passHref
             >
               <Link>

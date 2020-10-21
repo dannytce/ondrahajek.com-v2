@@ -14,18 +14,31 @@ import {
 
 export { useModal } from './useModal'
 
+function canUseDOM() {
+  return !!(
+    typeof window !== 'undefined' &&
+    window.document &&
+    window.document.createElement
+  )
+}
+
 export interface Props {
   isOpen: boolean
-  hide: () => void
+  onRequestClose: (event: KeyboardEvent | MouseEvent) => void
   headerText: string
   children: () => ReactElement
 }
 
-export const Modal: FC<Props> = ({ isOpen, hide, children, headerText }) => {
+export const Modal: FC<Props> = ({
+  isOpen,
+  onRequestClose,
+  children,
+  headerText,
+}) => {
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.code === 'Escape' && isOpen) {
-        hide()
+        onRequestClose(event)
       }
     }
 
@@ -37,11 +50,11 @@ export const Modal: FC<Props> = ({ isOpen, hide, children, headerText }) => {
     return () => {
       document.removeEventListener('keydown', onKeyDown, false)
     }
-  }, [isOpen, hide])
+  }, [isOpen, onRequestClose])
 
   const modal = (
     <>
-      <Backdrop onClick={hide} />
+      <Backdrop onClick={onRequestClose} />
       <FocusLock>
         <Wrapper
           aria-modal
@@ -52,7 +65,7 @@ export const Modal: FC<Props> = ({ isOpen, hide, children, headerText }) => {
           <StyledModal>
             <Header>
               <HeaderText>{headerText}</HeaderText>
-              <CloseButton onClick={hide}>X</CloseButton>
+              <CloseButton onClick={onRequestClose}>X</CloseButton>
             </Header>
             <Content>{children}</Content>
           </StyledModal>
@@ -60,6 +73,10 @@ export const Modal: FC<Props> = ({ isOpen, hide, children, headerText }) => {
       </FocusLock>
     </>
   )
+
+  if (!canUseDOM()) {
+    return null
+  }
 
   return isOpen ? ReactDOM.createPortal(modal, document.body) : null
 }

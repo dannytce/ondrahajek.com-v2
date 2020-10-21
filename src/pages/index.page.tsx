@@ -1,5 +1,5 @@
 import React from 'react'
-import { NextPage, InferGetStaticPropsType } from 'next'
+import { InferGetStaticPropsType } from 'next'
 
 import { Page } from '~/components/Page'
 import { Portfolio } from '~/components/Portfolio'
@@ -15,12 +15,13 @@ export async function getStaticProps() {
   }
 }
 
-const Home = ({
+export const Home = ({
   portfolios,
-}: InferGetStaticPropsType<typeof getStaticProps>) => {
+  slug,
+}: { slug: string } & InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
     <Page title="Aerial" subTitle="Video, Photography" isHomepage>
-      <Portfolio portfolios={portfolios} />
+      <Portfolio portfolios={portfolios} slug={slug} />
     </Page>
   )
 }

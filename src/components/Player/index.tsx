@@ -4,14 +4,14 @@ import { Wrapper, VideoContainer, Iframe } from './styled'
 
 type Props = {
   title: string
-  src: string
+  video: string
 }
 
-const Player: FC<Props> = ({ title, src }) => (
+const Player: FC<Props> = ({ title, video }) => (
   <Wrapper>
     <VideoContainer>
       <Iframe
-        src={`${src}/?autoplay=1&loop=1&autopause=0`}
+        src={`${video}/?autoplay=1&loop=1&autopause=0`}
         title={`${title} video`}
         frameBorder="0"
         allowFullScreen
