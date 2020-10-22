@@ -75,10 +75,10 @@ export async function getAllPortfolios() {
   return data?.allPortfolios
 }
 
-export async function getAllGalleries() {
+export async function getGallery() {
   const data = await fetchAPI(`
     {
-      allGalleries {
+      gallery {
         photos {
           id
           alt
@@ -93,6 +93,5 @@ export async function getAllGalleries() {
     ${responsiveImageFragment}
   `)
 
-  // TODO: refactor query to match one gallery
-  return data?.allGalleries[0].photos
+  return data.gallery.photos
 }

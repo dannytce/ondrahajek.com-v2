@@ -2,10 +2,10 @@ import React from 'react'
 
 import { Page } from '~/components/Page'
 import { Gallery } from '~/components/Gallery'
-import { getAllGalleries } from '~/api'
+import { getGallery } from '~/api'
 
 export async function getStaticProps() {
-  const photos = await getAllGalleries()
+  const photos = await getGallery()
 
   return {
     props: {
