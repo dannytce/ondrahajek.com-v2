@@ -37,7 +37,7 @@ export const Portfolio = ({ slug, isModalOpen, portfolios }) => {
         </Modal>
       )}
       <List>
-        {portfolios.map((portfolio) => (
+        {portfolios?.map((portfolio) => (
           <ListItem key={portfolio.slug}>
             <NextLink
               href={`/portfolio/${portfolio.slug}`}

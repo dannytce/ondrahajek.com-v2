@@ -10,7 +10,7 @@ export async function getStaticProps() {
 
   return {
     props: {
-      portfolios,
+      portfolios: portfolios || [],
     },
   }
 }

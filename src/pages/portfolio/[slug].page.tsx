@@ -12,7 +12,7 @@ export { getStaticProps } from '../index.page'
 export async function getStaticPaths() {
   const portfolios = await getAllPortfoliosWithSlug()
   return {
-    paths: portfolios.map((portfolio) => `/portfolio/${portfolio.slug}`),
+    paths: portfolios.map((portfolio) => `/portfolio/${portfolio.slug}`) || [],
     fallback: true,
   }
 }
