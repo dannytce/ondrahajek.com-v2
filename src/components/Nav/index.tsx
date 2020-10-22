@@ -1,4 +1,5 @@
 import React from 'react'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 
 import { Container } from '~/components/Page/styled'
@@ -12,26 +13,35 @@ const navLinks = [
   { text: 'About', link: '/about' },
 ]
 
-export const Nav = () => (
-  <StyledNav>
-    <Container>
-      <Link href="/">
-        <LogoLink href="/">
-          <img src="/logo-ondrahajek.svg" alt="Ondra Hajek" />
-        </LogoLink>
-      </Link>
+export const Nav = () => {
+  const router = useRouter()
 
-      <List>
-        {navLinks.map((item, index) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <ListItem key={index}>
-            <Link href={item.link}>
-              <NavLink href={item.link}>{item.text}</NavLink>
-            </Link>
-          </ListItem>
-        ))}
-      </List>
-    </Container>
-    <NavShadow />
-  </StyledNav>
-)
+  return (
+    <StyledNav>
+      <Container>
+        <Link href="/">
+          <LogoLink href="/">
+            <img src="/logo-ondrahajek.svg" alt="Ondra Hajek" />
+          </LogoLink>
+        </Link>
+
+        <List>
+          {navLinks.map((item, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <ListItem key={index}>
+              <Link href={item.link}>
+                <NavLink
+                  href={item.link}
+                  className={router.pathname === item.link ? 'active' : null}
+                >
+                  {item.text}
+                </NavLink>
+              </Link>
+            </ListItem>
+          ))}
+        </List>
+      </Container>
+      <NavShadow />
+    </StyledNav>
+  )
+}
