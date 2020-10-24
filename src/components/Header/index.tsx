@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import { useRouter } from 'next/router'
 import { Image } from 'react-datocms'
 
@@ -32,6 +32,11 @@ export const Header: FC<Props> = ({
   headerBackground,
 }) => {
   const router = useRouter()
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false)
+
+  const onLoadedData = () => {
+    setIsVideoLoaded(true)
+  }
 
   return (
     <>
@@ -50,7 +55,14 @@ export const Header: FC<Props> = ({
 
         {isHomepage && (
           <VideoContainer>
-            <Video poster="/header-Aerial.jpg" autoPlay loop muted>
+            <Video
+              onLoadedData={onLoadedData}
+              style={{ opacity: isVideoLoaded ? 1 : 0 }}
+              autoPlay
+              playsInline
+              loop
+              muted
+            >
               <source src="/bg.mp4" type="video/mp4" />
             </Video>
           </VideoContainer>
@@ -58,6 +70,7 @@ export const Header: FC<Props> = ({
         {headerBackground && (
           <BackgroundImgWrapper>
             <Image
+              style={{ opacity: isVideoLoaded ? 0 : 1 }}
               data={{
                 ...headerBackground.responsiveImage,
               }}
