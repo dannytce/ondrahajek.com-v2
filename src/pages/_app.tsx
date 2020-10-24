@@ -1,6 +1,6 @@
 import React from 'react'
 import type { AppProps } from 'next/app'
-import { Head } from 'next/head'
+import Head from 'next/head'
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => (
   <>
