@@ -7,9 +7,8 @@ const fontFamily = (family) => `font-family: ${family}`
 const fontWeight = (weight) => `font-weight: ${weight};`
 
 export const font = {
-  baseFamily: 'font-family: Impact, Arial, sans-serif',
+  baseFamily: 'font-family: Montserrat, Impact, Arial, sans-serif',
   Teko: fontFamily('Teko'),
-  montserratFamily: 'font-family: Montserrat',
   Montserrat: fontFamily('Montserrat'),
   regular: fontWeight(400),
   semibold: fontWeight(600),

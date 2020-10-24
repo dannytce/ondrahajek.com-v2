@@ -19,9 +19,5 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 1.8rem;
     ${font.baseFamily};
     padding-top: ${sizes.header.height};
-
-    &.fontsLoaded {
-      ${font.montserratFamily};
-    }
   }
 `
