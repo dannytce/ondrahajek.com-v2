@@ -14,6 +14,7 @@ const Player: FC<Props> = ({ title, video }) => (
         src={`${video}/?autoplay=1&loop=1&autopause=0`}
         title={`${title} video`}
         frameBorder="0"
+        allow="autoplay; fullscreen"
         allowFullScreen
       />
     </VideoContainer>
