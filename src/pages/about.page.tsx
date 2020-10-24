@@ -26,13 +26,13 @@ const AboutPage = ({ headerBackground }) => (
     <Section title="Cool numbers">
       <NumbersList>
         <NumbersListItem>
-          <strong>62</strong> Projects
+          <strong>135</strong> Projects
         </NumbersListItem>
         <NumbersListItem>
-          <strong>16</strong> Different countries
+          <strong>22</strong> Different countries
         </NumbersListItem>
         <NumbersListItem>
-          <strong>350+</strong> Flight hours
+          <strong>800+</strong> Flight hours
         </NumbersListItem>
       </NumbersList>
     </Section>
