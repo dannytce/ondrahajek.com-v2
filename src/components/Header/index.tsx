@@ -34,7 +34,7 @@ export const Header: FC<Props> = ({
   const router = useRouter()
   const [isVideoLoaded, setIsVideoLoaded] = useState(false)
 
-  const onLoadedData = () => {
+  const onCanPlay = () => {
     setIsVideoLoaded(true)
   }
 
@@ -56,7 +56,7 @@ export const Header: FC<Props> = ({
         {isHomepage && (
           <VideoContainer>
             <Video
-              onLoadedData={onLoadedData}
+              onCanPlay={onCanPlay}
               style={{ opacity: isVideoLoaded ? 1 : 0 }}
               autoPlay
               playsInline
@@ -68,9 +68,8 @@ export const Header: FC<Props> = ({
           </VideoContainer>
         )}
         {headerBackground && (
-          <BackgroundImgWrapper>
+          <BackgroundImgWrapper style={{ opacity: isVideoLoaded ? 0 : 1 }}>
             <Image
-              style={{ opacity: isVideoLoaded ? 0 : 1 }}
               data={{
                 ...headerBackground.responsiveImage,
               }}

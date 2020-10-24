@@ -38,6 +38,7 @@ export const BackgroundImgWrapper = styled.div`
   right: 0;
   bottom: 0;
   z-index: ${zIndex.header};
+  transition: opacity 400ms ease 0ms;
 
   > div {
     min-height: ${sizes.header.height};
