@@ -30,7 +30,7 @@ export const PlayShowreel: FC = () => {
       </A>
       <Modal isOpen={isShown} onRequestClose={toggle}>
         <Player
-          src="https://player.vimeo.com/video/245268560"
+          video="https://player.vimeo.com/video/435073664"
           title="Showreel"
         />
       </Modal>
