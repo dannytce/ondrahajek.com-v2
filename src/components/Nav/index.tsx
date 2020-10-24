@@ -21,7 +21,7 @@ export const Nav = () => {
       <Container>
         <Link href="/">
           <LogoLink href="/">
-            <img src="/logo-ondrahajek.svg" alt="Ondra Hajek" />
+            <img src="/logo-ondrahajek.svg" alt="ONDRAHAJEK.COM" />
           </LogoLink>
         </Link>
 
