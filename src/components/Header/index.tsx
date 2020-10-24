@@ -1,8 +1,10 @@
 import React, { FC } from 'react'
+import { useRouter } from 'next/router'
+import { Image } from 'react-datocms'
 
 import { Nav } from '~/components/Nav'
 import { PlayShowreel } from '~/components/PlayShowreel'
-import { TrustedBy } from '~/pages/about/components/TrustedBy'
+import { TrustedBy } from '~/components/About/TrustedBy'
 import { Container } from '~/components/Page/styled'
 
 import {
@@ -10,6 +12,7 @@ import {
   H2,
   HeaderGroup,
   StyledHeader,
+  BackgroundImgWrapper,
   Video,
   VideoContainer,
 } from './styled'
@@ -26,30 +29,44 @@ export const Header: FC<Props> = ({
   subTitle,
   isAboutPage,
   isHomepage,
-}) => (
-  <>
-    <StyledHeader title={title}>
-      <Container>
-        {subTitle ? (
-          <HeaderGroup>
-            <H1>{title}</H1>
-            <H2>{subTitle}</H2>
-          </HeaderGroup>
-        ) : (
-          <H1>{title}</H1>
-        )}
-        {isHomepage && <PlayShowreel />}
-      </Container>
+  headerBackground,
+}) => {
+  const router = useRouter()
 
-      {isHomepage && (
-        <VideoContainer>
-          <Video poster="/header-Aerial.jpg" autoPlay loop muted>
-            <source src="/bg.mp4" type="video/mp4" />
-          </Video>
-        </VideoContainer>
-      )}
-    </StyledHeader>
-    {isAboutPage && <TrustedBy />}
-    <Nav />
-  </>
-)
+  return (
+    <>
+      <StyledHeader>
+        <Container>
+          {subTitle ? (
+            <HeaderGroup>
+              <H1>{title}</H1>
+              <H2>{subTitle}</H2>
+            </HeaderGroup>
+          ) : (
+            <H1>{title}</H1>
+          )}
+          {isHomepage && <PlayShowreel />}
+        </Container>
+
+        {isHomepage && (
+          <VideoContainer>
+            <Video poster="/header-Aerial.jpg" autoPlay loop muted>
+              <source src="/bg.mp4" type="video/mp4" />
+            </Video>
+          </VideoContainer>
+        )}
+        {headerBackground && (
+          <BackgroundImgWrapper>
+            <Image
+              data={{
+                ...headerBackground.responsiveImage,
+              }}
+            />
+          </BackgroundImgWrapper>
+        )}
+      </StyledHeader>
+      {isAboutPage && <TrustedBy />}
+      <Nav />
+    </>
+  )
+}

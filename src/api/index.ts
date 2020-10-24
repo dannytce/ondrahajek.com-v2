@@ -95,3 +95,20 @@ export async function getGallery() {
 
   return data.gallery.photos
 }
+
+export async function getHeaderBackgroundByPage(page:string) {
+  const data = await fetchAPI(`
+    {
+      headerBackground(filter: {page: {eq: "${page}"}}) {
+        photo {
+          responsiveImage {
+            ...responsiveImageFragment
+          }
+        }
+      }
+    }
+    ${responsiveImageFragment}
+  `)
+
+  return data.headerBackground.photo
+}

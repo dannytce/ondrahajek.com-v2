@@ -1,25 +1,13 @@
-import React from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import { Container } from '~/components/Page/styled'
 import { font, zIndex, sizes } from '~/styles/variables'
 import { mq } from '~/styles/mq'
 
-const backgroundImage = ({ title }) =>
-  css`
-    background-image: url('/header-${title}.jpg');
-  `
-
-export const StyledHeader = styled(({ title, ...rest }) => (
-  <header {...rest} />
-))`
+export const StyledHeader = styled.header`
   top: 0;
   width: 100%;
   height: ${sizes.header.height};
-  background: url('/header-Aerial.jpg') no-repeat top center;
-  ${backgroundImage};
-  background-attachment: fixed;
-  background-size: cover;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -43,6 +31,28 @@ export const StyledHeader = styled(({ title, ...rest }) => (
   }
 `
 
+export const BackgroundImgWrapper = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: ${zIndex.header};
+
+  > div {
+    min-height: ${sizes.header.height};
+  }
+
+  img {
+    position: absolute;
+    min-width: 100%;
+    min-height: ${sizes.header.height};
+    pointer-events: none;
+    object-fit: cover;
+    z-index: 2;
+  }
+`
+
 export const HeaderGroup = styled.div`
   display: flex;
   flex-direction: column;
@@ -57,7 +67,6 @@ export const H1 = styled.h1`
 
   ${font.Teko};
   ${font.semibold};
-
   text-transform: uppercase;
   margin: 0;
   padding: 0;

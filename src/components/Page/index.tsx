@@ -19,6 +19,7 @@ export const Page: FC<Props> = ({
   subTitle,
   isHomepage,
   isAboutPage,
+  headerBackground,
   children,
 }) => (
   <>
@@ -28,6 +29,7 @@ export const Page: FC<Props> = ({
       subTitle={subTitle}
       isHomepage={isHomepage}
       isAboutPage={isAboutPage}
+      headerBackground={headerBackground}
     />
     <div id="modal"></div>
     <Main>
