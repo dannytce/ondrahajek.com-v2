@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next",
-    "build": "next build",
-    "export": "next export",
+    "build": "next build && next export",
     "start": "next start",
     "type-check": "tsc",
     "lint": "eslint src --ext .ts,.tsx",
