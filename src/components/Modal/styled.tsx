@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
 import { zIndex } from '~/styles/variables'
 
@@ -59,8 +59,20 @@ export const Backdrop = styled.div`
   background: rgba(0, 0, 0, 0.3);
   z-index: 500;
 `
+
 export const StyledModal = styled.div``
 export const Header = styled.div``
 export const HeaderText = styled.div``
 
-export const Content = styled.div``
+const scaleIn = keyframes`
+  0% {
+    transform: scale(0.1)
+  }
+  100% {
+    transform: scale(1)
+  }
+`
+
+export const Content = styled.div`
+  animation: ${scaleIn} 1s ease-in-out forwards;
+`
