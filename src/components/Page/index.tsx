@@ -32,7 +32,7 @@ export const Page: FC<Props> = ({
       headerBackground={headerBackground}
     />
     <div id="modal"></div>
-    <Main>
+    <Main id={isHomepage ? 'portfolio' : null}>
       {children}
       <Footer />
     </Main>
