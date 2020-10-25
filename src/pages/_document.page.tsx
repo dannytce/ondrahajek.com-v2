@@ -40,14 +40,14 @@ export default class MyDocument extends Document {
 
   render() {
     return (
-      <Html>
+      <Html lang="en">
         <Head>
           <meta
-            name="desciption"
+            name="description"
             content="Web portfolio of drone pilot Ondra Hajek, who will make your projects more interesting. He specialises in documentaries, film, music video, commercials and architecture."
           />
           <meta
-            name="og:desciption"
+            name="og:description"
             content="Web portfolio of drone pilot Ondra Hajek, who will make your projects more interesting. He specialises in documentaries, film, music video, commercials and architecture."
           />
           <meta

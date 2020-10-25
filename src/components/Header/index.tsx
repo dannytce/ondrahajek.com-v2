@@ -73,6 +73,8 @@ export const Header: FC<Props> = ({
               data={{
                 ...headerBackground.responsiveImage,
               }}
+              role="presentation"
+              alt=""
             />
           </BackgroundImgWrapper>
         )}
