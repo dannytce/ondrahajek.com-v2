@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 
 import { Container } from '~/components/Page/styled'
 import { color, font, zIndex } from '~/styles/variables'
@@ -34,6 +34,33 @@ export const List = styled.ul`
   justify-content: space-between;
 `
 
+export const fadeIn = keyframes`
+  0% {
+    opacity:0;
+    transform: scale(0.8)
+  }
+  100% {
+    opacity:1;
+    transform: scale(1)
+  }
+`
+
+function animationDelay() {
+  let styles = ''
+
+  for (let i = 0; i < 10; i += 1) {
+    styles += `
+       &:nth-child(${i}) {
+         animation-delay: ${i * 0.09}s;
+       }
+     `
+  }
+
+  return css`
+    ${styles}
+  `
+}
+
 export const ListItem = styled.li`
   margin: 0 20px;
 
@@ -44,4 +71,9 @@ export const ListItem = styled.li`
   &:last-child {
     margin-right: 0;
   }
+
+  opacity: 0;
+  animation: ${fadeIn} 0.5s ease;
+  animation-fill-mode: forwards;
+  ${animationDelay()}
 `
