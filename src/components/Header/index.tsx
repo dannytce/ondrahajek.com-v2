@@ -72,9 +72,8 @@ export const Header: FC<Props> = ({
             <Image
               data={{
                 ...headerBackground.responsiveImage,
+                alt: '',
               }}
-              role="presentation"
-              alt=""
             />
           </BackgroundImgWrapper>
         )}
