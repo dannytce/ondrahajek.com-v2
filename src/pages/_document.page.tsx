@@ -78,10 +78,7 @@ export default class MyDocument extends Document {
           <noscript>
             <link rel="stylesheet" href={fontsHref} />
           </noscript>
-          <link
-            href="https://fonts.googleapis.com/css?family=Teko:400,600|Montserrat:400,700"
-            rel="stylesheet"
-          />
+          <link href={fontsHref} rel="stylesheet" />
         </Head>
         <body>
           <Main />
