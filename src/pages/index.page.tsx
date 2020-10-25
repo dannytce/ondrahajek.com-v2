@@ -1,5 +1,6 @@
 import React from 'react'
 import { InferGetStaticPropsType } from 'next'
+import Head from 'next/head'
 
 import { Page } from '~/components/Page'
 import { Portfolio } from '~/components/Portfolio'
@@ -29,6 +30,13 @@ export const Home = ({
       headerBackground={headerBackground}
       isHomepage
     >
+      <Head>
+        <title>ondrahajek.com | AERIAL Video & Photography</title>
+        <meta
+          property="og:title"
+          content="ondrahajek.com | AERIAL Video & Photography"
+        />
+      </Head>
       <Portfolio portfolios={portfolios} slug={slug} />
     </Page>
   )

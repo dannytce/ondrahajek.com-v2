@@ -1,4 +1,5 @@
 import React from 'react'
+import Head from 'next/head'
 
 import { Page } from '~/components/Page'
 import {
@@ -23,6 +24,13 @@ export async function getStaticProps() {
 
 const AboutPage = ({ headerBackground }) => (
   <Page title="About" headerBackground={headerBackground} isAboutPage>
+    <Head>
+      <title>About - ondrahajek.com | AERIAL Video & Photography</title>
+      <meta
+        property="og:title"
+        content="About - ondrahajek.com | AERIAL Video & Photography"
+      />
+    </Head>
     <Section title="Cool numbers">
       <NumbersList>
         <NumbersListItem>

@@ -1,4 +1,5 @@
 import React from 'react'
+import Head from 'next/head'
 
 import { Page } from '~/components/Page'
 import { Gallery } from '~/components/Gallery'
@@ -18,6 +19,13 @@ export async function getStaticProps() {
 
 export const GalleryPage = ({ photos = [], headerBackground }) => (
   <Page title="Gallery" headerBackground={headerBackground}>
+    <Head>
+      <title>Gallery - ondrahajek.com | AERIAL Video & Photography</title>
+      <meta
+        property="og:title"
+        content="Gallery - ondrahajek.com | AERIAL Video & Photography"
+      />
+    </Head>
     <Gallery photos={photos} />
   </Page>
 )
