@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 import { Container } from '~/components/Page/styled'
 
-import NavShadow from './components/NavShadow'
+// import NavShadow from './components/NavShadow'
 import { StyledNav, List, ListItem, NavLink, LogoLink } from './styled'
 
 const navLinks = [
@@ -41,7 +41,7 @@ export const Nav = () => {
           ))}
         </List>
       </Container>
-      <NavShadow />
+      {/* <NavShadow /> */}
     </StyledNav>
   )
 }
