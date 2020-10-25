@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { Image } from 'react-datocms'
 
@@ -15,7 +16,7 @@ import {
   Description,
 } from './styled'
 
-const getPlayerProps = (portfolios, slug) =>
+const getPortfolioDetail = (portfolios, slug) =>
   portfolios.find((item) => item.slug === slug)
 
 export const Portfolio = ({ slug: incomingSlug, isModalOpen, portfolios }) => {
@@ -39,12 +40,25 @@ export const Portfolio = ({ slug: incomingSlug, isModalOpen, portfolios }) => {
     setSlug(null)
   }
 
+  let portfolioDetail
+  if (slug) {
+    portfolioDetail = getPortfolioDetail(portfolios, slug)
+  }
+
   return (
     <Container>
       {slug && (
-        <Modal isOpen onRequestClose={handleClose}>
-          <Player {...getPlayerProps(portfolios, slug)} />
-        </Modal>
+        <>
+          <Modal isOpen onRequestClose={handleClose}>
+            <Player {...portfolioDetail} />
+          </Modal>
+          <Head>
+            <title key="title">
+              {portfolioDetail.title} - ondrahajek.com | AERIAL Video &
+              Photography
+            </title>
+          </Head>
+        </>
       )}
       <List>
         {portfolios?.map((portfolio) => (
