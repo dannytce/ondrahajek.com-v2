@@ -59,6 +59,7 @@ export default class MyDocument extends Document {
             href="https://fonts.gstatic.com"
             crossOrigin="true"
           />
+          <link rel="preconnect" href="https://www.datocms-assets.com" />
           <link rel="preconnect" href="https://www.youtube.com" />
           <link rel="preconnect" href="https://i.ytimg.com" />
           <link rel="preconnect" href="https://i9.ytimg.com" />
