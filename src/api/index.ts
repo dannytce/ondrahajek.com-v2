@@ -44,7 +44,7 @@ async function fetchAPI(query, { variables, preview } = {}) {
 export async function getAllPortfoliosWithSlug() {
   const data = await fetchAPI(`
     {
-      allPortfolios {
+      allPortfolios(first: "40") {
         slug
       }
     }
@@ -56,7 +56,7 @@ export async function getAllPortfoliosWithSlug() {
 export async function getAllPortfolios() {
   const data = await fetchAPI(`
     {
-      allPortfolios {
+      allPortfolios(first: "40") {
         title
         subtitle
         slug
