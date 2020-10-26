@@ -49,10 +49,10 @@ export default class MyDocument extends Document {
             content="Web portfolio of drone pilot Ondra Hajek, who will make your projects more interesting. He specialises in documentaries, film, music video, commercials and architecture."
           />
           <meta
-            name="og:description"
+            property="og:description"
             content="Web portfolio of drone pilot Ondra Hajek, who will make your projects more interesting. He specialises in documentaries, film, music video, commercials and architecture."
           />
-          <meta name="og:image" content="/social.jpg" />
+          <meta property="og:image" content="/social.jpg" />
           <meta
             name="keywords"
             content="aerial, drone, camera, 4k, phantom, phantom4pro, inspire, video, equipment, photography, studio, professional, uav, dji, copter, documentary, film, music video, promo, commercial, architecture, music video, aerial video, aerial photography, 360 photography, 360°,copter vision, coptervision, georgia, bali, indonesia, brazil, rio de janeiro, surf, paragliding, surfing, travel, dron, kamera, letecké záběry, koptéra, na zakázku, výškové práce, ze vzduchu, ucl, dokument, film, hudební klip, architektura"
