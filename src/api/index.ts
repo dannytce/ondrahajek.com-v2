@@ -83,7 +83,7 @@ export async function getGallery() {
           id
           alt
           title
-          responsiveImage(imgixParams: {h: "600", w: "1077", fit: crop }) {
+          responsiveImage(imgixParams: {h: "1300", w: "2100", fit: crop }) {
             ...responsiveImageFragment
           }
           smartTags
@@ -96,7 +96,7 @@ export async function getGallery() {
   return data.gallery.photos
 }
 
-export async function getHeaderBackgroundByPage(page:string) {
+export async function getHeaderBackgroundByPage(page: string) {
   const data = await fetchAPI(`
     {
       headerBackground(filter: {page: {eq: "${page}"}}) {
