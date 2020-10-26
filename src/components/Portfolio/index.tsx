@@ -6,6 +6,7 @@ import { Image } from 'react-datocms'
 import { Modal } from '~/components/Modal'
 import Player from '~/components/Player'
 import { Container } from '~/components/Page/styled'
+import * as gtag from '~/lib/gtag'
 
 import {
   List,
@@ -27,10 +28,11 @@ export const Portfolio = ({ slug: incomingSlug, isModalOpen, portfolios }) => {
   function handleClick(event: MouseEvent) {
     event.preventDefault()
 
-    const href = event?.target?.getAttribute('href')
+    const href = event?.target?.getAttribute('href') as string
 
     if (href) {
       setSlug(href.replace('/portfolio/', ''))
+      gtag.pageview(href)
       window.history.pushState({}, '', href)
     }
   }

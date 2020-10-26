@@ -8,6 +8,8 @@ import Document, {
 } from 'next/document' // eslint-disable-line no-shadow
 import { ServerStyleSheet } from 'styled-components'
 
+import { GA_TRACKING_ID } from '~/lib/gtag'
+
 const fontsHref =
   'https://fonts.googleapis.com/css?family=Teko:400,600|Montserrat:400,700&display=swap'
 
@@ -79,6 +81,26 @@ export default class MyDocument extends Document {
             <link rel="stylesheet" href={fontsHref} />
           </noscript>
           <link href={fontsHref} rel="stylesheet" />
+
+          <script
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+          />
+
+          {/* eslint-disable react/no-danger */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GA_TRACKING_ID}', {
+                  page_path: window.location.pathname,
+                });
+              `,
+            }}
+          />
+          {/* eslint-enable react/no-danger */}
         </Head>
         <body>
           <Main />
