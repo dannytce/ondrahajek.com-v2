@@ -12,7 +12,6 @@ export const Container = styled.div`
     padding: 0;
   }
 `
-//TODO: original mq was +30 px (perhaps padding?)}
 
 export const Main = styled.main`
   position: relative;
@@ -28,12 +27,10 @@ export const Main = styled.main`
     height: 45vh;
     transform: translateY(-100%);
     pointer-events: none;
-    /* stylelint-disable declaration-colon-newline-after */
     background: linear-gradient(
       to bottom,
       ${hex2Rgba(background.main, 0)},
       ${hex2Rgba(background.main, 100)}
     );
-    /* stylelint-enable */
   }
 `

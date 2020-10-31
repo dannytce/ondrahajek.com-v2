@@ -1,4 +1,5 @@
 import React from 'react'
+import { InferGetStaticPropsType } from 'next'
 import Head from 'next/head'
 
 import { Page } from '~/components/Page'
@@ -17,7 +18,10 @@ export async function getStaticProps() {
   }
 }
 
-export const GalleryPage = ({ photos = [], headerBackground }) => (
+export const GalleryPage = ({
+  photos = [],
+  headerBackground,
+}: InferGetStaticPropsType<typeof getStaticProps>) => (
   <Page title="Gallery" headerBackground={headerBackground}>
     <Head>
       <title>Gallery - ondrahajek.com | AERIAL Video & Photography</title>

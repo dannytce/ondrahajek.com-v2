@@ -59,8 +59,8 @@ const Title = styled.h3`
   }
 `
 
-export const NumbersListItem: FC = (props) => (
+export const NumbersListItem: FC = ({ children }) => (
   <Li>
-    <Title>{props.children}</Title>
+    <Title>{children}</Title>
   </Li>
 )

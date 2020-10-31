@@ -9,11 +9,9 @@ export const StyledShadow = styled.div`
   height: 250px;
   z-index: -1;
   pointer-events: none;
-  /* stylelint-disable declaration-colon-newline-after */
   background: linear-gradient(
     to bottom,
     ${hex2Rgba(background.main, 100)},
     ${hex2Rgba(background.main, 0)}
   );
-  /* stylelint-enable */
 `

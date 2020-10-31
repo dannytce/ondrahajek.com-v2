@@ -71,23 +71,24 @@ export default class MyDocument extends Document {
           <link rel="preconnect" href="https://i.vimeocdn.com" />
           <link rel="preconnect" href="https://f.vimeocdn.com" />
 
+          {/* https://csswizardry.com/2020/05/the-fastest-google-fonts/ */}
           <link rel="preload" as="style" href={fontsHref} />
           <link
             rel="stylesheet"
             href={fontsHref}
             media="print"
+            // @ts-ignore
             onLoad="this.media='all'"
+            // TODO: https://github.com/vercel/next.js/issues/12984
           />
           <noscript>
             <link rel="stylesheet" href={fontsHref} />
           </noscript>
           <link href={fontsHref} rel="stylesheet" />
-
           <script
             async
             src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
           />
-
           {/* eslint-disable react/no-danger */}
           <script
             dangerouslySetInnerHTML={{

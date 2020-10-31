@@ -1,5 +1,4 @@
 import React, { FC, useState } from 'react'
-import { useRouter } from 'next/router'
 import { Image } from 'react-datocms'
 
 import { Nav } from '~/components/Nav'
@@ -17,11 +16,14 @@ import {
   VideoContainer,
 } from './styled'
 
+import { ResponsiveImage } from 'next-env'
+
 type Props = {
   isAboutPage?: boolean
   isHomepage?: boolean
   title: string
   subTitle?: string
+  headerBackground: ResponsiveImage
 }
 
 export const Header: FC<Props> = ({
@@ -31,7 +33,6 @@ export const Header: FC<Props> = ({
   isHomepage,
   headerBackground,
 }) => {
-  const router = useRouter()
   const [isVideoLoaded, setIsVideoLoaded] = useState(false)
 
   const onCanPlay = () => {
@@ -71,7 +72,7 @@ export const Header: FC<Props> = ({
           <BackgroundImgWrapper style={{ opacity: isVideoLoaded ? 0 : 1 }}>
             <Image
               data={{
-                ...headerBackground.responsiveImage,
+                ...headerBackground,
                 alt: '',
               }}
             />

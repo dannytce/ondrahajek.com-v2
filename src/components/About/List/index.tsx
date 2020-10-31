@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { mq } from '~/styles/mq'
@@ -32,8 +32,7 @@ const Title = styled.h3`
   }
 `
 
-// eslint-disable-next-line react/prop-types
-export const ListItem = ({ children }) => (
+export const ListItem: FC = ({ children }) => (
   <Li>
     <Title>{children}</Title>
   </Li>

@@ -1,5 +1,4 @@
 import React, { FC } from 'react'
-import { useRouter } from 'next/router'
 import Link from 'next/link'
 
 import {
@@ -21,23 +20,17 @@ type Props = {
 }
 
 export const FooterLink: FC<Props> = ({ link, title, name, email, phone }) => {
-  const router = useRouter()
-  const isActive = router.pathname === link
+  const LinkComponent: FC = (props) => (
+    <Link href={link} passHref>
+      <StyledLink href={link}>{props.children}</StyledLink>
+    </Link>
+  )
 
-  /* eslint-disable react/prop-types */
-  const LinkComponent = (props) =>
-    isActive || (
-      <Link href={link} passHref>
-        <StyledLink href={link}>{props.children}</StyledLink>
-      </Link>
-    )
-
-  const NameComponent = (props) => (
+  const NameComponent: FC = (props) => (
     <A href={email ? `mailto:${email}` : link}>
       <StyledName>{props.children}</StyledName>
     </A>
   )
-  /* eslint-disable react/prop-types */
 
   const Wrapper = link ? LinkComponent : StyledWrapper
   const Name = email ? NameComponent : StyledName

@@ -1,9 +1,23 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { Image } from 'react-datocms'
 
 import { Wrapper, Figure, Figcaption, Description } from './styled'
 
-export const Gallery = ({ photos }) => (
+import { ResponsiveImage } from 'next-env'
+
+type Photo = {
+  id: string
+  responsiveImage: ResponsiveImage
+  alt: string
+  title: string
+  smartTags: string[]
+}
+
+type Props = {
+  photos: Photo[]
+}
+
+export const Gallery: FC<Props> = ({ photos }) => (
   <Wrapper>
     {photos.map((item) => (
       <Figure key={item.id}>

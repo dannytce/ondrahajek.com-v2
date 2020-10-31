@@ -1,4 +1,4 @@
-import React, { FC, useEffect, ReactElement } from 'react'
+import React, { FC, useEffect, MouseEvent } from 'react'
 import FocusLock from 'react-focus-lock'
 import ReactDOM from 'react-dom'
 
@@ -25,8 +25,7 @@ function canUseDOM() {
 export interface Props {
   isOpen: boolean
   onRequestClose: (event: KeyboardEvent | MouseEvent) => void
-  headerText: string
-  children: () => ReactElement
+  headerText?: string
 }
 
 export const Modal: FC<Props> = ({
@@ -64,7 +63,7 @@ export const Modal: FC<Props> = ({
         >
           <StyledModal>
             <Header>
-              <HeaderText>{headerText}</HeaderText>
+              {headerText && <HeaderText>{headerText}</HeaderText>}
               <CloseButton onClick={onRequestClose}>X</CloseButton>
             </Header>
             <Content>{children}</Content>

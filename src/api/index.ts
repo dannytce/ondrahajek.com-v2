@@ -1,3 +1,7 @@
+import { PortfolioType } from '~/components/Portfolio'
+
+import { ResponsiveImage } from 'next-env'
+
 const API_URL = 'https://graphql.datocms.com'
 const API_TOKEN = process.env.DATOCMS_API_TOKEN
 
@@ -18,7 +22,10 @@ const responsiveImageFragment = `
   }
 `
 
-async function fetchAPI(query, { variables, preview } = {}) {
+const fetchAPI = async (
+  query: string,
+  { variables, preview }: { variables?: any; preview?: boolean } = {}
+) => {
   const res = await fetch(API_URL + (preview ? '/preview' : ''), {
     method: 'POST',
     headers: {
@@ -72,7 +79,7 @@ export async function getAllPortfolios() {
     ${responsiveImageFragment}
   `)
 
-  return data?.allPortfolios
+  return data?.allPortfolios as PortfolioType[]
 }
 
 export async function getGallery() {
@@ -110,5 +117,5 @@ export async function getHeaderBackgroundByPage(page: string) {
     ${responsiveImageFragment}
   `)
 
-  return data.headerBackground.photo
+  return data.headerBackground.photo.responsiveImage as ResponsiveImage
 }

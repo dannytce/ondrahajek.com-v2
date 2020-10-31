@@ -3,14 +3,13 @@ import styled, { css } from 'styled-components'
 import { font } from '~/styles/variables'
 
 export const StyledSection = styled.section<{
-  gray: boolean
+  gray?: boolean
 }>`
   height: 90vh;
   text-align: center;
   display: flex;
   flex-direction: column;
   padding: 15vh 0 0;
-
   ${(props) =>
     props.gray &&
     css`

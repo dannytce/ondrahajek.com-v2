@@ -1,4 +1,4 @@
-import React, { FC, ReactElement } from 'react'
+import React, { FC } from 'react'
 
 import { Container } from '~/components/Page/styled'
 
@@ -6,7 +6,6 @@ import { StyledSection, SectionContent, Title } from './styled'
 
 type Props = {
   title: string
-  children: () => ReactElement
   gray?: boolean
 }
 

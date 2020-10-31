@@ -32,7 +32,9 @@ export const Nav = () => {
               <Link href={item.link}>
                 <NavLink
                   href={item.link}
-                  className={router.pathname === item.link ? 'active' : null}
+                  className={
+                    router.pathname === item.link ? 'active' : undefined
+                  }
                 >
                   {item.text}
                 </NavLink>

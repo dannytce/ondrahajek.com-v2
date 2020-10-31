@@ -3,13 +3,13 @@ import type { AppProps } from 'next/app'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 
-import { pageview } from '~/lib/gtag'
+import { pageView } from '~/lib/gtag'
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   const router = useRouter()
   useEffect(() => {
     const handleRouteChange = (url: string) => {
-      pageview(url)
+      pageView(url)
     }
     router.events.on('routeChangeComplete', handleRouteChange)
     return () => {
