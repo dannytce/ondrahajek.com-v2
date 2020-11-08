@@ -19,7 +19,7 @@ export async function getStaticProps() {
 }
 
 export const GalleryPage = ({
-  photos = [],
+  photos,
   headerBackground,
 }: InferGetStaticPropsType<typeof getStaticProps>) => (
   <Page title="Gallery" headerBackground={headerBackground}>

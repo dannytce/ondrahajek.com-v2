@@ -7,6 +7,7 @@ import { Modal } from '~/components/Modal'
 import Player from '~/components/Player'
 import { Container } from '~/components/Page/styled'
 import { pageView } from '~/lib/gtag'
+import { PortfolioRecord } from '~/api/generated/types'
 
 import {
   List,
@@ -17,27 +18,12 @@ import {
   Description,
 } from './styled'
 
-import { ResponsiveImage } from 'next-env'
-
-type Thumbnail = {
-  smartTags: string
-  responsiveImage: ResponsiveImage
-}
-
-export type PortfolioType = {
-  title: string
-  subtitle: string
-  slug: string
-  thumbnail: Thumbnail
-  video: string
-}
-
 type Props = {
-  slug: string
-  portfolios: PortfolioType[]
+  slug?: string
+  portfolios: PortfolioRecord[]
 }
 
-const getPortfolioDetail = (portfolios: PortfolioType[], slug: string) =>
+const getPortfolioDetail = (portfolios: PortfolioRecord[], slug: string) =>
   portfolios.find((item) => item.slug === slug)!
 
 export const Portfolio: FC<Props> = ({ slug: incomingSlug, portfolios }) => {
@@ -63,26 +49,28 @@ export const Portfolio: FC<Props> = ({ slug: incomingSlug, portfolios }) => {
     setSlug('')
   }
 
-  let portfolioDetail
+  let ModalComponent
   if (slug) {
-    portfolioDetail = getPortfolioDetail(portfolios, slug)
+    const portfolioDetail = getPortfolioDetail(portfolios, slug)
+
+    ModalComponent = (
+      <>
+        <Modal isOpen onRequestClose={handleClose}>
+          <Player title={portfolioDetail.title} video={portfolioDetail.video} />
+        </Modal>
+        <Head>
+          <title key="title">
+            {portfolioDetail.title} - ondrahajek.com | AERIAL Video &
+            Photography
+          </title>
+        </Head>
+      </>
+    )
   }
 
   return (
     <Container>
-      {slug && (
-        <>
-          <Modal isOpen onRequestClose={handleClose}>
-            <Player {...portfolioDetail} />
-          </Modal>
-          <Head>
-            <title key="title">
-              {portfolioDetail?.title} - ondrahajek.com | AERIAL Video &
-              Photography
-            </title>
-          </Head>
-        </>
-      )}
+      {slug ? ModalComponent : null}
       <List>
         {portfolios.map((portfolio) => (
           <ListItem key={portfolio.slug}>

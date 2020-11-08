@@ -63,7 +63,7 @@ export const Modal: FC<Props> = ({
         >
           <StyledModal>
             <Header>
-              {headerText && <HeaderText>{headerText}</HeaderText>}
+              {headerText ? <HeaderText>{headerText}</HeaderText> : null}
               <CloseButton onClick={onRequestClose}>X</CloseButton>
             </Header>
             <Content>{children}</Content>

@@ -1,6 +1,4 @@
-import { PortfolioType } from '~/components/Portfolio'
-
-import { ResponsiveImage } from 'next-env'
+import { PortfolioRecord, FileField, ResponsiveImage } from './generated/types'
 
 const API_URL = 'https://graphql.datocms.com'
 const API_TOKEN = process.env.DATOCMS_API_TOKEN
@@ -41,6 +39,7 @@ const fetchAPI = async (
   const json = await res.json()
 
   if (json.errors) {
+    // eslint-disable-next-line
     console.error(json.errors)
     throw new Error('Failed to fetch API')
   }
@@ -57,7 +56,7 @@ export async function getAllPortfoliosWithSlug() {
     }
   `)
 
-  return data?.allPortfolios
+  return data?.allPortfolios as Array<{ slug: string }>
 }
 
 export async function getAllPortfolios() {
@@ -79,7 +78,7 @@ export async function getAllPortfolios() {
     ${responsiveImageFragment}
   `)
 
-  return data?.allPortfolios as PortfolioType[]
+  return data?.allPortfolios as PortfolioRecord[]
 }
 
 export async function getGallery() {
@@ -100,7 +99,7 @@ export async function getGallery() {
     ${responsiveImageFragment}
   `)
 
-  return data.gallery.photos
+  return data.gallery.photos as FileField[]
 }
 
 export async function getHeaderBackgroundByPage(page: string) {

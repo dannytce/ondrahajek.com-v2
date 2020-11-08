@@ -3,10 +3,9 @@ import React, { FC } from 'react'
 import { Header } from '~/components/Header'
 import { Footer } from '~/components/Footer'
 import { GlobalStyle } from '~/styles/globalStyles'
+import { ResponsiveImage } from '~/api/generated/types'
 
 import { Main } from './styled'
-
-import { ResponsiveImage } from 'next-env'
 
 type Props = {
   title: string

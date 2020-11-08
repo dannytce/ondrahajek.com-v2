@@ -5,6 +5,7 @@ import { Nav } from '~/components/Nav'
 import { PlayShowreel } from '~/components/PlayShowreel'
 import { TrustedBy } from '~/components/About/TrustedBy'
 import { Container } from '~/components/Page/styled'
+import { ResponsiveImage } from '~/api/generated/types'
 
 import {
   H1,
@@ -15,8 +16,6 @@ import {
   Video,
   VideoContainer,
 } from './styled'
-
-import { ResponsiveImage } from 'next-env'
 
 type Props = {
   isAboutPage?: boolean
@@ -51,10 +50,10 @@ export const Header: FC<Props> = ({
           ) : (
             <H1>{title}</H1>
           )}
-          {isHomepage && <PlayShowreel />}
+          {isHomepage ? <PlayShowreel /> : null}
         </Container>
 
-        {isHomepage && (
+        {isHomepage ? (
           <VideoContainer>
             <Video
               onCanPlay={onCanPlay}
@@ -67,19 +66,17 @@ export const Header: FC<Props> = ({
               <source src="/bg.mp4" type="video/mp4" />
             </Video>
           </VideoContainer>
-        )}
-        {headerBackground && (
-          <BackgroundImgWrapper style={{ opacity: isVideoLoaded ? 0 : 1 }}>
-            <Image
-              data={{
-                ...headerBackground,
-                alt: '',
-              }}
-            />
-          </BackgroundImgWrapper>
-        )}
+        ) : null}
+        <BackgroundImgWrapper style={{ opacity: isVideoLoaded ? 0 : 1 }}>
+          <Image
+            data={{
+              ...headerBackground,
+              alt: '',
+            }}
+          />
+        </BackgroundImgWrapper>
       </StyledHeader>
-      {isAboutPage && <TrustedBy />}
+      {isAboutPage ? <TrustedBy /> : null}
       <Nav />
     </>
   )

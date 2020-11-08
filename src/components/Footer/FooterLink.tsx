@@ -20,29 +20,28 @@ type Props = {
 }
 
 export const FooterLink: FC<Props> = ({ link, title, name, email, phone }) => {
-  const LinkComponent: FC = (props) => (
-    <Link href={link} passHref>
-      <StyledLink href={link}>{props.children}</StyledLink>
-    </Link>
-  )
+  if (link) {
+    return (
+      <Link href={link} passHref>
+        <StyledLink href={link}>{name}</StyledLink>
+      </Link>
+    )
+  }
 
-  const NameComponent: FC = (props) => (
-    <A href={email ? `mailto:${email}` : link}>
-      <StyledName>{props.children}</StyledName>
-    </A>
-  )
+  if (email && phone) {
+    return (
+      <StyledWrapper>
+        <Title>{title}</Title>
+        <A href={email ? `mailto:${email}` : link}>
+          <StyledName>
+            {name}
+            <StyledEmail email={email} />
+          </StyledName>
+        </A>
+        <StyledPhone href={`tel:${phone}`}>{phone}</StyledPhone>
+      </StyledWrapper>
+    )
+  }
 
-  const Wrapper = link ? LinkComponent : StyledWrapper
-  const Name = email ? NameComponent : StyledName
-
-  return (
-    <Wrapper>
-      <Title>{title}</Title>
-      <Name href={link}>
-        {name}
-        {email && <StyledEmail email={email} />}
-      </Name>
-      {phone && <StyledPhone href={`tel:${phone}`}>{phone}</StyledPhone>}
-    </Wrapper>
-  )
+  return null
 }

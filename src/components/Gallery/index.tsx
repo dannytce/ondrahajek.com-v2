@@ -1,20 +1,12 @@
 import React, { FC } from 'react'
 import { Image } from 'react-datocms'
 
+import { FileField } from '~/api/generated/types'
+
 import { Wrapper, Figure, Figcaption, Description } from './styled'
 
-import { ResponsiveImage } from 'next-env'
-
-type Photo = {
-  id: string
-  responsiveImage: ResponsiveImage
-  alt: string
-  title: string
-  smartTags: string[]
-}
-
 type Props = {
-  photos: Photo[]
+  photos: FileField[]
 }
 
 export const Gallery: FC<Props> = ({ photos }) => (

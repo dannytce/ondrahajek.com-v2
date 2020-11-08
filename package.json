@@ -9,7 +9,8 @@
     "type-check": "tsc",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:css": "stylelint 'src/**/*.{ts,tsx}'",
-    "format": "prettier --write 'src/**/*.{ts,tsx}'"
+    "format": "prettier --write 'src/**/*.{ts,tsx}'",
+    "codegen": "graphql-codegen --config graphql-codegen.js -r dotenv/config"
   },
   "dependencies": {
     "next": "^10.0.0",
@@ -22,6 +23,8 @@
     "styled-sanitize": "^1.1.2"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^1.19.1",
+    "@graphql-codegen/typescript": "^1.17.11",
     "@strv/eslint-config-react": "^3.1.2",
     "@strv/eslint-config-typescript": "^2.3.0",
     "@strv/stylelint-config-styled-components": "^1.1.1",
@@ -32,9 +35,12 @@
     "babel-eslint": "^10.1.0",
     "babel-plugin-root-import": "^6.6.0",
     "babel-plugin-styled-components": "^1.11.1",
+    "dotenv": "^8.2.0",
     "eslint": "^7.12.0",
     "eslint-config-prettier": "^6.14.0",
     "eslint-plugin-import": "^2.22.0",
+    "git-aliases-semantic-commits": "^0.4.1",
+    "graphql": "^15.4.0",
     "husky": "^4.2.5",
     "lint-staged": "^10.5.0",
     "prettier": "^2.0.5",
