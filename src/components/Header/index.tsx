@@ -53,9 +53,7 @@ export const Header: FC<Props> = ({
         <Container>
           {subTitle ? (
             <HeaderGroup>
-              <H1>
-                {title} {videoSrc}{' '}
-              </H1>
+              <H1>{title}</H1>
               <H2>{subTitle}</H2>
             </HeaderGroup>
           ) : (
