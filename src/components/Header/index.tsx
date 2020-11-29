@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react'
 import { Image } from 'react-datocms'
 
+import { useWindowSize } from '~/hooks/useWindowSize'
 import { Nav } from '~/components/Nav'
 import { PlayShowreel } from '~/components/PlayShowreel'
 import { TrustedBy } from '~/components/About/TrustedBy'
@@ -38,13 +39,23 @@ export const Header: FC<Props> = ({
     setIsVideoLoaded(true)
   }
 
+  const windowWidth = useWindowSize()
+  const videoSrc =
+    windowWidth < 768
+      ? windowWidth > 375
+        ? '/bg-tablet.mp4'
+        : '/bg-mobile.mp4'
+      : '/bg-desktop.mp4'
+
   return (
     <>
       <StyledHeader>
         <Container>
           {subTitle ? (
             <HeaderGroup>
-              <H1>{title}</H1>
+              <H1>
+                {title} {videoSrc}{' '}
+              </H1>
               <H2>{subTitle}</H2>
             </HeaderGroup>
           ) : (
@@ -53,7 +64,7 @@ export const Header: FC<Props> = ({
           {isHomepage ? <PlayShowreel /> : null}
         </Container>
 
-        {isHomepage ? (
+        {isHomepage && windowWidth ? (
           <VideoContainer>
             <Video
               onCanPlay={onCanPlay}
@@ -63,17 +74,7 @@ export const Header: FC<Props> = ({
               loop
               muted
             >
-              <source
-                src="/bg-mobile.mp4"
-                type="video/mp4"
-                media="all and (max-width: 375px)"
-              />
-              <source
-                src="/bg-tablet.mp4"
-                type="video/mp4"
-                media="all and (max-width: 768px)"
-              />
-              <source src="/bg-desktop.mp4" type="video/mp4" />
+              <source src={videoSrc} type="video/mp4" />
             </Video>
           </VideoContainer>
         ) : null}
