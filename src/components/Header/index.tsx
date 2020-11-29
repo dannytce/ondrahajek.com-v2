@@ -63,7 +63,17 @@ export const Header: FC<Props> = ({
               loop
               muted
             >
-              <source src="/bg.mp4" type="video/mp4" />
+              <source
+                src="/bg-mobile.mp4"
+                type="video/mp4"
+                media="all and (max-width: 375px)"
+              />
+              <source
+                src="/bg-tablet.mp4"
+                type="video/mp4"
+                media="all and (max-width: 768px)"
+              />
+              <source src="/bg-desktop.mp4" type="video/mp4" />
             </Video>
           </VideoContainer>
         ) : null}
