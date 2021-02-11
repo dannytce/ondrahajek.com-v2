@@ -75,10 +75,14 @@ export const H1 = styled.h1`
 
 export const H2 = styled.h2`
   font-size: 1.8rem;
-  ${font.regular};
-  margin: -1em 0 0;
+  ${mq.tablet} {
+    font-size: 3rem;
+  }
+
+  ${font.Teko};
+  text-transform: uppercase;
+  margin: -0.75em 0 0;
   padding: 0;
-  color: rgba(255, 255, 255, 0.6);
 `
 
 export const VideoContainer = styled.div`

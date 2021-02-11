@@ -11,7 +11,7 @@ import { ServerStyleSheet } from 'styled-components'
 import { GA_TRACKING_ID } from '~/lib/gtag'
 
 const fontsHref =
-  'https://fonts.googleapis.com/css?family=Teko:400,600|Montserrat:400,700&display=swap'
+  'https://fonts.googleapis.com/css?family=Teko:400,600|Roboto:400,700&display=swap'
 
 export default class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {

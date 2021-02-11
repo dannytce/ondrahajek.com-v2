@@ -7,9 +7,9 @@ const fontFamily = (family: string) => `font-family: ${family}`
 const fontWeight = (weight: number) => `font-weight: ${weight};`
 
 export const font = {
-  baseFamily: 'font-family: Montserrat, Impact, Arial, sans-serif',
+  baseFamily: 'font-family: Roboto, Impact, Arial, sans-serif',
   Teko: fontFamily('Teko'),
-  Montserrat: fontFamily('Montserrat'),
+  Roboto: fontFamily('Roboto'),
   regular: fontWeight(400),
   semibold: fontWeight(600),
   bold: fontWeight(700),
@@ -21,7 +21,7 @@ export const background = {
 
 export const sizes = {
   container: {
-    maxWidth: 1440,
+    maxWidth: 1294,
   },
   header: {
     height: '90vh',

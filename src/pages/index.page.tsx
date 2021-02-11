@@ -26,7 +26,7 @@ export const Home = ({
   return (
     <Page
       title="Aerial"
-      subTitle="Video, Photography"
+      subTitle="Video &amp; Photography"
       headerBackground={headerBackground}
       isHomepage
     >
