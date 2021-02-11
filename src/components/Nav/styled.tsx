@@ -29,8 +29,6 @@ export const List = styled.ul`
   list-style: none;
 `
 
-export const ListItem = styled.li``
-
 export const NavLink = styled.a`
   display: block;
   font-size: 2rem;
@@ -40,7 +38,16 @@ export const NavLink = styled.a`
   text-transform: uppercase;
   text-align: right;
   pointer-events: all;
+  padding: clamp(5px, 1.2vh, 10px) 0;
   ${linkAnimation()};
+`
+
+export const ListItem = styled.li`
+  &:first-child {
+    ${NavLink} {
+      padding-top: 0;
+    }
+  }
 `
 
 export const LogoLink = styled.a`
