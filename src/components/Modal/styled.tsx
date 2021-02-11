@@ -48,7 +48,7 @@ export const Wrapper = styled.div`
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.75);
   z-index: ${zIndex.modal};
-  padding: 60px;
+  padding: clamp(10px, 3vw, 60px);
 `
 export const Backdrop = styled.div`
   position: fixed;

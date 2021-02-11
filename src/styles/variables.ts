@@ -1,3 +1,5 @@
+import { css } from 'styled-components'
+
 export const color = {
   primary: '#fff',
   secondary: '#868687',
@@ -7,9 +9,9 @@ const fontFamily = (family: string) => `font-family: ${family}`
 const fontWeight = (weight: number) => `font-weight: ${weight};`
 
 export const font = {
-  baseFamily: 'font-family: Montserrat, Impact, Arial, sans-serif',
+  baseFamily: 'font-family: Roboto, Impact, Arial, sans-serif',
   Teko: fontFamily('Teko'),
-  Montserrat: fontFamily('Montserrat'),
+  Roboto: fontFamily('Roboto'),
   regular: fontWeight(400),
   semibold: fontWeight(600),
   bold: fontWeight(700),
@@ -21,7 +23,7 @@ export const background = {
 
 export const sizes = {
   container: {
-    maxWidth: 1440,
+    maxWidth: 1294,
   },
   header: {
     height: '90vh',
@@ -53,3 +55,21 @@ export const hex2Rgba = (hex: string, alpha: number) => {
   const b = parseInt(hex.substring(5, 7), 16)
   return `rgba(${r}, ${g}, ${b}, ${alpha})`
 }
+
+export const linkAnimation = (transitionDuration: number = 275) => css`
+  /*
+    https://css-tricks.com/4-ways-to-animate-the-color-of-a-text-link-on-hover/
+  */
+  background: linear-gradient(to right, #ddd, #ddd 50%, #fff 50%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 100%;
+  background-position: 100%;
+  transition: background-position ${transitionDuration}ms ease;
+
+  &:hover,
+  &.active {
+    background-position: 0 100%;
+  }
+`

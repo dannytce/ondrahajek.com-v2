@@ -41,7 +41,7 @@ export const Title = styled.p`
   padding: 0;
   margin: 0 0 20px;
   color: ${color.secondary};
-  ${font.Montserrat};
+  ${font.Roboto};
   text-transform: none;
   font-size: 1.8rem;
 `

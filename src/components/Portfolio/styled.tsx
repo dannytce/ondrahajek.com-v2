@@ -3,28 +3,23 @@ import styled from 'styled-components'
 import { mq } from '~/styles/mq'
 import { color, font } from '~/styles/variables'
 
-const offset = 10
-
 export const List = styled.ul`
   margin: 0;
   padding: 0;
   list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-`
-
-export const ListItem = styled.li`
+  display: grid;
+  gap: 20px 20px;
   width: 100%;
+  grid-template-columns: 1fr;
   ${mq.tablet} {
-    width: calc(50% - ${2 * offset}px);
-    margin: 10px;
+    grid-template-columns: 1fr 1fr;
   }
   ${mq.desktop} {
-    width: calc(33.33333% - ${2 * offset}px);
-    max-width: 418px;
+    grid-template-columns: 1fr 1fr 1fr;
   }
 `
+
+export const ListItem = styled.li``
 
 export const ImageWrapper = styled.div`
   position: relative;
@@ -37,8 +32,9 @@ export const ImageWrapper = styled.div`
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.2);
-    z-index: 0;
+    background: #000;
+    opacity: 0.25;
+    z-index: 1;
     transition: opacity 0.2s;
   }
 `
@@ -70,14 +66,14 @@ export const Title = styled.h3`
 
 export const Description = styled.h4`
   color: ${color.secondary};
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   ${font.regular};
   margin-top: -1.4em;
   ${mq.tablet} {
     margin-top: -1.8em;
   }
   ${mq.desktop} {
-    margin-top: -2em;
+    margin-top: -2.5em;
   }
 
   margin-left: 20px;
@@ -93,11 +89,11 @@ export const Link = styled.a`
   text-decoration: none;
 
   &:hover {
+    /* stylelint-disable  */
     ${ImageWrapper}::before {
       opacity: 0;
     }
 
-    /* stylelint-disable  */
     ${Title}, ${Description} {
       opacity: 0.25;
     }

@@ -21,12 +21,12 @@ export const PlayShowreel: FC = () => {
         onClick={toggle}
         title="Play Showreel"
       >
-        Play Showreel
         <Circle>
           <BeaconCircle />
           <BeaconCircle />
           <StyledPlayIcon />
         </Circle>
+        Play Showreel
       </A>
       <Modal isOpen={isShown} onRequestClose={toggle}>
         <Player

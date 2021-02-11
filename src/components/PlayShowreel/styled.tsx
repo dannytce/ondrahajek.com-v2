@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import styled, { keyframes } from 'styled-components'
 
 import { mq } from '~/styles/mq'
-import { font } from '~/styles/variables'
+import { font, linkAnimation } from '~/styles/variables'
 
 export const PlayShowreelWrapper = styled.div`
   display: flex;
@@ -16,8 +16,8 @@ export const PlayShowreelWrapper = styled.div`
   }
 `
 
-export const PlayIcon: FC = () => (
-  <svg width="14" height="16" viewBox="0 0 14 16">
+export const PlayIcon: FC = (props) => (
+  <svg width="14" height="16" viewBox="0 0 14 16" {...props}>
     <path
       d="M1.50389526,0.136099186 L13.5032156,7.13615397 L13.5032156,7.13615397 C13.9802597,7.41444764 14.1413788,8.02676989 13.8630851,8.50381399 C13.7761718,8.65279876 13.6522004,8.77677011 13.5032156,8.8636835 L1.50389526,15.8637383 L1.50389526,15.8637383 C1.02685115,16.1420319 0.414528904,15.9809129 0.136235236,15.5038688 C0.0470134485,15.350927 -5.14889621e-16,15.1770377 -2.22044605e-16,14.9999735 L0,0.99986395 L-4.4408921e-16,0.99986395 C-2.66460887e-16,0.4475792 0.44771525,-0.000136050417 1,-0.000136050417 C1.17706415,-0.000136050417 1.35095348,0.0468773981 1.50389526,0.136099186 Z"
       fill="#212327"
@@ -27,27 +27,24 @@ export const PlayIcon: FC = () => (
 )
 
 export const StyledPlayIcon = styled(PlayIcon)`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  margin-left: 5px;
 `
 
 export const Circle = styled.span`
   position: relative;
-  display: inline-block;
-  vertical-align: middle;
+  display: flex;
   text-align: center;
   width: 70px;
   height: 70px;
-  line-height: 64px;
-  margin-left: 25px;
-  padding-left: 2px;
+  margin-right: 25px;
+  padding-right: 2px;
   border-radius: 70px;
   background: #fff;
-  border: 3px solid rgba(255, 255, 255, 0.2);
+  border: 8px solid rgba(255, 255, 255, 0.2);
   background-clip: padding-box;
   transition: 0.8s all;
+  align-items: center;
+  justify-content: center;
 `
 
 export const circleExpand = keyframes`
@@ -96,12 +93,16 @@ export const BeaconCircle = styled.span`
 export const A = styled.a`
   color: #fff;
   ${font.bold};
+  ${font.Teko};
+  text-transform: uppercase;
   text-decoration: none;
   display: flex;
   align-items: center;
   justify-content: center;
   outline: none;
   padding: 0;
+
+  ${linkAnimation(420)};
 
   ${mq.tablet} {
     padding: 50px;
