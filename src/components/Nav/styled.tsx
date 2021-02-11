@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 import { mq } from '~/styles/mq'
 import { Container } from '~/components/Page/styled'
-import { font, zIndex } from '~/styles/variables'
+import { font, zIndex, linkAnimation } from '~/styles/variables'
 
 export const StyledNav = styled.nav`
   position: fixed;
@@ -40,22 +40,7 @@ export const NavLink = styled.a`
   text-transform: uppercase;
   text-align: right;
   pointer-events: all;
-
-  /*
-    https://css-tricks.com/4-ways-to-animate-the-color-of-a-text-link-on-hover/
-  */
-  background: linear-gradient(to right, #ccc, #ccc 50%, #fff 50%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-size: 200% 100%;
-  background-position: 100%;
-  transition: background-position 275ms ease;
-
-  &:hover,
-  &.active {
-    background-position: 0 100%;
-  }
+  ${linkAnimation()};
 `
 
 export const LogoLink = styled.a`

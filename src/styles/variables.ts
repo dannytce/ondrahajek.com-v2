@@ -1,3 +1,5 @@
+import { css } from 'styled-components'
+
 export const color = {
   primary: '#fff',
   secondary: '#868687',
@@ -53,3 +55,21 @@ export const hex2Rgba = (hex: string, alpha: number) => {
   const b = parseInt(hex.substring(5, 7), 16)
   return `rgba(${r}, ${g}, ${b}, ${alpha})`
 }
+
+export const linkAnimation = (transitionDuration: number = 275) => css`
+  /*
+    https://css-tricks.com/4-ways-to-animate-the-color-of-a-text-link-on-hover/
+  */
+  background: linear-gradient(to right, #ddd, #ddd 50%, #fff 50%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 100%;
+  background-position: 100%;
+  transition: background-position ${transitionDuration}ms ease;
+
+  &:hover,
+  &.active {
+    background-position: 0 100%;
+  }
+`

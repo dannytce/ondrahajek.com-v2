@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import styled, { keyframes } from 'styled-components'
 
 import { mq } from '~/styles/mq'
-import { font } from '~/styles/variables'
+import { font, linkAnimation } from '~/styles/variables'
 
 export const PlayShowreelWrapper = styled.div`
   display: flex;
@@ -101,6 +101,8 @@ export const A = styled.a`
   justify-content: center;
   outline: none;
   padding: 0;
+
+  ${linkAnimation(420)};
 
   ${mq.tablet} {
     padding: 50px;
