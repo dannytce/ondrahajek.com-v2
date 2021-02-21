@@ -6,7 +6,7 @@ import { Image } from 'react-datocms'
 import { Modal } from '~/components/Modal'
 import Player from '~/components/Player'
 import { Container } from '~/components/Page/styled'
-import { pageView } from '~/lib/gtag'
+import { pageView } from '~/service/analytics'
 import { PortfolioRecord } from '~/api/generated/types'
 
 import {

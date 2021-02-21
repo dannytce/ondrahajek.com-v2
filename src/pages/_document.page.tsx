@@ -8,7 +8,7 @@ import Document, {
 } from 'next/document' // eslint-disable-line no-shadow
 import { ServerStyleSheet } from 'styled-components'
 
-import { FB_PIXEL_ID, GA_TRACKING_ID } from '~/lib/gtag'
+import { FB_PIXEL_ID, GA_TRACKING_ID } from '~/service/analytics'
 
 const fontsHref =
   'https://fonts.googleapis.com/css?family=Teko:400,600|Roboto:400,700&display=swap'
