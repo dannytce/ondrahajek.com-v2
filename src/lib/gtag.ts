@@ -4,6 +4,8 @@ declare global {
   }
 }
 
+export const FB_PIXEL_ID = '895557671255172'
+
 export const GA_TRACKING_ID = 'UA-111398537-1'
 
 // https://developers.google.com/analytics/devguides/collection/gtagjs/pages
