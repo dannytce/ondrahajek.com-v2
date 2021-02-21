@@ -3,7 +3,7 @@ import type { AppProps } from 'next/app'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 
-import { pageView } from '~/lib/gtag'
+import { pageView } from '~/service/analytics'
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   const router = useRouter()

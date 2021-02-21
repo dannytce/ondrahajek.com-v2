@@ -1,8 +1,11 @@
 declare global {
   interface Window {
     gtag: any
+    fbq: any
   }
 }
+
+export const FB_PIXEL_ID = '895557671255172'
 
 export const GA_TRACKING_ID = 'UA-111398537-1'
 
@@ -11,6 +14,7 @@ export const pageView = (url: string) => {
   window.gtag('config', GA_TRACKING_ID, {
     page_path: url,
   })
+  window.fbq('track', 'PageView')
 }
 
 type gtagEvent = {
@@ -27,4 +31,7 @@ export const event = ({ action, category, label, value }: gtagEvent) => {
     event_label: label,
     value: value,
   })
+
+  // https://developers.facebook.com/docs/facebook-pixel/advanced/
+  window.fbq('track', action)
 }
