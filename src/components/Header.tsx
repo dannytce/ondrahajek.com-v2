@@ -1,17 +1,19 @@
-import { useState } from 'react';
-import { useWindowSize } from '~/hooks/useWindowSize';
-import { DatoImage } from '~/components/DatoImage';
-import { PlayShowreel } from '~/components/PlayShowreel';
-import { TrustedBy } from '~/components/About/TrustedBy';
-import type { ResponsiveImage } from '~/api/generated/types';
+import { useState } from 'react'
+import { useWindowSize } from '~/hooks/useWindowSize'
+import { useScrollDirection } from '~/hooks/useScrollDirection'
+import { usePastHero } from '~/hooks/usePastHero'
+import { DatoImage } from '~/components/DatoImage'
+import { PlayShowreel } from '~/components/PlayShowreel'
+import { TrustedBy } from '~/components/About/TrustedBy'
+import type { ResponsiveImage } from '~/api/generated/types'
 
 interface HeaderProps {
-  isAboutPage?: boolean;
-  isHomepage?: boolean;
-  title: string;
-  subTitle?: string;
-  headerBackground: ResponsiveImage;
-  currentPath?: string;
+  isAboutPage?: boolean
+  isHomepage?: boolean
+  title: string
+  subTitle?: string
+  headerBackground: ResponsiveImage
+  currentPath?: string
 }
 
 export function Header({
@@ -22,14 +24,14 @@ export function Header({
   headerBackground,
   currentPath = '/',
 }: HeaderProps) {
-  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
-  const windowWidth = useWindowSize();
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false)
+  const windowWidth = useWindowSize()
   const videoSrc =
     windowWidth !== undefined && windowWidth < 768
       ? windowWidth > 375
         ? '/bg-tablet.mp4'
         : '/bg-mobile.mp4'
-      : '/bg-desktop.mp4';
+      : '/bg-desktop.mp4'
 
   return (
     <>
@@ -82,37 +84,57 @@ export function Header({
       {isAboutPage ? <TrustedBy /> : null}
       <Nav currentPath={currentPath} />
     </>
-  );
+  )
 }
 
 function Nav({ currentPath }: { currentPath: string }) {
+  const isNavVisible = useScrollDirection()
+  const isPastHero = usePastHero()
   const navLinks = [
     { text: 'Portfolio', link: '/#portfolio' },
     { text: 'Gallery', link: '/gallery' },
     { text: 'About', link: '/about' },
-  ];
+  ]
 
   return (
-    <nav className="fixed w-full left-0 z-nav top-[30px] md:top-[63px] pointer-events-none">
-      <div className="w-full max-w-container mx-auto px-[15px] xl:px-0 flex justify-between">
-        <a href="/" className="pointer-events-auto">
-          <img src="/logo-ondrahajek.svg" alt="ONDRAHAJEK.COM" />
-        </a>
-        <ul className="p-0 m-0 list-none">
-          {navLinks.map((item) => (
-            <li key={item.link} className="first:[&_a]:pt-0">
-              <a
-                href={item.link}
-                className={`block text-[2rem] font-teko text-white no-underline uppercase text-right pointer-events-auto py-[clamp(5px,1.2vh,10px)] link-animation ${
-                  currentPath === item.link ? 'active' : ''
-                }`}
-              >
-                {item.text}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </nav>
-  );
+    <div
+      className="fixed left-0 right-0 top-0 z-nav pointer-events-none transition-[transform,opacity] duration-300 ease-out"
+      style={{
+        transform: isNavVisible ? 'translateY(0)' : 'translateY(-100%)',
+        opacity: isNavVisible ? 1 : 0,
+      }}
+    >
+      {/* Gradient only when hero is scrolled out – softer overlap with content */}
+      {isPastHero && (
+        <div
+          className="absolute inset-x-0 h-48 pointer-events-none -z-10 transition-opacity duration-300"
+          style={{
+            background:
+              'linear-gradient(to bottom, rgba(13,13,16,0.95) 0%, rgba(13,13,16,0.7) 35%, rgba(13,13,16,0.3) 70%, transparent 100%)',
+          }}
+        />
+      )}
+      <nav className="w-full top-[30px] md:top-[63px] relative">
+        <div className="w-full max-w-container mx-auto px-[15px] xl:px-0 flex justify-between">
+          <a href="/" className="pointer-events-auto">
+            <img src="/logo-ondrahajek.svg" alt="ONDRAHAJEK.COM" />
+          </a>
+          <ul className="p-0 m-0 list-none">
+            {navLinks.map((item) => (
+              <li key={item.link} className="first:[&_a]:pt-0">
+                <a
+                  href={item.link}
+                  className={`block text-[2rem] font-teko text-white no-underline uppercase text-right pointer-events-auto py-[clamp(5px,1.2vh,10px)] link-animation ${
+                    currentPath === item.link ? 'active' : ''
+                  }`}
+                >
+                  {item.text}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
+    </div>
+  )
 }
