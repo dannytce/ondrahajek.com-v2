@@ -1,3 +1,6 @@
-next-env.d.ts
-next.config.js
-graphql-codegen.js
+node_modules
+dist
+*.cjs
+*.mjs
+src/api/generated
+*.astro

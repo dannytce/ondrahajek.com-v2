@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-size: 62.5%;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    margin: 0;
+    background-color: theme('colors.background');
+    color: theme('colors.primary');
+    font-size: 1.8rem;
+    font-family: theme('fontFamily.roboto');
+    padding-top: theme('spacing.header');
+  }
+}
+
+@layer utilities {
+  .link-animation {
+    background: linear-gradient(to right, #ddd, #ddd 50%, #fff 50%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% 100%;
+    background-position: 100%;
+    transition: background-position 275ms ease;
+  }
+
+  .link-animation:hover,
+  .link-animation.active {
+    background-position: 0 100%;
+  }
+}

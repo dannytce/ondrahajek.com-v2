@@ -1,66 +1,49 @@
 {
-  "name": "PROJECT_NAME",
-  "version": "1.0.0",
+  "name": "ondrahajek.com",
+  "version": "2.0.0",
   "private": true,
+  "type": "module",
+  "packageManager": "pnpm@9.15.0",
   "scripts": {
-    "dev": "next",
-    "build": "next build && next export",
-    "start": "next start",
-    "type-check": "tsc",
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "type-check": "astro check",
     "lint": "eslint src --ext .ts,.tsx",
-    "lint:css": "stylelint 'src/**/*.{ts,tsx}'",
-    "format": "prettier --write 'src/**/*.{ts,tsx}'",
+    "format": "prettier --write 'src/**/*.{ts,tsx,astro}'",
     "codegen": "graphql-codegen --config graphql-codegen.js -r dotenv/config"
   },
   "dependencies": {
-    "next": "^10.0.6",
-    "react": "^17.0.1",
-    "react-datocms": "^1.5.0",
-    "react-dom": "^17.0.1",
-    "react-focus-lock": "^2.5.0",
-    "rect": "^1.2.1",
-    "styled-components": "^5.2.1",
-    "styled-sanitize": "^1.1.2"
+    "@astrojs/react": "^4.0.1",
+    "@astrojs/tailwind": "^5.1.0",
+    "astro": "^5.0.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-focus-lock": "^2.11.0"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.3.3",
     "@graphql-codegen/cli": "^1.20.1",
     "@graphql-codegen/typescript": "^1.21.0",
-    "@strv/eslint-config-react": "^3.1.2",
-    "@strv/eslint-config-typescript": "^2.3.0",
-    "@strv/stylelint-config-styled-components": "^1.1.1",
-    "@types/node": "^14.14.25",
-    "@types/react": "^17.0.1",
-    "@types/react-dom": "^17.0.0",
-    "@types/styled-components": "^5.1.7",
-    "babel-eslint": "^10.1.0",
-    "babel-plugin-root-import": "^6.6.0",
-    "babel-plugin-styled-components": "^1.12.0",
+    "@types/node": "^22.10.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
     "dotenv": "^8.2.0",
-    "eslint": "^7.19.0",
-    "eslint-config-prettier": "^7.2.0",
-    "eslint-plugin-import": "^2.22.0",
-    "git-aliases-semantic-commits": "^0.4.1",
     "graphql": "^15.5.0",
-    "husky": "^5.0.9",
-    "lint-staged": "^10.5.4",
-    "prettier": "^2.2.1",
-    "stylelint": "^13.10.0",
-    "stylelint-config-prettier": "^8.0.2",
-    "typescript": "^4.1.5"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "yarn type-check"
-    }
+    "tailwindcss": "^3.4.15",
+    "typescript": "^5.6.3"
   },
   "lint-staged": {
-    "*.{js,ts,tsx}": [
+    "*.{js,ts,tsx,astro}": [
       "eslint --fix",
-      "stylelint",
       "prettier --write"
     ],
-    "*.{json,md,html}": [
+    "*.{json,md,html,css}": [
       "prettier --write"
     ]
   }

@@ -1,7 +1,7 @@
-import { PortfolioRecord, FileField, ResponsiveImage } from './generated/types'
+import type { PortfolioRecord, FileField, ResponsiveImage } from './generated/types'
 
 const API_URL = 'https://graphql.datocms.com'
-const API_TOKEN = process.env.DATOCMS_API_TOKEN
+const API_TOKEN = import.meta.env.DATOCMS_API_TOKEN
 
 // See: https://www.datocms.com/blog/offer-responsive-progressive-lqip-images-in-2020
 const responsiveImageFragment = `

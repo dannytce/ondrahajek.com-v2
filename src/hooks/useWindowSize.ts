@@ -1,18 +1,12 @@
 // https://dev.to/vitaliemaldur/resize-event-listener-using-react-hooks-1k0c
 import { useState, useEffect } from 'react';
 
-export function useWindowSize() {
-  // Initialize state with undefined width/height so server and client renders match
-  // Learn more here: https://joshwcomeau.com/react/the-perils-of-rehydration/
-  const [windowSize, setWindowSize] = useState(undefined);
+export function useWindowSize(): number | undefined {
+  const [windowSize, setWindowSize] = useState<number | undefined>(undefined);
 
   useEffect(() => {
-    // Handler to call on window resize
     function handleResize() {
-      // Set window width/height to state
-      setWindowSize(
-        window.innerWidth,
-      );
+      setWindowSize(window.innerWidth);
     }
 
     // Add event listener

@@ -1,76 +1,64 @@
-# PROJECT_NAME
+# ondrahajek.com
 
-## Get Started
-
-1. To create a project based on this template click on the `Use this template` button
-2. Find and Replace `PROJECT_NAME` placeholder with the real project name
-3. Delete libraries which do not satisfy project needs
-4. Delete this section from `README`
-5. To cover your tracks and incorporate the changes to the project's `Initial commit`, run these commands:
-
-```sh
-git commit -a --amend
-git push -f origin master
-```
-
----
-
-## Documentation
-
-Project is based on `Next.js`, a production-ready React Framework. Check out the [documentation](https://nextjs.org/docs) for more information.
+Portfolio site built with Astro and Tailwind CSS.
 
 ## Prerequisites
 
-- `node`
-- `yarn`
+- Node.js
+- pnpm (`npm install -g pnpm`)
 
 ## Usage
 
-**Firstly, install all necessary dependencies:**
+**Install dependencies:**
 
 ```sh
-yarn install
+pnpm install
 ```
 
-**To start a development server:**
+**Start development server:**
 
 ```sh
-yarn dev
+pnpm dev
 ```
 
-**To build the app for production:**
+**Build for production:**
 
 ```sh
-yarn build
-yarn start
+pnpm build
 ```
 
-**To run tests:**
+**Preview production build:**
 
 ```sh
-yarn test
+pnpm preview
 ```
 
-## Deployment
+**Type-check:**
 
-> TODO: add info after setup
+```sh
+pnpm run type-check
+```
 
-## What's Inside
+**Lint:**
 
-- React Framework
+```sh
+pnpm run lint
+```
 
-  - [Next.js](https://nextjs.org)
+## Environment
 
-- Type-checking
+Create a `.env` file with:
 
-  - [TypeScript](https://www.typescriptlang.org/docs/home.html)
+```
+DATOCMS_API_TOKEN=your_api_token
+```
 
-- Styling
+Run `pnpm run codegen` to regenerate GraphQL types from DatoCMS.
 
-  - [styled-components](https://www.styled-components.com/docs)
+## Tech stack
 
-- Code quality tools
-  - Prettier
-  - ESLint
-  - stylelint
-  - git hooks
+- [Astro](https://astro.build)
+- [Tailwind CSS](https://tailwindcss.com)
+- [React](https://react.dev) (islands)
+- [DatoCMS](https://www.datocms.com)
+- TypeScript

@@ -1,0 +1,23 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Page from '~/components/Page.astro';
+import { Header } from '~/components/Header';
+import GalleryComponent from '~/components/Gallery.astro';
+import { getGallery, getHeaderBackgroundByPage } from '~/api';
+
+const photos = await getGallery();
+const headerBackground = await getHeaderBackgroundByPage('/gallery');
+---
+
+<BaseLayout title="Gallery - ondrahajek.com | AERIAL Video & Photography">
+  <Page>
+    <Header
+      slot="header"
+      client:load
+      title="Gallery"
+      headerBackground={headerBackground}
+      currentPath={Astro.url.pathname}
+    />
+    <GalleryComponent photos={photos} />
+  </Page>
+</BaseLayout>
