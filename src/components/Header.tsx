@@ -34,7 +34,7 @@ export function Header({
   return (
     <>
       <header className="top-0 w-full h-header flex flex-col justify-center fixed z-header">
-        <div className="w-full relative z-headerContainer flex flex-col flex-1 justify-center md:flex-none md:justify-start md:flex-row">
+        <div className="w-full max-w-container mx-auto px-[15px] xl:px-0 relative z-headerContainer flex flex-col flex-1 justify-center md:flex-none md:justify-start md:flex-row">
           {subTitle ? (
             <div className="flex flex-col justify-center">
               <h1 className="text-[6rem] md:text-[10rem] font-teko font-semibold uppercase m-0 p-0">
