@@ -91,7 +91,8 @@ function Nav({ currentPath }: { currentPath: string }) {
   const isNavVisible = useScrollDirection()
   const isPastHero = usePastHero()
   const navLinks = [
-    { text: 'Portfolio', link: '/#portfolio' },
+    { text: 'Drone Cinematography', link: '/drone-cinematography' },
+    { text: 'Video Production', link: '/video-production' },
     { text: 'Gallery', link: '/gallery' },
     { text: 'About', link: '/about' },
   ]

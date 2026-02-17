@@ -2,8 +2,8 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Page from '~/components/Page.astro';
 import { Header } from '~/components/Header';
-import { Portfolio } from '~/components/Portfolio';
-import { getAllPortfolios, getAllPortfoliosWithSlug, getHeaderBackgroundByPage } from '~/api';
+import { Player } from '~/components/Player';
+import { getAllPortfoliosWithSlug, getPortfolioBySlug, getHeaderBackgroundByPage } from '~/api';
 
 export async function getStaticPaths() {
   const portfolios = await getAllPortfoliosWithSlug();
@@ -11,21 +11,52 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
-const portfolios = await getAllPortfolios();
+const portfolio = await getPortfolioBySlug(slug as string);
 const headerBackground = await getHeaderBackgroundByPage('/');
 ---
 
-<BaseLayout title={`${slug} - ondrahajek.com | AERIAL Video & Photography`}>
-  <Page isHomepage>
-    <Header
-      slot="header"
-      client:load
-      title="Aerial"
-      subTitle="Video &amp; Photography"
-      headerBackground={headerBackground}
-      isHomepage
-      currentPath={Astro.url.pathname}
-    />
-    <Portfolio client:load portfolios={portfolios} slug={slug} />
-  </Page>
-</BaseLayout>
+{portfolio ? (
+  <BaseLayout title={`${portfolio.title} - ondrahajek.com | AERIAL Video & Photography`}>
+    <Page>
+      <Header
+        slot="header"
+        client:load
+        title={portfolio.title ?? 'Portfolio'}
+        subTitle={portfolio.subtitle}
+        headerBackground={headerBackground}
+        currentPath={Astro.url.pathname}
+      />
+      <section class="w-full max-w-container mx-auto px-[15px] xl:px-0 py-12">
+        <a
+          href="/#portfolio"
+          class="inline-block mb-8 text-secondary font-teko text-[2rem] uppercase no-underline transition-colors hover:text-white"
+        >
+          ← Back to portfolio
+        </a>
+        <Player
+          client:load
+          title={portfolio.title ?? 'Video'}
+          video={portfolio.video ?? ''}
+        />
+      </section>
+    </Page>
+  </BaseLayout>
+) : (
+  <BaseLayout title="Not found - ondrahajek.com">
+    <Page>
+      <Header
+        slot="header"
+        client:load
+        title="Not found"
+        headerBackground={headerBackground}
+        currentPath={Astro.url.pathname}
+      />
+      <section class="w-full max-w-container mx-auto px-[15px] xl:px-0 py-12 text-center">
+        <p class="text-secondary text-[2rem]">This portfolio item could not be found.</p>
+        <a href="/#portfolio" class="text-white font-teko text-[2rem] uppercase mt-4 inline-block no-underline hover:opacity-80">
+          Back to portfolio
+        </a>
+      </section>
+    </Page>
+  </BaseLayout>
+)}

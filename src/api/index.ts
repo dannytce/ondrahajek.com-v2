@@ -59,6 +59,21 @@ export async function getAllPortfoliosWithSlug() {
   return data?.allPortfolios as Array<{ slug: string }>
 }
 
+export async function getPortfolioBySlug(slug: string) {
+  const data = await fetchAPI(`
+    {
+      portfolio(filter: { slug: { eq: "${slug}" } }) {
+        title
+        subtitle
+        slug
+        video
+      }
+    }
+  `)
+
+  return data?.portfolio as PortfolioRecord | null
+}
+
 export async function getAllPortfolios() {
   const data = await fetchAPI(`
     {

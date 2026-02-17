@@ -20,6 +20,6 @@ const headerBackground = await getHeaderBackgroundByPage('/');
       isHomepage
       currentPath={Astro.url.pathname}
     />
-    <Portfolio client:load portfolios={portfolios} slug={undefined} />
+    <Portfolio client:load portfolios={portfolios} />
   </Page>
 </BaseLayout>
