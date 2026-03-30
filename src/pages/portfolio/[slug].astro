@@ -3,6 +3,7 @@ import BaseLayout from '~/layouts/BaseLayout.astro';
 import Page from '~/components/Page.astro';
 import { Header } from '~/components/Header';
 import { Player } from '~/components/Player';
+import { PortfolioDescriptions } from '~/components/PortfolioDescriptions';
 import { getAllPortfoliosWithSlug, getPortfolioBySlug, getHeaderBackgroundByPage } from '~/api';
 
 export async function getStaticPaths() {
@@ -22,7 +23,7 @@ const headerBackground = await getHeaderBackgroundByPage('/');
         slot="header"
         client:load
         title={portfolio.title ?? 'Portfolio'}
-        subTitle={portfolio.subtitle}
+        subTitle={portfolio.subtitle ?? undefined}
         headerBackground={headerBackground}
         currentPath={Astro.url.pathname}
       />
@@ -37,6 +38,11 @@ const headerBackground = await getHeaderBackgroundByPage('/');
           client:load
           title={portfolio.title ?? 'Video'}
           video={portfolio.video ?? ''}
+        />
+        <PortfolioDescriptions
+          client:load
+          descriptionCs={portfolio.descriptionCs}
+          descriptionEn={portfolio.descriptionEn}
         />
       </section>
     </Page>

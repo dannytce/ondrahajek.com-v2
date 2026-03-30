@@ -1,7 +1,17 @@
+import type { CdaStructuredTextValue } from 'datocms-structured-text-utils'
 import type { PortfolioRecord, FileField, ResponsiveImage } from './generated/types'
+
+/** Single portfolio detail query (localized subtitle + descriptions). */
+export type PortfolioDetail = PortfolioRecord & {
+  descriptionCs?: CdaStructuredTextValue | null
+  descriptionEn?: CdaStructuredTextValue | null
+}
 
 const API_URL = 'https://graphql.datocms.com'
 const API_TOKEN = import.meta.env.DATOCMS_API_TOKEN
+
+/** Max portfolio items to fetch (must cover full CSV import; Dato allows up to 100 per page). */
+const PORTFOLIO_LIST_FIRST = 100
 
 // See: https://www.datocms.com/blog/offer-responsive-progressive-lqip-images-in-2020
 const responsiveImageFragment = `
@@ -50,7 +60,7 @@ const fetchAPI = async (
 export async function getAllPortfoliosWithSlug() {
   const data = await fetchAPI(`
     {
-      allPortfolios(first: "40") {
+      allPortfolios(first: "${PORTFOLIO_LIST_FIRST}") {
         slug
       }
     }
@@ -64,20 +74,26 @@ export async function getPortfolioBySlug(slug: string) {
     {
       portfolio(filter: { slug: { eq: "${slug}" } }) {
         title
-        subtitle
+        subtitle(locale: cs)
         slug
         video
+        descriptionCs: description(locale: cs) {
+          value
+        }
+        descriptionEn: description(locale: en) {
+          value
+        }
       }
     }
   `)
 
-  return data?.portfolio as PortfolioRecord | null
+  return data?.portfolio as PortfolioDetail | null
 }
 
 export async function getAllPortfolios() {
   const data = await fetchAPI(`
     {
-      allPortfolios(first: "40") {
+      allPortfolios(first: "${PORTFOLIO_LIST_FIRST}") {
         title
         subtitle
         slug
