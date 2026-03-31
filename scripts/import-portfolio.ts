@@ -1,7 +1,8 @@
 /**
  * Import portfolio rows from CSV into DatoCMS Portfolio records (Content Management API).
  *
- * CSV (header row 1): ODKAZ,Titulek videa,,,Slug,Rok,Kategorie 1,Kategorie 2,Klient,Lokace,Štítky
+ * CSV (header row 1): ODKAZ,Titulek videa,,,Slug,Rok,Kategorie 1,Kategorie 2,Klient,Lokace,Štítky[,canonical_tags]
+ * (canonical_tags column is ignored by import; optional for spreadsheets that still have it.)
  * Unnamed columns = Czech + English long descriptions.
  *
  * Mapping:
@@ -12,16 +13,17 @@
  *   rok → date (YYYY-01-01)
  *   klient → client
  *   lokace → location
- *   kategorie1 → category (link by exact name on portfolio_category)
- *   kategorie2 → subcategory (link by exact name on portfolio_subcategory)
+ *   kategorie1 → category (portfolio_category: case-insensitive name match + optional aliases)
+ *   kategorie2 → subcategory (portfolio_subcategory: same)
  *   subtitle → short line Klient · Lokace (both cs and en)
- *   stitky → not in schema (skipped)
+ *   stitky → Portfolio `tags` (single string, stored as in CSV — e.g. #hashtag #hashtag …)
  *
  * Requires DATOCMS_MANAGEMENT_API_TOKEN (or DATOCMS_API_TOKEN with CMA access).
  *
  * Usage:
  *   pnpm import:portfolio -- path/to/file.csv
  *   pnpm import:portfolio -- path/to/file.csv --dry-run
+ *   pnpm import:portfolio -- path/to/file.csv --update-only   # only PATCH existing items (match by slug); never create
  *
  * @see https://www.datocms.com/docs/content-management-api
  */
@@ -32,6 +34,12 @@ import path from 'node:path'
 import { parse } from 'csv-parse/sync'
 import { buildClient } from '@datocms/cma-client-node'
 import { plainTextToStructuredTextRequest, type StructuredTextRequest } from './plain-text-to-dast'
+import {
+  buildTaxonomyMaps,
+  loadTaxonomyAliasesFromDisk,
+  resolveTaxonomyId,
+  type TaxonomyMaps,
+} from './import-taxonomy-lookup'
 
 const COLUMN_NAMES = [
   'odkaz',
@@ -45,19 +53,20 @@ const COLUMN_NAMES = [
   'klient',
   'lokace',
   'stitky',
+  'canonical_tags',
 ] as const
 
 type Row = Record<(typeof COLUMN_NAMES)[number], string>
 
-const linkIdCache = new Map<string, string | null>()
-const warnedMissingNames = new Set<string>()
+const warnedMissingTaxonomy = new Set<string>()
 
 function parseArgs(argv: string[]) {
-  const args = argv.slice(2)
+  const args = argv.slice(2).filter((a) => a !== '--')
   const dryRun = args.includes('--dry-run')
-  const paths = args.filter((a) => a !== '--dry-run')
+  const updateOnly = args.includes('--update-only')
+  const paths = args.filter((a) => a !== '--dry-run' && a !== '--update-only')
   const csvPath = paths[0]
-  return { csvPath, dryRun }
+  return { csvPath, dryRun, updateOnly }
 }
 
 function youtubeEmbedBase(url: string): string {
@@ -124,35 +133,28 @@ async function findItemBySlug(
   return first ? { id: first.id } : null
 }
 
-async function findLinkedRecordIdByName(
-  client: ReturnType<typeof buildClient>,
+function warnMissingTaxonomy(
   modelApiKey: 'portfolio_category' | 'portfolio_subcategory',
-  name: string
-): Promise<string | null> {
-  const k = name.trim()
-  if (!k) {
-    return null
+  csvValue: string,
+  maps: TaxonomyMaps
+) {
+  const k = `${modelApiKey}:${csvValue.trim()}`
+  if (warnedMissingTaxonomy.has(k)) {
+    return
   }
-  const cacheKey = `${modelApiKey}:${k}`
-  if (linkIdCache.has(cacheKey)) {
-    return linkIdCache.get(cacheKey) ?? null
-  }
-  const items = await client.items.list({
-    filter: {
-      type: modelApiKey,
-      fields: {
-        name: { eq: k },
-      },
-    },
-    page: { limit: 1 },
-  })
-  const id = items[0]?.id ?? null
-  linkIdCache.set(cacheKey, id)
-  if (!id && !warnedMissingNames.has(cacheKey)) {
-    warnedMissingNames.add(cacheKey)
-    console.warn(`No ${modelApiKey} record with name "${k}" — link omitted for matching rows`)
-  }
-  return id
+  warnedMissingTaxonomy.add(k)
+  const sample = [...(modelApiKey === 'portfolio_category' ? maps.category : maps.subcategory).keys()]
+    .slice(0, 12)
+    .join(', ')
+  console.warn(
+    `No ${modelApiKey} matching "${csvValue.trim()}" (after normalization/aliases). Known examples: ${sample || '(none)'}`
+  )
+}
+
+/** Dato Portfolio `tags`: one string from `Štítky`, unchanged (e.g. PORTFOLIO.FINAL2.csv). */
+function buildTagsField(row: Row): string | null {
+  const t = row.stitky?.trim()
+  return t || null
 }
 
 function buildLocalizedDescription(row: Row) {
@@ -169,9 +171,11 @@ function buildLocalizedDescription(row: Row) {
 }
 
 async function main() {
-  const { csvPath, dryRun } = parseArgs(process.argv)
+  const { csvPath, dryRun, updateOnly } = parseArgs(process.argv)
   if (!csvPath) {
-    console.error('Usage: pnpm import:portfolio -- <path-to.csv> [--dry-run]')
+    console.error(
+      'Usage: pnpm import:portfolio -- <path-to.csv> [--dry-run] [--update-only]'
+    )
     process.exit(1)
   }
 
@@ -193,15 +197,19 @@ async function main() {
     columns: [...COLUMN_NAMES],
     from_line: 2,
     relax_quotes: true,
+    relax_column_count: true,
     trim: true,
     skip_empty_lines: true,
   }) as Row[]
 
   const client = token ? buildClient({ apiToken: token }) : null
   const itemTypeId = client && !dryRun ? await findPortfolioItemTypeId(client) : ''
+  const taxonomyAliases = loadTaxonomyAliasesFromDisk()
+  const taxonomyMaps = client ? await buildTaxonomyMaps(client) : null
 
   let created = 0
   let updated = 0
+  let skippedUpdateOnly = 0
   let errors = 0
   let dryOk = 0
 
@@ -224,15 +232,26 @@ async function main() {
 
       let categoryIds: string[] = []
       let subcategoryIds: string[] = []
-      if (client) {
-        const c1 = await findLinkedRecordIdByName(client, 'portfolio_category', row.kategorie1 ?? '')
-        const c2 = await findLinkedRecordIdByName(client, 'portfolio_subcategory', row.kategorie2 ?? '')
+      if (client && taxonomyMaps) {
+        const k1 = row.kategorie1 ?? ''
+        const k2 = row.kategorie2 ?? ''
+        const c1 = resolveTaxonomyId(taxonomyMaps, 'portfolio_category', k1, taxonomyAliases)
+        const c2 = resolveTaxonomyId(taxonomyMaps, 'portfolio_subcategory', k2, taxonomyAliases)
         if (c1) {
           categoryIds = [c1]
+        } else if (k1.trim()) {
+          warnMissingTaxonomy('portfolio_category', k1, taxonomyMaps)
         }
         if (c2) {
           subcategoryIds = [c2]
+        } else if (k2.trim()) {
+          warnMissingTaxonomy('portfolio_subcategory', k2, taxonomyMaps)
         }
+      }
+
+      let existing: { id: string } | null = null
+      if (client) {
+        existing = await findItemBySlug(client, slug)
       }
 
       if (dryRun || !client) {
@@ -240,17 +259,37 @@ async function main() {
         const descEnLen = (row.popis_en ?? '').trim().length
         const catLabel = client ? `${categoryIds.length ? 'yes' : '—'}` : 'n/a'
         const subLabel = client ? `${subcategoryIds.length ? 'yes' : '—'}` : 'n/a'
+        let upsertHint = ''
+        if (client) {
+          if (updateOnly) {
+            upsertHint = existing ? ' | action: update' : ' | action: skip (no slug in Dato)'
+          } else {
+            upsertHint = existing ? ' | action: update' : ' | action: create'
+          }
+        }
+        const tagsPreview = buildTagsField(row)
+        const tagsLabel = tagsPreview
+          ? tagsPreview.includes('#')
+            ? `${(tagsPreview.match(/#/g) ?? []).length} #tags`
+            : `${tagsPreview.length} chars`
+          : '—'
         console.log(
-          `[dry-run] ${slug} | desc cs/en: ${descCsLen}/${descEnLen} chars | date: ${dateStr ?? '—'} | category: ${catLabel} subcategory: ${subLabel}`
+          `[dry-run] ${slug} | desc cs/en: ${descCsLen}/${descEnLen} chars | date: ${dateStr ?? '—'} | category: ${catLabel} subcategory: ${subLabel} | tags: ${tagsLabel}${upsertHint}`
         )
         dryOk++
         continue
       }
 
-      const existing = await findItemBySlug(client, slug)
+      if (updateOnly && !existing) {
+        console.warn(`Skipped (update-only, unknown slug): ${slug}`)
+        skippedUpdateOnly++
+        continue
+      }
 
       const subtitleLocales =
         shortSubtitle.length > 0 ? { cs: shortSubtitle, en: shortSubtitle } : undefined
+
+      const tagsField = buildTagsField(row)
 
       const baseFields = {
         title,
@@ -263,6 +302,7 @@ async function main() {
         subcategory: subcategoryIds,
         ...(subtitleLocales ? { subtitle: subtitleLocales } : {}),
         ...(description ? { description } : {}),
+        ...(tagsField ? { tags: tagsField } : {}),
         meta: { status: 'published' as const },
       }
 
@@ -286,11 +326,18 @@ async function main() {
     }
   }
 
-  console.log(
-    dryRun
-      ? `Dry run: ${dryOk} rows OK, ${errors} skipped/errors`
-      : `Done: ${created} created, ${updated} updated, ${errors} errors`
-  )
+  if (dryRun) {
+    const mode = updateOnly ? ' [update-only]' : ''
+    console.log(`Dry run${mode}: ${dryOk} rows OK, ${errors} skipped/errors`)
+  } else {
+    const skipPart =
+      updateOnly && skippedUpdateOnly > 0
+        ? `, ${skippedUpdateOnly} skipped (unknown slug)`
+        : ''
+    console.log(
+      `Done: ${created} created, ${updated} updated${skipPart}, ${errors} errors`
+    )
+  }
 }
 
 main().catch((e) => {

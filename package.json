@@ -12,7 +12,9 @@
     "lint": "eslint src --ext .ts,.tsx",
     "format": "prettier --write 'src/**/*.{ts,tsx,astro}'",
     "codegen": "graphql-codegen -r dotenv/config --config graphql-codegen.cjs",
-    "import:portfolio": "tsx scripts/import-portfolio.ts"
+    "import:portfolio": "tsx scripts/import-portfolio.ts",
+    "update:portfolio": "tsx scripts/import-portfolio.ts --update-only",
+    "enrich:portfolio-csv": "tsx scripts/enrich-portfolio-csv-canonical-tags.ts"
   },
   "dependencies": {
     "@astrojs/react": "^4.0.1",

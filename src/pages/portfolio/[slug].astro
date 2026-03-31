@@ -14,6 +14,21 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 const portfolio = await getPortfolioBySlug(slug as string);
 const headerBackground = await getHeaderBackgroundByPage('/');
+
+/** CSV `Štítky` as one string: `#a #b` or legacy `slug;slug`. */
+function splitPortfolioTags(raw: string | null | undefined): string[] {
+  const t = raw?.trim();
+  if (!t) return [];
+  if (t.includes('#')) {
+    return t.split(/#+/).map((s) => s.trim()).filter(Boolean);
+  }
+  if (t.includes(';')) {
+    return t.split(';').map((s) => s.trim()).filter(Boolean);
+  }
+  return [t];
+}
+
+const tagItems = portfolio ? splitPortfolioTags(portfolio.tags) : [];
 ---
 
 {portfolio ? (
@@ -44,6 +59,15 @@ const headerBackground = await getHeaderBackgroundByPage('/');
           descriptionCs={portfolio.descriptionCs}
           descriptionEn={portfolio.descriptionEn}
         />
+        {tagItems.length > 0 ? (
+          <ul class="mt-10 flex flex-wrap gap-2 list-none p-0 m-0 max-w-[65ch]">
+            {tagItems.map((tag) => (
+              <li class="text-secondary font-teko text-[1.4rem] uppercase tracking-wide px-3 py-1 border border-secondary/40 rounded-sm">
+                {tag.includes('-') && !tag.includes(' ') ? tag.replace(/-/g, ' ') : tag}
+              </li>
+            ))}
+          </ul>
+        ) : null}
       </section>
     </Page>
   </BaseLayout>

@@ -77,6 +77,7 @@ export async function getPortfolioBySlug(slug: string) {
         subtitle(locale: cs)
         slug
         video
+        tags
         descriptionCs: description(locale: cs) {
           value
         }
@@ -97,6 +98,7 @@ export async function getAllPortfolios() {
         title
         subtitle
         slug
+        tags
         thumbnail {
           responsiveImage(imgixParams: {h: "460", w: "836", fit: crop }) {
             ...responsiveImageFragment
