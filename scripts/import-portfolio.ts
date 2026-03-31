@@ -1,8 +1,7 @@
 /**
  * Import portfolio rows from CSV into DatoCMS Portfolio records (Content Management API).
  *
- * CSV (header row 1): ODKAZ,Titulek videa,,,Slug,Rok,Kategorie 1,Kategorie 2,Klient,Lokace,Štítky[,canonical_tags]
- * (canonical_tags column is ignored by import; optional for spreadsheets that still have it.)
+ * CSV (header row 1): ODKAZ,Titulek videa,,,Slug,Rok,Kategorie 1,Kategorie 2,Klient,Lokace,Štítky
  * Unnamed columns = Czech + English long descriptions.
  *
  * Mapping:
@@ -53,7 +52,6 @@ const COLUMN_NAMES = [
   'klient',
   'lokace',
   'stitky',
-  'canonical_tags',
 ] as const
 
 type Row = Record<(typeof COLUMN_NAMES)[number], string>

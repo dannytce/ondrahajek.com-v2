@@ -43,14 +43,18 @@ function extractLocalizedName(raw: unknown): string {
   return ''
 }
 
-function itemDisplayName(item: Record<string, unknown>): string {
+/** Display name for a taxonomy item (used by import and portfolio CSV export). */
+export function taxonomyItemDisplayName(item: Record<string, unknown>): string {
   const top = item.name
   const attrs = item.attributes as Record<string, unknown> | undefined
   const fromAttrs = attrs?.name
   return extractLocalizedName(top) || extractLocalizedName(fromAttrs)
 }
 
-async function fetchAllItemsOfType(client: Client, modelApiKey: string): Promise<Record<string, unknown>[]> {
+export async function fetchAllItemsOfType(
+  client: Client,
+  modelApiKey: string
+): Promise<Record<string, unknown>[]> {
   const out: Record<string, unknown>[] = []
   const limit = 100
   let offset = 0
@@ -109,7 +113,7 @@ export async function buildTaxonomyMaps(client: Client): Promise<TaxonomyMaps> {
   function toMap(items: Record<string, unknown>[]): Map<string, string> {
     const m = new Map<string, string>()
     for (const item of items) {
-      const name = itemDisplayName(item)
+      const name = taxonomyItemDisplayName(item)
       if (!name) {
         continue
       }
@@ -129,6 +133,34 @@ export async function buildTaxonomyMaps(client: Client): Promise<TaxonomyMaps> {
   return {
     category: toMap(catItems),
     subcategory: toMap(subItems),
+  }
+}
+
+/** Dato item id → display name (for CSV export). */
+export async function buildTaxonomyIdToNameMaps(client: Client): Promise<{
+  category: Map<string, string>
+  subcategory: Map<string, string>
+}> {
+  const [catItems, subItems] = await Promise.all([
+    fetchAllItemsOfType(client, 'portfolio_category'),
+    fetchAllItemsOfType(client, 'portfolio_subcategory'),
+  ])
+
+  function toIdMap(items: Record<string, unknown>[]): Map<string, string> {
+    const m = new Map<string, string>()
+    for (const item of items) {
+      const id = item.id as string
+      const name = taxonomyItemDisplayName(item)
+      if (id && name) {
+        m.set(id, name)
+      }
+    }
+    return m
+  }
+
+  return {
+    category: toIdMap(catItems),
+    subcategory: toIdMap(subItems),
   }
 }
 
