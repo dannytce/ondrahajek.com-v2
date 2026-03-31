@@ -1,0 +1,35 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Page from '~/components/Page.astro';
+import { Header } from '~/components/Header';
+import GalleryComponent from '~/components/Gallery.astro';
+import { getGallery, getHeaderBackgroundByPage } from '~/api';
+import { localeStaticPaths, getLocaleFromParam, t } from '~/i18n';
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const locale = getLocaleFromParam(Astro.params.locale);
+const photos = await getGallery();
+const headerBackground = await getHeaderBackgroundByPage('/gallery');
+---
+
+<BaseLayout
+  title={`${t(locale, 'nav.gallery')} - ${t(locale, 'meta.title')}`}
+  locale={locale}
+  canonicalPath="/gallery"
+>
+  <Page locale={locale}>
+    <Header
+      slot="header"
+      client:load
+      title={t(locale, 'nav.gallery')}
+      headerBackground={headerBackground}
+      currentPath={`/${locale}/gallery`}
+      locale={locale}
+      pagePath="/gallery"
+    />
+    <GalleryComponent photos={photos} />
+  </Page>
+</BaseLayout>

@@ -1,12 +1,14 @@
 ---
 import Footer from './Footer.astro';
+import type { Locale } from '~/i18n';
 
 interface Props {
   isHomepage?: boolean;
-  isAboutPage?: boolean; // Passed for semantic clarity, consumed by Header slot
+  isAboutPage?: boolean;
+  locale?: Locale;
 }
 
-const { isHomepage } = Astro.props;
+const { isHomepage, locale = 'en' } = Astro.props;
 ---
 
 <slot name="header" />
@@ -16,5 +18,5 @@ const { isHomepage } = Astro.props;
   class="relative z-main bg-background before:content-[''] before:absolute before:left-0 before:top-0.5 before:w-full before:h-[45vh] before:-translate-y-full before:pointer-events-none before:bg-gradient-to-b before:from-[rgba(13,13,16,0)] before:to-background"
 >
   <slot />
-  <Footer />
+  <Footer locale={locale} />
 </main>

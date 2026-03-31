@@ -1,6 +1,7 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
 import '../styles/global.css';
+import type { Locale } from '~/i18n';
 
 const FB_PIXEL_ID = '895557671255172';
 const GA_TRACKING_ID = 'UA-111398537-1';
@@ -10,13 +11,28 @@ const fontsHref =
 interface Props {
   title?: string;
   description?: string;
+  locale?: Locale;
+  /** Absolute path of the current page WITHOUT locale prefix (e.g. "/portfolio/my-slug") */
+  canonicalPath?: string;
+  /** JSON-LD structured data object */
+  jsonLd?: Record<string, unknown>;
 }
 
-const { title = 'ondrahajek.com | AERIAL Video & Photography', description = 'Web portfolio of drone pilot Ondra Hajek, who will make your projects more interesting. He specialises in documentaries, film, music video, commercials and architecture.' } = Astro.props;
+const {
+  title = 'ondrahajek.com | AERIAL Video & Photography',
+  description = 'Web portfolio of drone pilot Ondra Hajek, who will make your projects more interesting. He specialises in documentaries, film, music video, commercials and architecture.',
+  locale = 'en',
+  canonicalPath,
+  jsonLd,
+} = Astro.props;
+
+const siteUrl = 'https://ondrahajek.com';
+const enUrl = canonicalPath ? `${siteUrl}/en${canonicalPath === '/' ? '' : canonicalPath}` : undefined;
+const csUrl = canonicalPath ? `${siteUrl}/cs${canonicalPath === '/' ? '' : canonicalPath}` : undefined;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -29,6 +45,14 @@ const { title = 'ondrahajek.com | AERIAL Video & Photography', description = 'We
       content="aerial, drone, camera, 4k, phantom, phantom4pro, inspire, video, equipment, photography, studio, professional, uav, dji, copter, documentary, film, music video, promo, commercial, architecture, music video, aerial video, aerial photography, 360 photography, 360°,copter vision, coptervision, georgia, bali, indonesia, brazil, rio de janeiro, surf, paragliding, surfing, travel, dron, kamera, letecké záběry, koptéra, na zakázku, výškové práce, ze vzduchu, ucl, dokument, film, hudební klip, architektura"
     />
     <title>{title}</title>
+
+    {enUrl && <link rel="alternate" hreflang="en" href={enUrl} />}
+    {csUrl && <link rel="alternate" hreflang="cs" href={csUrl} />}
+    {enUrl && csUrl && <link rel="alternate" hreflang="x-default" href={enUrl} />}
+
+    {jsonLd && (
+      <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    )}
 
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://www.datocms-assets.com" />

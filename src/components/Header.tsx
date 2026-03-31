@@ -6,6 +6,7 @@ import { DatoImage } from '~/components/DatoImage'
 import { PlayShowreel } from '~/components/PlayShowreel'
 import { TrustedBy } from '~/components/About/TrustedBy'
 import type { ResponsiveImage } from '~/api/generated/types'
+import { t, localePath, getAlternateLocale, type Locale } from '~/i18n'
 
 interface HeaderProps {
   isAboutPage?: boolean
@@ -14,6 +15,9 @@ interface HeaderProps {
   subTitle?: string
   headerBackground: ResponsiveImage
   currentPath?: string
+  locale?: Locale
+  /** Path WITHOUT locale prefix, used to build the language switcher URL */
+  pagePath?: string
 }
 
 export function Header({
@@ -23,6 +27,8 @@ export function Header({
   isHomepage,
   headerBackground,
   currentPath = '/',
+  locale = 'en',
+  pagePath = '/',
 }: HeaderProps) {
   const [isVideoLoaded, setIsVideoLoaded] = useState(false)
   const windowWidth = useWindowSize()
@@ -82,20 +88,32 @@ export function Header({
         </div>
       </header>
       {isAboutPage ? <TrustedBy /> : null}
-      <Nav currentPath={currentPath} />
+      <Nav currentPath={currentPath} locale={locale} pagePath={pagePath} />
     </>
   )
 }
 
-function Nav({ currentPath }: { currentPath: string }) {
+function Nav({
+  currentPath,
+  locale,
+  pagePath,
+}: {
+  currentPath: string
+  locale: Locale
+  pagePath: string
+}) {
   const isNavVisible = useScrollDirection()
   const isPastHero = usePastHero()
+
   const navLinks = [
-    { text: 'Drone Cinematography', link: '/drone-cinematography' },
-    { text: 'Video Production', link: '/video-production' },
-    { text: 'Gallery', link: '/gallery' },
-    { text: 'About', link: '/about' },
+    { text: t(locale, 'nav.drone'), link: localePath(locale, '/drone-cinematography') },
+    { text: t(locale, 'nav.video'), link: localePath(locale, '/video-production') },
+    { text: t(locale, 'nav.gallery'), link: localePath(locale, '/gallery') },
+    { text: t(locale, 'nav.about'), link: localePath(locale, '/about') },
   ]
+
+  const altLocale = getAlternateLocale(locale)
+  const switchUrl = localePath(altLocale, pagePath)
 
   return (
     <div
@@ -105,7 +123,6 @@ function Nav({ currentPath }: { currentPath: string }) {
         opacity: isNavVisible ? 1 : 0,
       }}
     >
-      {/* Gradient only when hero is scrolled out – softer overlap with content */}
       {isPastHero && (
         <div
           className="absolute inset-x-0 h-48 pointer-events-none -z-10 transition-opacity duration-300"
@@ -117,23 +134,31 @@ function Nav({ currentPath }: { currentPath: string }) {
       )}
       <nav className="w-full top-[30px] md:top-[63px] relative">
         <div className="w-full max-w-container mx-auto px-[15px] xl:px-0 flex justify-between">
-          <a href="/" className="pointer-events-auto">
+          <a href={localePath(locale, '/')} className="pointer-events-auto">
             <img src="/logo-ondrahajek.svg" alt="ONDRAHAJEK.COM" />
           </a>
-          <ul className="p-0 m-0 list-none">
-            {navLinks.map((item) => (
-              <li key={item.link} className="first:[&_a]:pt-0">
-                <a
-                  href={item.link}
-                  className={`block text-[2rem] font-teko text-white no-underline uppercase text-right pointer-events-auto py-[clamp(5px,1.2vh,10px)] link-animation ${
-                    currentPath === item.link ? 'active' : ''
-                  }`}
-                >
-                  {item.text}
-                </a>
-              </li>
-            ))}
-          </ul>
+          <div className="flex flex-col items-end gap-1">
+            <ul className="p-0 m-0 list-none">
+              {navLinks.map((item) => (
+                <li key={item.link} className="first:[&_a]:pt-0">
+                  <a
+                    href={item.link}
+                    className={`block text-[2rem] font-teko text-white no-underline uppercase text-right pointer-events-auto py-[clamp(5px,1.2vh,10px)] link-animation ${
+                      currentPath === item.link ? 'active' : ''
+                    }`}
+                  >
+                    {item.text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <a
+              href={switchUrl}
+              className="pointer-events-auto text-secondary text-[1.4rem] font-teko uppercase no-underline hover:text-white transition-colors"
+            >
+              {t(locale, 'lang.switch')}
+            </a>
+          </div>
         </div>
       </nav>
     </div>

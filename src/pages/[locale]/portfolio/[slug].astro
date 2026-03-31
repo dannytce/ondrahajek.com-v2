@@ -1,0 +1,160 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Page from '~/components/Page.astro';
+import { Header } from '~/components/Header';
+import { Player } from '~/components/Player';
+import { PortfolioDescriptions } from '~/components/PortfolioDescriptions';
+import { getAllPortfoliosWithSlug, getPortfolioBySlug, getHeaderBackgroundByPage } from '~/api';
+import { LOCALES, getLocaleFromParam, t, localePath, getCategorySlug, type Locale } from '~/i18n';
+
+export async function getStaticPaths() {
+  const portfolios = await getAllPortfoliosWithSlug();
+  return LOCALES.flatMap((locale) =>
+    portfolios.map((p) => ({ params: { locale, slug: p.slug } }))
+  );
+}
+
+const locale = getLocaleFromParam(Astro.params.locale);
+const { slug } = Astro.params;
+const portfolio = await getPortfolioBySlug(slug as string);
+const headerBackground = await getHeaderBackgroundByPage('/');
+
+function splitPortfolioTags(raw: string | null | undefined): string[] {
+  const str = raw?.trim();
+  if (!str) return [];
+  if (str.includes('#')) return str.split(/#+/).map((s) => s.trim()).filter(Boolean);
+  if (str.includes(';')) return str.split(';').map((s) => s.trim()).filter(Boolean);
+  return [str];
+}
+
+const tagItems = portfolio ? splitPortfolioTags(portfolio.tags) : [];
+
+// Determine back link based on primary category
+const primaryCategoryId = portfolio?.category?.[0]?.id;
+const categorySlug = primaryCategoryId ? getCategorySlug(primaryCategoryId) : null;
+const backPath = categorySlug && categorySlug !== 'selected-work'
+  ? `/${categorySlug}`
+  : '/';
+const backLabel = categorySlug === 'drone-cinematography'
+  ? t(locale, 'nav.drone')
+  : categorySlug === 'video-production'
+  ? t(locale, 'nav.video')
+  : 'Portfolio';
+
+// Locale-aware subtitle
+const subtitle = locale === 'cs'
+  ? (portfolio?.subtitleCs || portfolio?.subtitleEn)
+  : (portfolio?.subtitleEn || portfolio?.subtitleCs);
+
+// Year from date
+const year = portfolio?.date ? new Date(portfolio.date).getFullYear() : null;
+
+// JSON-LD structured data
+const jsonLd = portfolio ? {
+  '@context': 'https://schema.org',
+  '@type': 'VideoObject',
+  name: portfolio.title,
+  description: subtitle ?? portfolio.title,
+  thumbnailUrl: portfolio.thumbnail?.responsiveImage?.src,
+  uploadDate: portfolio.date ?? undefined,
+  embedUrl: portfolio.video ?? undefined,
+} : undefined;
+---
+
+{portfolio ? (
+  <BaseLayout
+    title={`${portfolio.title} - ${t(locale, 'meta.title')}`}
+    description={subtitle ?? portfolio.title ?? ''}
+    locale={locale}
+    canonicalPath={`/portfolio/${slug}`}
+    jsonLd={jsonLd}
+  >
+    <Page locale={locale}>
+      <Header
+        slot="header"
+        client:load
+        title={portfolio.title ?? 'Portfolio'}
+        subTitle={subtitle ?? undefined}
+        headerBackground={headerBackground}
+        currentPath={Astro.url.pathname}
+        locale={locale}
+        pagePath={`/portfolio/${slug}`}
+      />
+      <section class="w-full max-w-container mx-auto px-[15px] xl:px-0 py-12">
+        <a
+          href={localePath(locale, backPath)}
+          class="inline-block mb-8 text-secondary font-teko text-[2rem] uppercase no-underline transition-colors hover:text-white"
+        >
+          {t(locale, 'detail.backTo')} {backLabel}
+        </a>
+
+        {portfolio.video && (
+          <Player
+            client:load
+            title={portfolio.title ?? 'Video'}
+            video={portfolio.video}
+          />
+        )}
+
+        {/* Metadata bar */}
+        <div class="mt-8 flex flex-wrap gap-x-10 gap-y-3 text-secondary font-teko text-[1.6rem] uppercase">
+          {year && (
+            <div>
+              <span class="text-secondary/60 mr-2">{t(locale, 'detail.year')}</span>
+              <span class="text-white">{year}</span>
+            </div>
+          )}
+          {portfolio.client && (
+            <div>
+              <span class="text-secondary/60 mr-2">{t(locale, 'detail.client')}</span>
+              <span class="text-white">{portfolio.client}</span>
+            </div>
+          )}
+          {portfolio.location && (
+            <div>
+              <span class="text-secondary/60 mr-2">{t(locale, 'detail.location')}</span>
+              <span class="text-white">{portfolio.location}</span>
+            </div>
+          )}
+        </div>
+
+        <PortfolioDescriptions
+          client:load
+          descriptionCs={portfolio.descriptionCs}
+          descriptionEn={portfolio.descriptionEn}
+          locale={locale}
+        />
+
+        {tagItems.length > 0 && (
+          <ul class="mt-10 flex flex-wrap gap-2 list-none p-0 m-0 max-w-[65ch]">
+            {tagItems.map((tag) => (
+              <li class="text-secondary font-teko text-[1.4rem] uppercase tracking-wide px-3 py-1 border border-secondary/40 rounded-sm">
+                {tag.includes('-') && !tag.includes(' ') ? tag.replace(/-/g, ' ') : tag}
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    </Page>
+  </BaseLayout>
+) : (
+  <BaseLayout title={`Not found - ${t(locale, 'meta.title')}`} locale={locale}>
+    <Page locale={locale}>
+      <Header
+        slot="header"
+        client:load
+        title="Not found"
+        headerBackground={headerBackground}
+        currentPath={Astro.url.pathname}
+        locale={locale}
+        pagePath={`/portfolio/${slug}`}
+      />
+      <section class="w-full max-w-container mx-auto px-[15px] xl:px-0 py-12 text-center">
+        <p class="text-secondary text-[2rem]">This portfolio item could not be found.</p>
+        <a href={localePath(locale, '/')} class="text-white font-teko text-[2rem] uppercase mt-4 inline-block no-underline hover:opacity-80">
+          {t(locale, 'detail.back')}
+        </a>
+      </section>
+    </Page>
+  </BaseLayout>
+)}

@@ -1,10 +1,5 @@
 ---
-import BaseLayout from '~/layouts/BaseLayout.astro';
-import Page from '~/components/Page.astro';
-import { Header } from '~/components/Header';
-import { Player } from '~/components/Player';
-import { PortfolioDescriptions } from '~/components/PortfolioDescriptions';
-import { getAllPortfoliosWithSlug, getPortfolioBySlug, getHeaderBackgroundByPage } from '~/api';
+import { getAllPortfoliosWithSlug } from '~/api';
 
 export async function getStaticPaths() {
   const portfolios = await getAllPortfoliosWithSlug();
@@ -12,81 +7,19 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
-const portfolio = await getPortfolioBySlug(slug as string);
-const headerBackground = await getHeaderBackgroundByPage('/');
-
-/** CSV `Štítky` as one string: `#a #b` or legacy `slug;slug`. */
-function splitPortfolioTags(raw: string | null | undefined): string[] {
-  const t = raw?.trim();
-  if (!t) return [];
-  if (t.includes('#')) {
-    return t.split(/#+/).map((s) => s.trim()).filter(Boolean);
-  }
-  if (t.includes(';')) {
-    return t.split(';').map((s) => s.trim()).filter(Boolean);
-  }
-  return [t];
-}
-
-const tagItems = portfolio ? splitPortfolioTags(portfolio.tags) : [];
+const redirectUrl = `/en/portfolio/${slug}`;
 ---
 
-{portfolio ? (
-  <BaseLayout title={`${portfolio.title} - ondrahajek.com | AERIAL Video & Photography`}>
-    <Page>
-      <Header
-        slot="header"
-        client:load
-        title={portfolio.title ?? 'Portfolio'}
-        subTitle={portfolio.subtitle ?? undefined}
-        headerBackground={headerBackground}
-        currentPath={Astro.url.pathname}
-      />
-      <section class="w-full max-w-container mx-auto px-[15px] xl:px-0 py-12">
-        <a
-          href="/#portfolio"
-          class="inline-block mb-8 text-secondary font-teko text-[2rem] uppercase no-underline transition-colors hover:text-white"
-        >
-          ← Back to portfolio
-        </a>
-        <Player
-          client:load
-          title={portfolio.title ?? 'Video'}
-          video={portfolio.video ?? ''}
-        />
-        <PortfolioDescriptions
-          client:load
-          descriptionCs={portfolio.descriptionCs}
-          descriptionEn={portfolio.descriptionEn}
-        />
-        {tagItems.length > 0 ? (
-          <ul class="mt-10 flex flex-wrap gap-2 list-none p-0 m-0 max-w-[65ch]">
-            {tagItems.map((tag) => (
-              <li class="text-secondary font-teko text-[1.4rem] uppercase tracking-wide px-3 py-1 border border-secondary/40 rounded-sm">
-                {tag.includes('-') && !tag.includes(' ') ? tag.replace(/-/g, ' ') : tag}
-              </li>
-            ))}
-          </ul>
-        ) : null}
-      </section>
-    </Page>
-  </BaseLayout>
-) : (
-  <BaseLayout title="Not found - ondrahajek.com">
-    <Page>
-      <Header
-        slot="header"
-        client:load
-        title="Not found"
-        headerBackground={headerBackground}
-        currentPath={Astro.url.pathname}
-      />
-      <section class="w-full max-w-container mx-auto px-[15px] xl:px-0 py-12 text-center">
-        <p class="text-secondary text-[2rem]">This portfolio item could not be found.</p>
-        <a href="/#portfolio" class="text-white font-teko text-[2rem] uppercase mt-4 inline-block no-underline hover:opacity-80">
-          Back to portfolio
-        </a>
-      </section>
-    </Page>
-  </BaseLayout>
-)}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content={`0;url=${redirectUrl}`} />
+    <link rel="canonical" href={redirectUrl} />
+    <title>Redirecting...</title>
+  </head>
+  <body>
+    <script is:inline define:vars={{ redirectUrl }}>window.location.replace(redirectUrl);</script>
+    <noscript><a href={redirectUrl}>Click here</a></noscript>
+  </body>
+</html>

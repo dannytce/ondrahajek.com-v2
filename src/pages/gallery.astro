@@ -1,23 +1,17 @@
 ---
-import BaseLayout from '~/layouts/BaseLayout.astro';
-import Page from '~/components/Page.astro';
-import { Header } from '~/components/Header';
-import GalleryComponent from '~/components/Gallery.astro';
-import { getGallery, getHeaderBackgroundByPage } from '~/api';
-
-const photos = await getGallery();
-const headerBackground = await getHeaderBackgroundByPage('/gallery');
+// Redirect old /gallery → /en/gallery
 ---
 
-<BaseLayout title="Gallery - ondrahajek.com | AERIAL Video & Photography">
-  <Page>
-    <Header
-      slot="header"
-      client:load
-      title="Gallery"
-      headerBackground={headerBackground}
-      currentPath={Astro.url.pathname}
-    />
-    <GalleryComponent photos={photos} />
-  </Page>
-</BaseLayout>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content="0;url=/en/gallery" />
+    <link rel="canonical" href="/en/gallery" />
+    <title>Redirecting...</title>
+  </head>
+  <body>
+    <script is:inline>window.location.replace('/en/gallery');</script>
+    <noscript><a href="/en/gallery">Click here</a></noscript>
+  </body>
+</html>

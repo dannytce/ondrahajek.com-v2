@@ -1,0 +1,36 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Page from '~/components/Page.astro';
+import { Header } from '~/components/Header';
+import { CategoryPortfolioGrid } from '~/components/CategoryPortfolioGrid';
+import { getPortfoliosByCategory, getHeaderBackgroundByPage } from '~/api';
+import { localeStaticPaths, getLocaleFromParam, t, CATEGORY_IDS } from '~/i18n';
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const locale = getLocaleFromParam(Astro.params.locale);
+const portfolios = await getPortfoliosByCategory(CATEGORY_IDS['drone-cinematography']);
+const headerBackground = await getHeaderBackgroundByPage('/');
+---
+
+<BaseLayout
+  title={`${t(locale, 'category.drone.title')} - ${t(locale, 'meta.title')}`}
+  description={t(locale, 'category.drone.description')}
+  locale={locale}
+  canonicalPath="/drone-cinematography"
+>
+  <Page locale={locale}>
+    <Header
+      slot="header"
+      client:load
+      title={t(locale, 'category.drone.title')}
+      headerBackground={headerBackground}
+      currentPath={`/${locale}/drone-cinematography`}
+      locale={locale}
+      pagePath="/drone-cinematography"
+    />
+    <CategoryPortfolioGrid client:load portfolios={portfolios} locale={locale} />
+  </Page>
+</BaseLayout>

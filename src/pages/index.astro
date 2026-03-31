@@ -1,25 +1,17 @@
 ---
-import BaseLayout from '~/layouts/BaseLayout.astro';
-import Page from '~/components/Page.astro';
-import { Header } from '~/components/Header';
-import { Portfolio } from '~/components/Portfolio';
-import { getAllPortfolios, getHeaderBackgroundByPage } from '~/api';
-
-const portfolios = await getAllPortfolios();
-const headerBackground = await getHeaderBackgroundByPage('/');
+// Root index redirects to /en/
 ---
 
-<BaseLayout title="ondrahajek.com | AERIAL Video & Photography">
-  <Page isHomepage>
-    <Header
-      slot="header"
-      client:load
-      title="Aerial"
-      subTitle="Video &amp; Photography"
-      headerBackground={headerBackground}
-      isHomepage
-      currentPath={Astro.url.pathname}
-    />
-    <Portfolio client:load portfolios={portfolios} />
-  </Page>
-</BaseLayout>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content="0;url=/en/" />
+    <link rel="canonical" href="/en/" />
+    <title>Redirecting...</title>
+  </head>
+  <body>
+    <script is:inline>window.location.replace('/en/');</script>
+    <noscript><a href="/en/">Click here</a></noscript>
+  </body>
+</html>

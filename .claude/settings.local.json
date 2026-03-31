@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -n '<Page' /Users/dannytce/Projects/ondrahajek.com-v2/src/pages/[locale]/portfolio/[slug].astro)",
+      "Bash(pnpm build:*)",
+      "Bash(npx astro:*)",
+      "Bash(export PATH=\"/opt/homebrew/bin:/usr/local/bin:$HOME/.local/bin:$HOME/.nvm/versions/node/*/bin:$PATH\")",
+      "Read(//Users/dannytce/.nvm/versions/**)",
+      "Read(//opt/homebrew/bin/**)",
+      "Bash(/usr/local/bin/pnpm build:*)",
+      "Bash(export PATH=\"/Users/dannytce/.local/share/nvm/v24.14.0/bin:$PATH\")"
+    ]
+  }
+}

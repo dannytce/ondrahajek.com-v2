@@ -1,0 +1,38 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Page from '~/components/Page.astro';
+import { Header } from '~/components/Header';
+import { FeaturedWork } from '~/components/FeaturedWork';
+import { getFeaturedPortfolios, getHeaderBackgroundByPage } from '~/api';
+import { localeStaticPaths, getLocaleFromParam, t, CATEGORY_IDS } from '~/i18n';
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const locale = getLocaleFromParam(Astro.params.locale);
+const featured = await getFeaturedPortfolios(CATEGORY_IDS['selected-work']);
+const headerBackground = await getHeaderBackgroundByPage('/');
+---
+
+<BaseLayout
+  title={t(locale, 'meta.title')}
+  description={t(locale, 'meta.description')}
+  locale={locale}
+  canonicalPath="/"
+>
+  <Page isHomepage locale={locale}>
+    <Header
+      slot="header"
+      client:load
+      title={t(locale, 'home.title')}
+      subTitle={t(locale, 'home.subtitle')}
+      headerBackground={headerBackground}
+      isHomepage
+      currentPath={`/${locale}`}
+      locale={locale}
+      pagePath="/"
+    />
+    <FeaturedWork client:load portfolios={featured} locale={locale} />
+  </Page>
+</BaseLayout>
