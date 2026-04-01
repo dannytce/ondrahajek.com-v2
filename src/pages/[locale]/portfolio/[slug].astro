@@ -3,6 +3,7 @@ import BaseLayout from '~/layouts/BaseLayout.astro'
 import Page from '~/components/Page.astro'
 import Player from '~/components/Player.astro'
 import PortfolioDescriptions from '~/components/PortfolioDescriptions.astro'
+import PortfolioDetailMeta from '~/components/PortfolioDetailMeta.astro'
 import { getAllPortfoliosWithSlug, getPortfolioBySlug } from '~/api'
 import {
   LOCALES,
@@ -74,6 +75,11 @@ const switchUrl = localePath(
 
 // Year from date
 const year = portfolio?.date ? new Date(portfolio.date).getFullYear() : null
+
+const hasDetailMeta =
+  year != null ||
+  Boolean(portfolio?.client?.trim()) ||
+  Boolean(portfolio?.location?.trim())
 
 // JSON-LD structured data
 const jsonLd = portfolio
@@ -147,15 +153,27 @@ const jsonLd = portfolio
             {backLinkText}
           </a>
 
-          <div class="grid gap-10 xl:grid-cols-[minmax(0,1fr)_300px]">
+          <div
+            class:list={[
+              'grid gap-10',
+              hasDetailMeta && 'xl:grid-cols-[minmax(0,1fr)_300px]',
+            ]}
+          >
             <div>
               <h1 class="detail-reveal m-0 font-teko text-[5.2rem] uppercase leading-[0.95] tracking-[0.01em] text-white md:text-[7.2rem]">
                 {portfolio.title}
               </h1>
-              {subtitle && (
-                <p class="detail-reveal detail-reveal-delay-1 mt-4 max-w-[70ch] text-[1.8rem] leading-relaxed text-secondary">
-                  {subtitle}
-                </p>
+              {(subtitle || hasDetailMeta) && (
+                <div class="detail-reveal detail-reveal-delay-1 mt-4 max-w-[70ch] xl:hidden">
+                  <PortfolioDetailMeta
+                    variant="inline"
+                    locale={locale}
+                    year={year}
+                    client={portfolio.client}
+                    location={portfolio.location}
+                    class={subtitle ? 'mt-4' : undefined}
+                  />
+                </div>
               )}
               {portfolio.video && (
                 <div class="detail-reveal detail-reveal-delay-1 mt-8">
@@ -186,38 +204,16 @@ const jsonLd = portfolio
                 </ul>
               )}
             </div>
-            <aside class="detail-reveal detail-reveal-delay-1 h-fit rounded border border-white/10 bg-[#111114] p-6 xl:sticky xl:top-28">
-              <dl class="m-0 space-y-4">
-                {year && (
-                  <div>
-                    <dt class="font-teko text-[1.5rem] uppercase text-secondary">
-                      {t(locale, 'detail.year')}
-                    </dt>
-                    <dd class="m-0 text-[1.8rem] text-white">{year}</dd>
-                  </div>
-                )}
-                {portfolio.client && (
-                  <div>
-                    <dt class="font-teko text-[1.5rem] uppercase text-secondary">
-                      {t(locale, 'detail.client')}
-                    </dt>
-                    <dd class="m-0 text-[1.8rem] text-white">
-                      {portfolio.client}
-                    </dd>
-                  </div>
-                )}
-                {portfolio.location && (
-                  <div>
-                    <dt class="font-teko text-[1.5rem] uppercase text-secondary">
-                      {t(locale, 'detail.location')}
-                    </dt>
-                    <dd class="m-0 text-[1.8rem] text-white">
-                      {portfolio.location}
-                    </dd>
-                  </div>
-                )}
-              </dl>
-            </aside>
+            {hasDetailMeta && (
+              <aside class="detail-reveal detail-reveal-delay-1 hidden h-fit rounded border border-white/10 bg-[#111114] p-6 xl:sticky xl:top-28 xl:block">
+                <PortfolioDetailMeta
+                  locale={locale}
+                  year={year}
+                  client={portfolio.client}
+                  location={portfolio.location}
+                />
+              </aside>
+            )}
           </div>
         </section>
       </Page>

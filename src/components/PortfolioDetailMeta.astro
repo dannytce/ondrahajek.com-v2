@@ -1,0 +1,72 @@
+---
+import { t, type Locale } from '~/i18n'
+
+interface Props {
+  locale: Locale
+  year: number | null
+  client?: string | null
+  location?: string | null
+  /** `labeled` = dt/dd (aside). `inline` = values only, middot-separated (mobile under title). */
+  variant?: 'labeled' | 'inline'
+  /** Extra classes for the root element */
+  class?: string
+}
+
+const {
+  locale,
+  year,
+  client,
+  location,
+  variant = 'labeled',
+  class: className,
+} = Astro.props
+
+const parts: string[] = []
+if (year != null) parts.push(String(year))
+if (client?.trim()) parts.push(client.trim())
+if (location?.trim()) parts.push(location.trim())
+
+const hasAny = parts.length > 0
+const inlineText = parts.join(' · ')
+---
+
+{
+  hasAny &&
+    (variant === 'inline' ? (
+      <p
+        class:list={[
+          'm-0 font-teko text-[1.5rem] leading-snug tracking-wide text-secondary',
+          className,
+        ]}
+      >
+        {inlineText}
+      </p>
+    ) : (
+      <dl class:list={['m-0 space-y-4', className]}>
+        {year != null && (
+          <div>
+            <dt class="font-teko text-[1.5rem] uppercase text-secondary">
+              {t(locale, 'detail.year')}
+            </dt>
+            <dd class="m-0 text-[1.8rem] text-white">{year}</dd>
+          </div>
+        )}
+        {client?.trim() && (
+          <div>
+            <dt class="font-teko text-[1.5rem] uppercase text-secondary">
+              {t(locale, 'detail.client')}
+            </dt>
+            <dd class="m-0 text-[1.8rem] text-white">{client}</dd>
+          </div>
+        )}
+        {location?.trim() && (
+          <div>
+            <dt class="font-teko text-[1.5rem] uppercase text-secondary">
+              {t(locale, 'detail.location')}
+            </dt>
+            <dd class="m-0 text-[1.8rem] text-white">{location}</dd>
+          </div>
+        )}
+      </dl>
+    ))
+}
