@@ -5,7 +5,7 @@ import { Header } from '~/components/Header';
 import { Player } from '~/components/Player';
 import { PortfolioDescriptions } from '~/components/PortfolioDescriptions';
 import { getAllPortfoliosWithSlug, getPortfolioBySlug, getHeaderBackgroundByPage } from '~/api';
-import { LOCALES, getLocaleFromParam, t, localePath, getCategorySlug, type Locale } from '~/i18n';
+import { LOCALES, getLocaleFromParam, t, localePath, getCategorySlug } from '~/i18n';
 
 export async function getStaticPaths() {
   const portfolios = await getAllPortfoliosWithSlug();
@@ -46,6 +46,8 @@ const subtitle = locale === 'cs'
   ? (portfolio?.subtitleCs || portfolio?.subtitleEn)
   : (portfolio?.subtitleEn || portfolio?.subtitleCs);
 
+const mediaTransitionName = portfolio?.slug ? `portfolio-media-${portfolio.slug}` : undefined;
+
 // Year from date
 const year = portfolio?.date ? new Date(portfolio.date).getFullYear() : null;
 
@@ -83,7 +85,7 @@ const jsonLd = portfolio ? {
       <section class="w-full max-w-container mx-auto px-[15px] xl:px-0 py-12">
         <a
           href={localePath(locale, backPath)}
-          class="inline-block mb-8 text-secondary font-teko text-[2rem] uppercase no-underline transition-colors hover:text-white"
+          class="detail-reveal inline-block mb-8 text-secondary font-teko text-[2rem] uppercase no-underline transition-colors hover:text-white"
         >
           {t(locale, 'detail.backTo')} {backLabel}
         </a>
@@ -93,11 +95,12 @@ const jsonLd = portfolio ? {
             client:load
             title={portfolio.title ?? 'Video'}
             video={portfolio.video}
+            poster={portfolio.thumbnail?.responsiveImage}
+            transitionName={mediaTransitionName}
           />
         )}
 
-        {/* Metadata bar */}
-        <div class="mt-8 flex flex-wrap gap-x-10 gap-y-3 text-secondary font-teko text-[1.6rem] uppercase">
+        <div class="detail-reveal detail-reveal-delay-1 mt-8 flex flex-wrap gap-x-10 gap-y-3 text-secondary font-teko text-[1.6rem] uppercase">
           {year && (
             <div>
               <span class="text-secondary/60 mr-2">{t(locale, 'detail.year')}</span>
@@ -118,15 +121,17 @@ const jsonLd = portfolio ? {
           )}
         </div>
 
-        <PortfolioDescriptions
-          client:load
-          descriptionCs={portfolio.descriptionCs}
-          descriptionEn={portfolio.descriptionEn}
-          locale={locale}
-        />
+        <div class="detail-reveal detail-reveal-delay-2">
+          <PortfolioDescriptions
+            client:load
+            descriptionCs={portfolio.descriptionCs}
+            descriptionEn={portfolio.descriptionEn}
+            locale={locale}
+          />
+        </div>
 
         {tagItems.length > 0 && (
-          <ul class="mt-10 flex flex-wrap gap-2 list-none p-0 m-0 max-w-[65ch]">
+          <ul class="detail-reveal detail-reveal-delay-3 mt-10 flex flex-wrap gap-2 list-none p-0 m-0 max-w-[65ch]">
             {tagItems.map((tag) => (
               <li class="text-secondary font-teko text-[1.4rem] uppercase tracking-wide px-3 py-1 border border-secondary/40 rounded-sm">
                 {tag.includes('-') && !tag.includes(' ') ? tag.replace(/-/g, ' ') : tag}

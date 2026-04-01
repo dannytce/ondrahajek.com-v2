@@ -34,4 +34,103 @@
   .link-animation.active {
     background-position: 0 100%;
   }
+
+  .portfolio-card-frame {
+    transition: transform 220ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .portfolio-card-media {
+    transition:
+      transform 260ms cubic-bezier(0.23, 1, 0.32, 1),
+      filter 260ms ease,
+      opacity 220ms ease;
+  }
+
+  .portfolio-card-overlay {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.3));
+    opacity: 1;
+    transition: opacity 220ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .portfolio-card-title,
+  .portfolio-card-subtitle {
+    transition:
+      opacity 180ms ease,
+      transform 220ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .portfolio-card:focus-visible .portfolio-card-title,
+  .portfolio-card:focus-visible .portfolio-card-subtitle {
+    opacity: 0.82;
+    transform: translateY(-1px);
+  }
+
+  .portfolio-card:active .portfolio-card-frame {
+    transform: scale(0.985);
+  }
+
+  .detail-reveal {
+    animation: detailFadeIn 300ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+
+  .detail-reveal-delay-1 {
+    animation-delay: 70ms;
+  }
+
+  .detail-reveal-delay-2 {
+    animation-delay: 120ms;
+  }
+
+  .detail-reveal-delay-3 {
+    animation-delay: 170ms;
+  }
+}
+
+@keyframes detailFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 180ms;
+  animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-card-frame,
+  .portfolio-card-media,
+  .portfolio-card-overlay,
+  .portfolio-card-title,
+  .portfolio-card-subtitle,
+  .detail-reveal {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .portfolio-card:hover .portfolio-card-media {
+    transform: scale(1.015);
+    filter: saturate(1.03);
+  }
+
+  .portfolio-card:hover .portfolio-card-overlay {
+    opacity: 0.72;
+  }
+
+  .portfolio-card:hover .portfolio-card-title,
+  .portfolio-card:hover .portfolio-card-subtitle {
+    opacity: 0.82;
+    transform: translateY(-1px);
+  }
 }

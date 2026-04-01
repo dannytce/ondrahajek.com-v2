@@ -82,7 +82,11 @@ export function Header({
           <div className="min-h-header">
             <DatoImage
               data={{ ...headerBackground, alt: '' }}
-              className="absolute min-w-full min-h-header pointer-events-none object-cover z-[2]"
+              className="absolute inset-0 z-[2] min-h-header pointer-events-none"
+              imgClassName="h-full w-full object-cover"
+              priority
+              layout="fill"
+              objectFit="cover"
             />
           </div>
         </div>

@@ -1,6 +1,12 @@
+import { useState } from 'react';
+import { DatoImage } from '~/components/DatoImage';
+import type { ResponsiveImage } from '~/api/generated/types';
+
 interface PlayerProps {
   title: string;
   video: string;
+  poster?: ResponsiveImage | null;
+  transitionName?: string;
 }
 
 function buildIframeSrc(video: string): string {
@@ -22,18 +28,44 @@ function buildIframeSrc(video: string): string {
   }
 }
 
-export function Player({ title, video }: PlayerProps) {
+export function Player({ title, video, poster, transitionName }: PlayerProps) {
+  const [isLoaded, setIsLoaded] = useState(false);
+
   return (
     <div className="h-full">
-      <div className="w-full h-0 pb-[56.25%] relative">
-        <iframe
-          src={buildIframeSrc(video)}
-          title={`${title} video`}
-          style={{ border: 0 }}
-          allow="autoplay; fullscreen"
-          allowFullScreen
-          className="absolute w-full h-full max-h-[calc(100vh-120px)] top-0 left-0 shadow-[0_10px_30px_rgba(0,0,0,0.75)]"
-        />
+      <div className="relative w-full overflow-hidden bg-black shadow-[0_10px_30px_rgba(0,0,0,0.75)]">
+        {poster && (
+          <div
+            className="absolute inset-0 z-10 transition-opacity duration-[220ms] ease-[cubic-bezier(0.23,1,0.32,1)]"
+            style={{
+              opacity: isLoaded ? 0 : 1,
+              pointerEvents: isLoaded ? 'none' : 'auto',
+              viewTransitionName: transitionName,
+            }}
+          >
+            <DatoImage
+              data={{
+                ...poster,
+                alt: '',
+              }}
+              className="absolute inset-0"
+              imgClassName="h-full w-full object-cover"
+              priority
+              layout="fill"
+              objectFit="cover"
+            />
+          </div>
+        )}
+        <div className="w-full h-0 pb-[56.25%] relative">
+          <iframe
+            src={buildIframeSrc(video)}
+            title={`${title} video`}
+            allow="autoplay; fullscreen"
+            onLoad={() => setIsLoaded(true)}
+            className="absolute w-full h-full max-h-[calc(100vh-120px)] top-0 left-0 transition-opacity duration-[260ms] ease-[cubic-bezier(0.23,1,0.32,1)]"
+            style={{ opacity: isLoaded || !poster ? 1 : 0, border: 0 }}
+          />
+        </div>
       </div>
     </div>
   );

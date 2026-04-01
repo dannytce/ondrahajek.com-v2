@@ -13,24 +13,33 @@ export function Portfolio({ portfolios }: PortfolioProps) {
           const thumb = portfolio.thumbnail
           const responsiveImage = thumb?.responsiveImage
           if (!responsiveImage) return null
+          const transitionName = portfolio.slug ? `portfolio-media-${portfolio.slug}` : undefined
           return (
             <li key={portfolio.slug ?? `portfolio-${index}`}>
               <a
                 href={`/portfolio/${portfolio.slug}`}
-                className="block w-full relative no-underline group"
+                className="portfolio-card block w-full relative no-underline group"
               >
-                <div className="relative -z-10 group-hover:before:opacity-0 before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:bottom-0 before:bg-black before:opacity-25 before:z-10 before:transition-opacity">
-                  <DatoImage
-                    data={{
-                      ...responsiveImage,
-                      alt: `Cover Image for ${portfolio.title ?? ''}. ${Array.isArray(thumb.smartTags) ? thumb.smartTags.filter(Boolean).join(', ') : ''}`,
-                    }}
-                  />
+                <div className="portfolio-card-frame relative overflow-hidden bg-black">
+                  <div
+                    className="portfolio-card-media"
+                    style={{ viewTransitionName: transitionName }}
+                  >
+                    <DatoImage
+                      data={{
+                        ...responsiveImage,
+                        alt: '',
+                      }}
+                      className="w-full"
+                      imgClassName="block h-auto w-full"
+                    />
+                  </div>
+                  <div className="portfolio-card-overlay absolute inset-0 pointer-events-none" />
                 </div>
-                <h3 className="text-white text-[2.4rem] xs:text-[2.6rem] md:text-[3rem] lg:text-[4rem] font-teko font-semibold uppercase -mt-[0.5em] leading-none ml-5 relative z-10 transition-opacity group-hover:opacity-25">
+                <h3 className="portfolio-card-title text-white text-[2.4rem] xs:text-[2.6rem] md:text-[3rem] lg:text-[4rem] font-teko font-semibold uppercase -mt-[0.5em] leading-none ml-5 relative z-10">
                   {portfolio.title}
                 </h3>
-                <h4 className="text-secondary text-[1.5rem] font-normal  ml-5 relative z-10 transition-opacity group-hover:opacity-25">
+                <h4 className="portfolio-card-subtitle text-secondary text-[1.5rem] font-normal  ml-5 relative z-10">
                   {portfolio.subtitle}
                 </h4>
               </a>

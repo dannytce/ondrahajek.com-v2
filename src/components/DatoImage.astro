@@ -1,27 +1,20 @@
 ---
+import { Image } from '@datocms/astro';
 import type { ResponsiveImage } from '~/api/generated/types';
 
 interface Props {
   data: ResponsiveImage & { alt?: string };
   class?: string;
+  priority?: boolean;
+  sizes?: string;
 }
 
-const { data, class: className } = Astro.props;
-const { src, srcSet, webpSrcSet, sizes, width, height, alt = '', title } = data;
+const { data, class: className, priority = false, sizes } = Astro.props;
 ---
 
-<picture>
-  <source type="image/webp" srcset={webpSrcSet} sizes={sizes} />
-  <img
-    src={src}
-    srcset={srcSet}
-    sizes={sizes}
-    width={width}
-    height={height}
-    alt={alt}
-    title={title ?? undefined}
-    class={className}
-    loading="lazy"
-    decoding="async"
-  />
-</picture>
+<Image
+  data={data}
+  imgClass={className}
+  priority={priority}
+  sizes={sizes}
+/>
