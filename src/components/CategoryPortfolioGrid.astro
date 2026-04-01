@@ -19,8 +19,13 @@ interface Props {
   defaultSeoDescription: string
 }
 
-const { portfolios, locale, categorySlug, defaultSeoTitle, defaultSeoDescription } =
-  Astro.props
+const {
+  portfolios,
+  locale,
+  categorySlug,
+  defaultSeoTitle,
+  defaultSeoDescription,
+} = Astro.props
 
 const subcategoryMap = new Map<string, string>()
 for (const portfolio of portfolios) {
@@ -73,38 +78,87 @@ const clients: FilterOption[] = [...clientSlugByValue.entries()]
   data-default-seo-title={defaultSeoTitle}
   data-default-seo-description={defaultSeoDescription}
 >
-  <div class="mb-10 flex flex-col gap-6">
-    {
-      subcategories.length > 0 && (
-        <div class="flex flex-wrap gap-2">
-          <button
-            type="button"
-            data-filter-subcategory=""
-            data-active="true"
-            class="cursor-pointer border border-white bg-white px-4 py-1 font-teko text-[1.6rem] uppercase text-background transition-colors data-[active=false]:border-secondary/40 data-[active=false]:bg-transparent data-[active=false]:text-secondary data-[active=false]:hover:border-white data-[active=false]:hover:text-white"
-          >
-            {t(locale, 'filter.all')}
-          </button>
-          {subcategories.map((subcategory) => (
-            <button
-              type="button"
-              data-filter-subcategory={subcategory.value}
-              data-active="false"
-              class="cursor-pointer border border-white bg-white px-4 py-1 font-teko text-[1.6rem] uppercase text-background transition-colors data-[active=false]:border-secondary/40 data-[active=false]:bg-transparent data-[active=false]:text-secondary data-[active=false]:hover:border-white data-[active=false]:hover:text-white"
-            >
-              {subcategory.label}
-            </button>
-          ))}
-        </div>
-      )
-    }
+  <div class="portfolio-toolbar-enter mb-10 flex flex-col gap-4">
+    <div class="flex flex-wrap items-center justify-between gap-4">
+      <div class="flex min-w-0 flex-1 flex-wrap gap-2">
+        {
+          subcategories.length > 0 && (
+            <div class="flex flex-wrap gap-2">
+              <button
+                type="button"
+                data-filter-subcategory=""
+                data-active="true"
+                class="filter-subcategory-chip cursor-pointer border border-white bg-white px-4 py-1 font-teko text-[1.6rem] uppercase text-background transition-colors data-[active=false]:border-secondary/40 data-[active=false]:bg-transparent data-[active=false]:text-secondary data-[active=false]:hover:border-white data-[active=false]:hover:text-white"
+              >
+                {t(locale, 'filter.all')}
+              </button>
+              {subcategories.map((subcategory) => (
+                <button
+                  type="button"
+                  data-filter-subcategory={subcategory.value}
+                  data-active="false"
+                  class="filter-subcategory-chip cursor-pointer border border-white bg-white px-4 py-1 font-teko text-[1.6rem] uppercase text-background transition-colors data-[active=false]:border-secondary/40 data-[active=false]:bg-transparent data-[active=false]:text-secondary data-[active=false]:hover:border-white data-[active=false]:hover:text-white"
+                >
+                  {subcategory.label}
+                </button>
+              ))}
+            </div>
+          )
+        }
+      </div>
 
-    <div class="flex flex-wrap items-center gap-3">
+      <div
+        class="flex w-full shrink-0 items-center justify-end gap-2 sm:w-auto"
+      >
+        <button
+          type="button"
+          data-filter-toggle
+          class="filter-toggle-btn"
+          aria-expanded="false"
+          aria-controls="portfolio-filters-panel"
+          aria-label={t(locale, 'filter.toggleFilters')}
+        >
+          <svg
+            class="h-6 w-6"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"
+            ></polygon>
+          </svg>
+          <span
+            data-filter-active-badge
+            hidden
+            class="pointer-events-none absolute -right-4 -top-4 flex min-h-[1.8rem] min-w-[1.8rem] items-center justify-center rounded-full bg-secondary px-0.5 font-teko text-[1.1rem] font-semibold tabular-nums leading-none text-background ring-2 ring-background"
+            aria-hidden="true"
+          >
+            0
+          </span>
+        </button>
+        <span class="font-roboto text-[1.3rem] text-secondary/60">
+          <span data-filter-result-count>{portfolios.length}</span> / {
+            portfolios.length
+          }{' '}
+          {t(locale, 'filter.results')}
+        </span>
+      </div>
+    </div>
+
+    <div
+      id="portfolio-filters-panel"
+      data-filter-panel
+      class="flex hidden flex-wrap items-center justify-end gap-3"
+    >
       {
         years.length > 0 && (
           <select
             data-filter-year
-            class="cursor-pointer border border-secondary/40 bg-transparent px-3 py-1 font-teko text-[1.6rem] uppercase text-secondary transition-colors hover:border-white hover:text-white focus:border-white focus:outline-none"
+            class="filter-select w-full max-w-full shrink-0 md:w-[9rem] md:min-w-[9rem] md:max-w-[9rem]"
           >
             <option value="">{t(locale, 'filter.year')}</option>
             {years.map((year) => (
@@ -118,7 +172,7 @@ const clients: FilterOption[] = [...clientSlugByValue.entries()]
         locations.length > 0 && (
           <select
             data-filter-location
-            class="cursor-pointer border border-secondary/40 bg-transparent px-3 py-1 font-teko text-[1.6rem] uppercase text-secondary transition-colors hover:border-white hover:text-white focus:border-white focus:outline-none"
+            class="filter-select w-full max-w-full shrink-0 md:w-[14rem] md:min-w-[14rem] md:max-w-[14rem]"
           >
             <option value="">{t(locale, 'filter.location')}</option>
             {locations.map((location) => (
@@ -132,7 +186,7 @@ const clients: FilterOption[] = [...clientSlugByValue.entries()]
         clients.length > 0 && (
           <select
             data-filter-client
-            class="cursor-pointer border border-secondary/40 bg-transparent px-3 py-1 font-teko text-[1.6rem] uppercase text-secondary transition-colors hover:border-white hover:text-white focus:border-white focus:outline-none"
+            class="filter-select w-full max-w-full shrink-0 md:w-[16rem] md:min-w-[16rem] md:max-w-[16rem]"
           >
             <option value="">{t(locale, 'filter.client')}</option>
             {clients.map((client) => (
@@ -146,7 +200,7 @@ const clients: FilterOption[] = [...clientSlugByValue.entries()]
         type="text"
         data-filter-search
         placeholder={t(locale, 'filter.search')}
-        class="min-w-[200px] border border-secondary/40 bg-transparent px-3 py-[5px] font-roboto text-[1.4rem] text-white transition-colors placeholder:text-secondary/60 hover:border-white focus:border-white focus:outline-none"
+        class="filter-search-input w-full min-w-[200px] max-w-[22rem] sm:w-auto"
       />
 
       <button
@@ -157,13 +211,6 @@ const clients: FilterOption[] = [...clientSlugByValue.entries()]
       >
         {t(locale, 'filter.clear')}
       </button>
-
-      <span class="ml-auto font-roboto text-[1.3rem] text-secondary/60">
-        <span data-filter-result-count>{portfolios.length}</span> / {
-          portfolios.length
-        }{' '}
-        {t(locale, 'filter.results')}
-      </span>
     </div>
   </div>
 
@@ -179,7 +226,7 @@ const clients: FilterOption[] = [...clientSlugByValue.entries()]
     class="m-0 grid w-full list-none grid-cols-1 gap-12 p-0 sm:grid-cols-2 lg:grid-cols-3"
   >
     {
-      portfolios.map((portfolio) => {
+      portfolios.map((portfolio, index) => {
         const year = portfolio.date
           ? new Date(portfolio.date).getFullYear().toString()
           : ''
@@ -188,9 +235,7 @@ const clients: FilterOption[] = [...clientSlugByValue.entries()]
         const locationSlug = location
           ? (locationSlugByValue.get(location) ?? '')
           : ''
-        const clientSlug = client
-          ? (clientSlugByValue.get(client) ?? '')
-          : ''
+        const clientSlug = client ? (clientSlugByValue.get(client) ?? '') : ''
         const search = [
           portfolio.title,
           portfolio.subtitle,
@@ -206,6 +251,8 @@ const clients: FilterOption[] = [...clientSlugByValue.entries()]
 
         return (
           <li
+            class="portfolio-grid-item-enter"
+            style={{ '--stagger': String(Math.min(index, 20)) }}
             data-portfolio-item
             data-subcategories={portfolio.subcategory
               .map((subcategory) => subcategory.id)

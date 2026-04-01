@@ -102,6 +102,7 @@ export const translations = {
     'filter.clear': 'Clear filters',
     'filter.results': 'results',
     'filter.noResults': 'No projects match your filters.',
+    'filter.toggleFilters': 'Show or hide filters',
 
     // Detail
     'detail.back': '← Back to portfolio',
@@ -177,6 +178,7 @@ export const translations = {
     'filter.clear': 'Vymazat filtry',
     'filter.results': 'výsledků',
     'filter.noResults': 'Žádné projekty neodpovídají filtrům.',
+    'filter.toggleFilters': 'Zobrazit nebo skrýt filtry',
 
     'detail.back': '← Zpět na portfolio',
     'detail.backTo': '← Zpět na',

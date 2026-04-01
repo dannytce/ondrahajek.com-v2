@@ -23,6 +23,116 @@
   }
 }
 
+@layer components {
+  /**
+   * Portfolio category filters: styled native <select> on md+ (chevron, stable width from markup).
+   * Below 768px keeps browser default appearance for native pickers on touch devices.
+   */
+  .filter-select {
+    cursor: pointer;
+    max-width: 100%;
+    border: 1px solid rgb(134 134 135 / 0.4);
+    background-color: transparent;
+    padding: 0.25rem 0.75rem;
+    font-family: theme('fontFamily.teko');
+    font-size: 1.6rem;
+    line-height: 1.25;
+    text-transform: uppercase;
+    color: theme('colors.secondary');
+    transition:
+      border-color 200ms ease,
+      color 200ms ease,
+      box-shadow 200ms ease;
+  }
+
+  .filter-select:hover {
+    border-color: theme('colors.primary');
+    color: theme('colors.primary');
+  }
+
+  .filter-select:focus {
+    outline: none;
+  }
+
+  .filter-select:focus-visible {
+    border-color: theme('colors.primary');
+    box-shadow: 0 0 0 2px rgb(255 255 255 / 0.35);
+  }
+
+  @media (min-width: 768px) {
+    .filter-select {
+      appearance: none;
+      padding-right: 2.5rem;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='currentColor' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.65rem center;
+      background-size: 1rem 1rem;
+    }
+  }
+
+  /** Search field: same outer height as .filter-select row (62.5% root: ~3rem + border) */
+  .filter-search-input {
+    box-sizing: border-box;
+    min-height: 3rem;
+    border: 1px solid rgb(134 134 135 / 0.4);
+    background-color: transparent;
+    padding: 0.25rem 0.75rem;
+    font-family: theme('fontFamily.roboto');
+    font-size: 1.4rem;
+    line-height: 1.25;
+    color: theme('colors.primary');
+    transition:
+      border-color 200ms ease,
+      box-shadow 200ms ease;
+  }
+
+  .filter-search-input::placeholder {
+    color: rgb(134 134 135 / 0.6);
+  }
+
+  .filter-search-input:hover {
+    border-color: theme('colors.primary');
+  }
+
+  .filter-search-input:focus {
+    outline: none;
+  }
+
+  .filter-search-input:focus-visible {
+    border-color: theme('colors.primary');
+    box-shadow: 0 0 0 2px rgb(255 255 255 / 0.35);
+  }
+
+  .filter-toggle-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgb(134 134 135 / 0.4);
+    background-color: transparent;
+    padding: 0.5rem;
+    color: theme('colors.secondary');
+    transition:
+      border-color 200ms ease,
+      color 200ms ease,
+      box-shadow 200ms ease;
+  }
+
+  .filter-toggle-btn:hover {
+    border-color: theme('colors.primary');
+    color: theme('colors.primary');
+  }
+
+  .filter-toggle-btn:focus {
+    outline: none;
+  }
+
+  .filter-toggle-btn:focus-visible {
+    border-color: theme('colors.primary');
+    box-shadow: 0 0 0 2px rgb(255 255 255 / 0.35);
+  }
+}
+
 @layer utilities {
   .link-animation {
     background: linear-gradient(to right, #ddd, #ddd 50%, #fff 50%);
@@ -51,7 +161,11 @@
   }
 
   .portfolio-card-overlay {
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.3));
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.18),
+      rgba(0, 0, 0, 0.3)
+    );
     opacity: 1;
     transition: opacity 220ms cubic-bezier(0.23, 1, 0.32, 1);
   }
@@ -88,6 +202,57 @@
   .detail-reveal-delay-3 {
     animation-delay: 170ms;
   }
+
+  /** Staggered grid entrances (category + featured); filter toolbar one-shot */
+  .portfolio-grid-item-enter {
+    animation: portfolioGridItemEnter 240ms cubic-bezier(0.23, 1, 0.32, 1) both;
+    animation-delay: min(calc(var(--stagger, 0) * 50ms), 600ms);
+  }
+
+  .portfolio-toolbar-enter {
+    animation: portfolioToolbarEnter 200ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+
+  .portfolio-toolbar-enter-delayed {
+    animation: portfolioToolbarEnter 200ms cubic-bezier(0.23, 1, 0.32, 1) both;
+    animation-delay: 180ms;
+  }
+
+  .filter-subcategory-chip {
+    transition:
+      transform 160ms cubic-bezier(0.23, 1, 0.32, 1),
+      border-color 200ms ease,
+      background-color 200ms ease,
+      color 200ms ease;
+  }
+
+  .filter-subcategory-chip:active {
+    transform: scale(0.97);
+  }
+}
+
+@keyframes portfolioGridItemEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes portfolioToolbarEnter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes detailFadeIn {
@@ -114,11 +279,29 @@
   .portfolio-card-overlay,
   .portfolio-card-title,
   .portfolio-card-subtitle,
-  .detail-reveal {
+  .detail-reveal,
+  .portfolio-grid-item-enter,
+  .portfolio-toolbar-enter,
+  .portfolio-toolbar-enter-delayed {
     animation: none !important;
     transition: none !important;
     transform: none !important;
     filter: none !important;
+    opacity: 1 !important;
+  }
+
+  .filter-subcategory-chip {
+    transition: none !important;
+  }
+
+  .filter-subcategory-chip:active {
+    transform: none !important;
+  }
+
+  .filter-select,
+  .filter-search-input,
+  .filter-toggle-btn {
+    transition: none !important;
   }
 }
 

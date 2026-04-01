@@ -14,18 +14,21 @@ const { portfolios, locale } = Astro.props
 {
   portfolios.length > 0 && (
     <div class="mx-auto w-full max-w-container px-[15px] xl:px-0">
-      <h2 class="mb-8 font-teko text-[4rem] font-semibold uppercase text-white md:text-[6rem]">
+      <h2 class="portfolio-toolbar-enter mb-8 font-teko text-[4rem] font-semibold uppercase text-white md:text-[6rem]">
         {t(locale, 'home.featured')}
       </h2>
       <ul class="m-0 grid w-full list-none grid-cols-1 gap-12 p-0 sm:grid-cols-2 lg:grid-cols-3">
-        {portfolios.map((portfolio) => (
-          <li>
+        {portfolios.map((portfolio, index) => (
+          <li
+            class="portfolio-grid-item-enter"
+            style={{ '--stagger': String(Math.min(index, 20)) }}
+          >
             <PortfolioCard portfolio={portfolio} locale={locale} />
           </li>
         ))}
       </ul>
 
-      <div class="mt-16 flex justify-center gap-8">
+      <div class="portfolio-toolbar-enter-delayed mt-16 flex justify-center gap-8">
         <a
           href={localePath(locale, '/drone-cinematography')}
           class="border border-white/20 px-8 py-3 font-teko text-[2.4rem] uppercase text-white no-underline transition-colors hover:bg-white/10"

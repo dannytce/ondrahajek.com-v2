@@ -21,6 +21,28 @@ function setSelectFromUrlParam(
   }
 }
 
+/** Year / location / client / search in URL — open advanced filter panel */
+function hasUrlAdvancedFilterParams(): boolean {
+  const p = new URLSearchParams(window.location.search)
+  return Boolean(
+    p.get('year') ||
+      p.get('loc') ||
+      p.get('location') ||
+      p.get('cl') ||
+      p.get('client') ||
+      p.get('q')
+  )
+}
+
+function applyFiltersPanelOpen(
+  panel: HTMLElement,
+  open: boolean,
+  toggle: HTMLButtonElement | null
+): void {
+  panel.classList.toggle('hidden', !open)
+  toggle?.setAttribute('aria-expanded', open ? 'true' : 'false')
+}
+
 function syncUrlFromState(pathname: string, params: URLSearchParams) {
   const qs = params.toString()
   const next = qs ? `${pathname}?${qs}` : pathname
@@ -36,6 +58,16 @@ interface FilterState {
   locSlug: string
   clientSlug: string
   q: string
+}
+
+function countActiveFilters(st: FilterState): number {
+  let n = 0
+  if (st.sub) n += 1
+  if (st.year) n += 1
+  if (st.locSlug) n += 1
+  if (st.clientSlug) n += 1
+  if (st.q) n += 1
+  return n
 }
 
 function readStateFromControls(
@@ -290,10 +322,26 @@ function bindGrid(grid: HTMLElement) {
   const items = Array.from(
     grid.querySelectorAll<HTMLElement>('[data-portfolio-item]')
   )
+  const filterPanel = grid.querySelector<HTMLElement>('[data-filter-panel]')
+  const filterToggle = grid.querySelector<HTMLButtonElement>(
+    '[data-filter-toggle]'
+  )
+  const activeBadge = grid.querySelector<HTMLElement>(
+    '[data-filter-active-badge]'
+  )
 
   if (!resultCount || !searchInput) return
 
   const pathname = window.location.pathname
+
+  /** Advanced filters panel (year/location/client/search); synced from URL on readUrl */
+  let filtersPanelOpen = false
+
+  const syncFiltersPanelFromUrl = () => {
+    if (!filterPanel) return
+    filtersPanelOpen = hasUrlAdvancedFilterParams()
+    applyFiltersPanelOpen(filterPanel, filtersPanelOpen, filterToggle)
+  }
 
   const yearPlaceholder =
     yearSelect?.querySelector('option[value=""]')?.textContent ?? 'Year'
@@ -383,14 +431,14 @@ function bindGrid(grid: HTMLElement) {
     })
 
     resultCount.textContent = String(visibleCount)
+    const activeCount = countActiveFilters(st)
+    const hasActiveFilters = activeCount > 0
     if (clearButton) {
-      clearButton.hidden = !(
-        st.sub ||
-        st.year ||
-        st.locSlug ||
-        st.clientSlug ||
-        st.q
-      )
+      clearButton.hidden = !hasActiveFilters
+    }
+    if (activeBadge) {
+      activeBadge.hidden = !hasActiveFilters
+      activeBadge.textContent = String(activeCount)
     }
     if (noResults) {
       noResults.hidden = visibleCount !== 0
@@ -409,11 +457,20 @@ function bindGrid(grid: HTMLElement) {
     )
   }
 
-  const readUrl = () => readUrlIntoGrid(grid)
+  const readUrl = () => {
+    readUrlIntoGrid(grid)
+    syncFiltersPanelFromUrl()
+  }
 
   gridFilterActions.set(grid, { readUrl, apply: applyFilters })
 
-  readUrlIntoGrid(grid)
+  readUrl()
+
+  filterToggle?.addEventListener('click', () => {
+    if (!filterPanel) return
+    filtersPanelOpen = !filtersPanelOpen
+    applyFiltersPanelOpen(filterPanel, filtersPanelOpen, filterToggle)
+  })
 
   subcategoryButtons.forEach((button) => {
     button.addEventListener('click', () => {
