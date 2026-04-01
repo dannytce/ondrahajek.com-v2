@@ -12,6 +12,7 @@ interface Props {
   title?: string
   description?: string
   locale?: Locale
+  compactHeader?: boolean
   /** Absolute path of the current page WITHOUT locale prefix (e.g. "/portfolio/my-slug") */
   canonicalPath?: string
   /** JSON-LD structured data object */
@@ -22,6 +23,7 @@ const {
   title = 'ondrahajek.com | AERIAL Video & Photography',
   description = 'Web portfolio of drone pilot Ondra Hajek, who will make your projects more interesting. He specialises in documentaries, film, music video, commercials and architecture.',
   locale = 'en',
+  compactHeader = false,
   canonicalPath,
   jsonLd,
 } = Astro.props
@@ -164,8 +166,11 @@ const csUrl = canonicalPath
     <meta name="msapplication-TileColor" content="#ffc40d" />
     <meta name="theme-color" content="#ffffff" />
     <ViewTransitions />
+    <script>
+      import '~/scripts/portfolio-list-scroll'
+    </script>
   </head>
-  <body>
+  <body class:list={[compactHeader && 'compact-header']}>
     <noscript>
       <iframe
         src="https://www.googletagmanager.com/ns.html?id=GTM-T58QC9G"

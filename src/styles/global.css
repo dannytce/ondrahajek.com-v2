@@ -17,6 +17,10 @@
     font-family: theme('fontFamily.roboto');
     padding-top: theme('spacing.header');
   }
+
+  body.compact-header {
+    padding-top: 0;
+  }
 }
 
 @layer utilities {

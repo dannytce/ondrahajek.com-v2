@@ -15,7 +15,7 @@ function buildIframeSrc(video: string): string {
 
   try {
     const url = new URL(base)
-    url.searchParams.set('autoplay', '1')
+    url.searchParams.set('autoplay', '0')
     url.searchParams.set('loop', '1')
     url.searchParams.set('autopause', '0')
 
