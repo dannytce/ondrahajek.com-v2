@@ -1,0 +1,25 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript"],
+  "env": {
+    "browser": true,
+    "builtin": true
+  },
+  "ignorePatterns": [
+    "dist/**",
+    "node_modules/**",
+    "**/*.cjs",
+    "**/*.mjs",
+    "**/*.astro",
+    "src/api/generated/**"
+  ],
+  "rules": {
+    "no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "typescript/no-explicit-any": "warn"
+  }
+}

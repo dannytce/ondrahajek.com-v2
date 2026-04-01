@@ -1,0 +1,44 @@
+---
+import PortfolioCard from '~/components/PortfolioCard.astro';
+import { t, localePath, type Locale } from '~/i18n';
+import type { PortfolioListItem } from '~/api';
+
+interface Props {
+  portfolios: PortfolioListItem[];
+  locale: Locale;
+}
+
+const { portfolios, locale } = Astro.props;
+---
+
+{
+  portfolios.length > 0 && (
+    <div class="w-full max-w-container mx-auto px-[15px] xl:px-0">
+      <h2 class="text-white text-[4rem] md:text-[6rem] font-teko font-semibold uppercase mb-8">
+        {t(locale, 'home.featured')}
+      </h2>
+      <ul class="m-0 p-0 list-none grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 w-full">
+        {portfolios.map((portfolio) => (
+          <li>
+            <PortfolioCard portfolio={portfolio} locale={locale} />
+          </li>
+        ))}
+      </ul>
+
+      <div class="flex gap-8 mt-16 justify-center">
+        <a
+          href={localePath(locale, '/drone-cinematography')}
+          class="text-white font-teko text-[2.4rem] uppercase no-underline border border-white/20 px-8 py-3 transition-colors hover:bg-white/10"
+        >
+          {t(locale, 'nav.drone')}
+        </a>
+        <a
+          href={localePath(locale, '/video-production')}
+          class="text-white font-teko text-[2.4rem] uppercase no-underline border border-white/20 px-8 py-3 transition-colors hover:bg-white/10"
+        >
+          {t(locale, 'nav.video')}
+        </a>
+      </div>
+    </div>
+  )
+}

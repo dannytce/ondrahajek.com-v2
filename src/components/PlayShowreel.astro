@@ -1,0 +1,53 @@
+---
+import Player from '~/components/Player.astro';
+import showreelDialogScriptUrl from '~/scripts/showreel-dialog.ts?url';
+
+const dialogId = 'showreel-dialog';
+---
+
+<div class="flex items-center justify-center my-[125px] -mb-[125px] md:flex-1 md:my-0">
+  <button
+    type="button"
+    data-showreel-trigger={dialogId}
+    title="Play Showreel"
+    class="text-white font-teko font-bold uppercase no-underline flex items-center justify-center outline-none p-0 md:p-[50px] link-animation hover:[&_.play-circle]:border-white/80 group bg-transparent border-0 cursor-pointer"
+  >
+    <span class="relative flex text-center w-[70px] h-[70px] mr-[25px] pr-0.5 rounded-full bg-white border-[8px] border-white/20 bg-clip-padding transition-all duration-[0.8s] items-center justify-center play-circle">
+      <span class="absolute top-1/2 left-1/2 rounded-full bg-white/10 h-10 w-10 -ml-5 -mt-5 -z-10 md:h-20 md:w-20 md:-ml-10 md:-mt-10 md:opacity-0 md:animate-circleExpand" />
+      <span class="absolute top-1/2 left-1/2 rounded-full bg-white/10 h-10 w-10 -ml-5 -mt-5 -z-10 md:h-20 md:w-20 md:-ml-10 md:-mt-10 md:opacity-0 md:animate-circleExpand md:[animation-delay:2s]" />
+      <svg class="ml-[5px]" width="14" height="16" viewBox="0 0 14 16" fill="none">
+        <path
+          d="M1.50389526,0.136099186 L13.5032156,7.13615397 L13.5032156,7.13615397 C13.9802597,7.41444764 14.1413788,8.02676989 13.8630851,8.50381399 C13.7761718,8.65279876 13.6522004,8.77677011 13.5032156,8.8636835 L1.50389526,15.8637383 L1.50389526,15.8637383 C1.02685115,16.1420319 0.414528904,15.9809129 0.136235236,15.5038688 C0.0470134485,15.350927 -5.14889621e-16,15.1770377 -2.22044605e-16,14.9999735 L0,0.99986395 L-4.4408921e-16,0.99986395 C-2.66460887e-16,0.4475792 0.44771525,-0.000136050417 1,-0.000136050417 C1.17706415,-0.000136050417 1.35095348,0.0468773981 1.50389526,0.136099186 Z"
+          fill="#212327"
+          fill-rule="evenodd"
+        />
+      </svg>
+    </span>
+    Play Showreel
+  </button>
+
+  <dialog
+    id={dialogId}
+    data-showreel-dialog
+    class="w-[min(1100px,calc(100vw-30px))] max-w-none border-0 bg-transparent p-0 text-white backdrop:bg-black/75"
+  >
+    <div class="relative">
+      <button
+        type="button"
+        data-dialog-close
+        class="fixed z-modalCloseButton h-8 w-8 right-[15px] top-5 p-0 bg-transparent border-0 appearance-none select-none transition-opacity duration-200 opacity-60 cursor-pointer hover:opacity-100 text-white text-2xl leading-8"
+      >
+        ×
+      </button>
+      <div class="animate-scaleIn">
+        <Player
+          title="Showreel"
+          video="https://player.vimeo.com/video/435073664"
+          deferLoad
+        />
+      </div>
+    </div>
+  </dialog>
+</div>
+
+<script type="module" src={showreelDialogScriptUrl}></script>

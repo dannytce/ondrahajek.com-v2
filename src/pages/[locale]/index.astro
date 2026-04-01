@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Page from '~/components/Page.astro';
-import { Header } from '~/components/Header';
-import { FeaturedWork } from '~/components/FeaturedWork';
+import Header from '~/components/Header.astro';
+import FeaturedWork from '~/components/FeaturedWork.astro';
 import { getFeaturedPortfolios, getHeaderBackgroundByPage } from '~/api';
 import { localeStaticPaths, getLocaleFromParam, t, CATEGORY_IDS } from '~/i18n';
 
@@ -24,7 +24,6 @@ const headerBackground = await getHeaderBackgroundByPage('/');
   <Page isHomepage locale={locale}>
     <Header
       slot="header"
-      client:load
       title={t(locale, 'home.title')}
       subTitle={t(locale, 'home.subtitle')}
       headerBackground={headerBackground}
@@ -33,6 +32,6 @@ const headerBackground = await getHeaderBackgroundByPage('/');
       locale={locale}
       pagePath="/"
     />
-    <FeaturedWork client:load portfolios={featured} locale={locale} />
+    <FeaturedWork portfolios={featured} locale={locale} />
   </Page>
 </BaseLayout>

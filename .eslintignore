@@ -1,6 +1,0 @@
-node_modules
-dist
-*.cjs
-*.mjs
-src/api/generated
-*.astro

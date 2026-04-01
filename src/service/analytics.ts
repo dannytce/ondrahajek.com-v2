@@ -1,7 +1,10 @@
+type GtagFn = (...args: unknown[]) => void
+type FbqFn = (...args: unknown[]) => void
+
 declare global {
   interface Window {
-    gtag: any
-    fbq: any
+    gtag: GtagFn
+    fbq: FbqFn
   }
 }
 

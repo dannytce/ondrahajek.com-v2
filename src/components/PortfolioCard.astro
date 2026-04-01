@@ -1,0 +1,52 @@
+---
+import { Image } from '@datocms/astro';
+import { localePath, type Locale } from '~/i18n';
+import type { PortfolioListItem } from '~/api';
+
+interface Props {
+  portfolio: PortfolioListItem;
+  locale: Locale;
+}
+
+const { portfolio, locale } = Astro.props;
+
+const thumb = portfolio.thumbnail;
+const responsiveImage = thumb?.responsiveImage;
+const subtitle =
+  locale === 'cs'
+    ? portfolio.subtitleCs || portfolio.subtitleEn
+    : portfolio.subtitleEn || portfolio.subtitleCs;
+const transitionName = portfolio.slug ? `portfolio-media-${portfolio.slug}` : undefined;
+---
+
+{
+  responsiveImage && (
+    <a
+      href={localePath(locale, `/portfolio/${portfolio.slug}`)}
+      class="portfolio-card block w-full relative no-underline group"
+    >
+      <div class="portfolio-card-frame relative overflow-hidden bg-black">
+        <div
+          class="portfolio-card-media"
+          style={transitionName ? `view-transition-name:${transitionName}` : undefined}
+        >
+          <Image
+            data={{
+              ...responsiveImage,
+              alt: '',
+            }}
+            pictureClass="w-full"
+            imgClass="block h-auto w-full"
+          />
+        </div>
+        <div class="portfolio-card-overlay absolute inset-0 pointer-events-none" />
+      </div>
+      <h3 class="portfolio-card-title text-white text-[2.4rem] xs:text-[2.6rem] md:text-[3rem] lg:text-[4rem] font-teko font-semibold uppercase -mt-[0.5em] leading-none ml-5 relative z-10">
+        {portfolio.title}
+      </h3>
+      <h4 class="portfolio-card-subtitle text-secondary text-[1.5rem] font-normal ml-5 relative z-10">
+        {subtitle}
+      </h4>
+    </a>
+  )
+}

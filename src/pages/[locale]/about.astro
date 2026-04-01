@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Page from '~/components/Page.astro';
-import { Header } from '~/components/Header';
+import Header from '~/components/Header.astro';
 import Section from '~/components/About/Section.astro';
 import { getHeaderBackgroundByPage } from '~/api';
 import { localeStaticPaths, getLocaleFromParam, t } from '~/i18n';
@@ -22,7 +22,6 @@ const headerBackground = await getHeaderBackgroundByPage('/about');
   <Page isAboutPage locale={locale}>
     <Header
       slot="header"
-      client:load
       title={t(locale, 'nav.about')}
       headerBackground={headerBackground}
       isAboutPage

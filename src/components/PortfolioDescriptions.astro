@@ -1,0 +1,61 @@
+---
+import { StructuredText } from '@datocms/astro';
+import type { CdaStructuredTextValue } from 'datocms-structured-text-utils';
+import type { Locale } from '~/i18n';
+import descriptionsScriptUrl from '~/scripts/portfolio-descriptions.ts?url';
+
+interface Props {
+  descriptionCs?: CdaStructuredTextValue | null;
+  descriptionEn?: CdaStructuredTextValue | null;
+  locale?: Locale;
+}
+
+const { descriptionCs, descriptionEn, locale = 'en' } = Astro.props;
+
+const hasCs = descriptionCs?.value != null;
+const hasEn = descriptionEn?.value != null;
+const primary =
+  locale === 'cs'
+    ? { data: descriptionCs, label: 'Čeština', has: hasCs }
+    : { data: descriptionEn, label: 'English', has: hasEn };
+const secondary =
+  locale === 'cs'
+    ? { data: descriptionEn, label: 'English', has: hasEn }
+    : { data: descriptionCs, label: 'Čeština', has: hasCs };
+const collapsedLabel = `▸ ${secondary.label}`;
+const expandedLabel = `▾ ${secondary.label}`;
+---
+
+{
+  (hasCs || hasEn) && (
+    <div class="mt-10 max-w-[840px] text-white/90 font-sans text-[1.05rem] leading-relaxed space-y-8" data-portfolio-descriptions>
+      {primary.has && primary.data && (
+        <section>
+          <div class="[&_a]:text-secondary [&_a]:underline [&_p]:mb-3">
+            <StructuredText data={primary.data} />
+          </div>
+        </section>
+      )}
+
+      {secondary.has && secondary.data && (
+        <section>
+          <button
+            type="button"
+            data-description-toggle
+            data-label-collapsed={collapsedLabel}
+            data-label-expanded={expandedLabel}
+            aria-expanded="false"
+            class="text-secondary font-teko text-[1.5rem] uppercase tracking-wide cursor-pointer bg-transparent border-none hover:text-white transition-colors"
+          >
+            {collapsedLabel}
+          </button>
+          <div data-description-secondary class="[&_a]:text-secondary [&_a]:underline [&_p]:mb-3 mt-3">
+            <StructuredText data={secondary.data} />
+          </div>
+        </section>
+      )}
+    </div>
+  )
+}
+
+<script type="module" src={descriptionsScriptUrl}></script>

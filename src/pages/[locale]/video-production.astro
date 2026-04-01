@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Page from '~/components/Page.astro';
-import { Header } from '~/components/Header';
-import { CategoryPortfolioGrid } from '~/components/CategoryPortfolioGrid';
+import Header from '~/components/Header.astro';
+import CategoryPortfolioGrid from '~/components/CategoryPortfolioGrid.astro';
 import { getPortfoliosByCategory, getHeaderBackgroundByPage } from '~/api';
 import { localeStaticPaths, getLocaleFromParam, t, CATEGORY_IDS } from '~/i18n';
 
@@ -24,13 +24,12 @@ const headerBackground = await getHeaderBackgroundByPage('/');
   <Page locale={locale}>
     <Header
       slot="header"
-      client:load
       title={t(locale, 'category.video.title')}
       headerBackground={headerBackground}
       currentPath={`/${locale}/video-production`}
       locale={locale}
       pagePath="/video-production"
     />
-    <CategoryPortfolioGrid client:load portfolios={portfolios} locale={locale} />
+    <CategoryPortfolioGrid portfolios={portfolios} locale={locale} />
   </Page>
 </BaseLayout>

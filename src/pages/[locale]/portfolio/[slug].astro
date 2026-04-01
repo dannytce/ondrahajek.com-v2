@@ -1,9 +1,9 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Page from '~/components/Page.astro';
-import { Header } from '~/components/Header';
-import { Player } from '~/components/Player';
-import { PortfolioDescriptions } from '~/components/PortfolioDescriptions';
+import Header from '~/components/Header.astro';
+import Player from '~/components/Player.astro';
+import PortfolioDescriptions from '~/components/PortfolioDescriptions.astro';
 import { getAllPortfoliosWithSlug, getPortfolioBySlug, getHeaderBackgroundByPage } from '~/api';
 import { LOCALES, getLocaleFromParam, t, localePath, getCategorySlug } from '~/i18n';
 
@@ -74,7 +74,6 @@ const jsonLd = portfolio ? {
     <Page locale={locale}>
       <Header
         slot="header"
-        client:load
         title={portfolio.title ?? 'Portfolio'}
         subTitle={subtitle ?? undefined}
         headerBackground={headerBackground}
@@ -92,7 +91,6 @@ const jsonLd = portfolio ? {
 
         {portfolio.video && (
           <Player
-            client:load
             title={portfolio.title ?? 'Video'}
             video={portfolio.video}
             poster={portfolio.thumbnail?.responsiveImage}
@@ -123,7 +121,6 @@ const jsonLd = portfolio ? {
 
         <div class="detail-reveal detail-reveal-delay-2">
           <PortfolioDescriptions
-            client:load
             descriptionCs={portfolio.descriptionCs}
             descriptionEn={portfolio.descriptionEn}
             locale={locale}
@@ -147,7 +144,6 @@ const jsonLd = portfolio ? {
     <Page locale={locale}>
       <Header
         slot="header"
-        client:load
         title="Not found"
         headerBackground={headerBackground}
         currentPath={Astro.url.pathname}

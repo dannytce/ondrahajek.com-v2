@@ -9,22 +9,17 @@
     "build": "astro build",
     "preview": "astro preview",
     "type-check": "astro check",
-    "lint": "eslint src --ext .ts,.tsx",
-    "format": "prettier --write 'src/**/*.{ts,tsx,astro}'",
+    "lint": "oxlint src scripts",
+    "format": "prettier --write 'src/**/*.{ts,astro}'",
     "codegen": "graphql-codegen -r dotenv/config --config graphql-codegen.cjs",
     "import:portfolio": "tsx scripts/import-portfolio.ts",
     "update:portfolio": "tsx scripts/import-portfolio.ts --update-only",
     "export:portfolio": "tsx scripts/export-portfolio-csv.ts"
   },
   "dependencies": {
-    "@astrojs/react": "^4.0.1",
     "@astrojs/tailwind": "^5.1.0",
     "@datocms/astro": "^0.6.12",
-    "astro": "^5.0.3",
-    "react": "^18.3.1",
-    "react-datocms": "^8.0.2",
-    "react-dom": "^18.3.1",
-    "react-focus-lock": "^2.11.0"
+    "astro": "^5.0.3"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.0",
@@ -32,28 +27,19 @@
     "@graphql-codegen/cli": "^5.0.7",
     "@graphql-codegen/typescript": "^4.1.6",
     "@types/node": "^22.10.0",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
-    "@typescript-eslint/eslint-plugin": "^7.0.0",
-    "@typescript-eslint/parser": "^7.0.0",
     "csv-parse": "^6.2.1",
     "datocms-structured-text-utils": "^5.1.7",
     "dotenv": "^8.2.0",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
     "graphql": "^15.5.0",
+    "oxlint": "^1.58.0",
     "prettier": "^3.3.3",
     "tailwindcss": "^3.4.15",
     "tsx": "^4.21.0",
     "typescript": "^5.6.3"
   },
   "lint-staged": {
-    "*.{js,ts,tsx,astro}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "*.{json,md,html,css}": [
-      "prettier --write"
-    ]
+    "*.{js,ts}": ["oxlint --fix", "prettier --write"],
+    "*.astro": ["prettier --write"],
+    "*.{json,md,html,css}": ["prettier --write"]
   }
 }

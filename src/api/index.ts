@@ -87,7 +87,7 @@ const portfolioListFields = `
 
 const fetchAPI = async (
   query: string,
-  { variables, preview }: { variables?: any; preview?: boolean } = {}
+  { variables, preview }: { variables?: Record<string, unknown>; preview?: boolean } = {}
 ) => {
   const res = await fetch(API_URL + (preview ? '/preview' : ''), {
     method: 'POST',
