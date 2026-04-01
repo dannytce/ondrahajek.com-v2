@@ -9,7 +9,6 @@ import {
   getAlternateLocale,
   type Locale,
 } from '~/i18n';
-import headerScriptUrl from '~/scripts/header.ts?url';
 
 interface Props {
   isAboutPage?: boolean;
@@ -140,7 +139,9 @@ const switchUrl = localePath(altLocale, pagePath);
   </div>
 </div>
 
-<script type="module" src={headerScriptUrl}></script>
+<script>
+  import '~/scripts/header.ts';
+</script>
 
 <style>
   [data-site-header][data-video-ready='false'] .header-video {

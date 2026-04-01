@@ -2,7 +2,6 @@
 import PortfolioCard from '~/components/PortfolioCard.astro';
 import { t, type Locale } from '~/i18n';
 import type { PortfolioListItem } from '~/api';
-import portfolioFiltersScriptUrl from '~/scripts/portfolio-filters.ts?url';
 
 interface FilterOption {
   value: string;
@@ -171,4 +170,6 @@ const locations: FilterOption[] = Array.from(locationSet)
   </ul>
 </div>
 
-<script type="module" src={portfolioFiltersScriptUrl}></script>
+<script>
+  import '~/scripts/portfolio-filters.ts';
+</script>

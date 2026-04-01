@@ -6,6 +6,15 @@ export default defineConfig({
   output: 'static',
   integrations: [tailwind()],
   vite: {
+    build: {
+      assetsInlineLimit: 0,
+      rollupOptions: {
+        output: {
+          entryFileNames: '_astro/[name].[hash].js',
+          chunkFileNames: '_astro/[name].[hash].js',
+        },
+      },
+    },
     resolve: {
       alias: {
         '~': '/src',

@@ -1,7 +1,6 @@
 ---
 import DatoImageCover from '~/components/DatoImageCover.astro';
 import type { ResponsiveImage } from '~/api/generated/types';
-import playerScriptUrl from '~/scripts/player.ts?url';
 
 interface Props {
   title: string;
@@ -75,7 +74,9 @@ const iframeSrc = buildIframeSrc(video);
   </div>
 </div>
 
-<script type="module" src={playerScriptUrl}></script>
+<script>
+  import '~/scripts/player.ts';
+</script>
 
 <style>
   [data-player-root][data-loaded='false'] .player-poster {

@@ -1,6 +1,5 @@
 ---
 import Player from '~/components/Player.astro';
-import showreelDialogScriptUrl from '~/scripts/showreel-dialog.ts?url';
 
 const dialogId = 'showreel-dialog';
 ---
@@ -50,4 +49,6 @@ const dialogId = 'showreel-dialog';
   </dialog>
 </div>
 
-<script type="module" src={showreelDialogScriptUrl}></script>
+<script>
+  import '~/scripts/showreel-dialog.ts';
+</script>
