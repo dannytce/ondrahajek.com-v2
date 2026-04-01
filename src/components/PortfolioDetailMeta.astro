@@ -10,6 +10,12 @@ interface Props {
   variant?: 'labeled' | 'inline'
   /** Extra classes for the root element */
   class?: string
+  /** Deep link to category portfolio filtered by client */
+  moreForClientHref?: string
+  moreForClientLabel?: string
+  /** Deep link to category portfolio filtered by location */
+  moreInLocationHref?: string
+  moreInLocationLabel?: string
 }
 
 const {
@@ -19,7 +25,14 @@ const {
   location,
   variant = 'labeled',
   class: className,
+  moreForClientHref,
+  moreForClientLabel,
+  moreInLocationHref,
+  moreInLocationLabel,
 } = Astro.props
+
+const linkClass =
+  'mt-2 inline-block font-teko text-[1.4rem] uppercase tracking-wide text-secondary no-underline transition-colors hover:text-white'
 
 const parts: string[] = []
 if (year != null) parts.push(String(year))
@@ -28,45 +41,89 @@ if (location?.trim()) parts.push(location.trim())
 
 const hasAny = parts.length > 0
 const inlineText = parts.join(' · ')
+const hasFilterLinks =
+  Boolean(moreForClientHref && moreForClientLabel) ||
+  Boolean(moreInLocationHref && moreInLocationLabel)
 ---
 
 {
   hasAny &&
     (variant === 'inline' ? (
-      <p
-        class:list={[
-          'm-0 font-teko text-[1.5rem] leading-snug tracking-wide text-secondary',
-          className,
-        ]}
-      >
-        {inlineText}
-      </p>
+      <div class:list={[className]}>
+        <p
+          class:list={[
+            'm-0 font-teko text-[1.5rem] leading-snug tracking-wide text-secondary',
+          ]}
+        >
+          {inlineText}
+        </p>
+        {
+          hasFilterLinks && (
+            <p class="m-0 mt-3 flex flex-wrap gap-x-6 gap-y-2">
+              {
+                moreInLocationHref && moreInLocationLabel && (
+                  <a href={moreInLocationHref} class={linkClass}>
+                    {moreInLocationLabel}
+                  </a>
+                )
+              }
+              {
+                moreForClientHref && moreForClientLabel && (
+                  <a href={moreForClientHref} class={linkClass}>
+                    {moreForClientLabel}
+                  </a>
+                )
+              }
+            </p>
+          )
+        }
+      </div>
     ) : (
       <dl class:list={['m-0 space-y-4', className]}>
-        {year != null && (
-          <div>
-            <dt class="font-teko text-[1.5rem] uppercase text-secondary">
-              {t(locale, 'detail.year')}
-            </dt>
-            <dd class="m-0 text-[1.8rem] text-white">{year}</dd>
-          </div>
-        )}
-        {client?.trim() && (
-          <div>
-            <dt class="font-teko text-[1.5rem] uppercase text-secondary">
-              {t(locale, 'detail.client')}
-            </dt>
-            <dd class="m-0 text-[1.8rem] text-white">{client}</dd>
-          </div>
-        )}
-        {location?.trim() && (
-          <div>
-            <dt class="font-teko text-[1.5rem] uppercase text-secondary">
-              {t(locale, 'detail.location')}
-            </dt>
-            <dd class="m-0 text-[1.8rem] text-white">{location}</dd>
-          </div>
-        )}
+        {
+          year != null && (
+            <div>
+              <dt class="font-teko text-[1.5rem] uppercase text-secondary">
+                {t(locale, 'detail.year')}
+              </dt>
+              <dd class="m-0 text-[1.8rem] text-white">{year}</dd>
+            </div>
+          )
+        }
+        {
+          client?.trim() && (
+            <div>
+              <dt class="font-teko text-[1.5rem] uppercase text-secondary">
+                {t(locale, 'detail.client')}
+              </dt>
+              <dd class="m-0 text-[1.8rem] text-white">{client}</dd>
+              {
+                moreForClientHref && moreForClientLabel && (
+                  <a href={moreForClientHref} class={linkClass}>
+                    {moreForClientLabel}
+                  </a>
+                )
+              }
+            </div>
+          )
+        }
+        {
+          location?.trim() && (
+            <div>
+              <dt class="font-teko text-[1.5rem] uppercase text-secondary">
+                {t(locale, 'detail.location')}
+              </dt>
+              <dd class="m-0 text-[1.8rem] text-white">{location}</dd>
+              {
+                moreInLocationHref && moreInLocationLabel && (
+                  <a href={moreInLocationHref} class={linkClass}>
+                    {moreInLocationLabel}
+                  </a>
+                )
+              }
+            </div>
+          )
+        }
       </dl>
     ))
 }

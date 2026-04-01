@@ -15,8 +15,8 @@ interface Props {
   compactHeader?: boolean
   /** Absolute path of the current page WITHOUT locale prefix (e.g. "/portfolio/my-slug") */
   canonicalPath?: string
-  /** JSON-LD structured data object */
-  jsonLd?: Record<string, unknown>
+  /** JSON-LD structured data (one or more blocks) */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[]
 }
 
 const {
@@ -35,6 +35,16 @@ const enUrl = canonicalPath
 const csUrl = canonicalPath
   ? `${siteUrl}/cs${canonicalPath === '/' ? '' : canonicalPath}`
   : undefined
+const canonicalHref =
+  canonicalPath !== undefined && canonicalPath !== null
+    ? `${siteUrl}/${locale}${canonicalPath === '/' ? '' : canonicalPath}`
+    : undefined
+const ogImageUrl = `${siteUrl}/social.jpg`
+const jsonLdBlocks = jsonLd
+  ? Array.isArray(jsonLd)
+    ? jsonLd
+    : [jsonLd]
+  : []
 ---
 
 <!doctype html>
@@ -44,7 +54,7 @@ const csUrl = canonicalPath
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content="/social.jpg" />
+    <meta property="og:image" content={ogImageUrl} />
     <meta property="og:title" content={title} />
     <meta
       name="keywords"
@@ -52,18 +62,32 @@ const csUrl = canonicalPath
     />
     <title>{title}</title>
 
-    {enUrl && <link rel="alternate" hreflang="en" href={enUrl} />}
-    {csUrl && <link rel="alternate" hreflang="cs" href={csUrl} />}
+    {
+      canonicalHref && (
+        <link rel="canonical" id="seo-canonical" href={canonicalHref} />
+      )
+    }
+    {enUrl && (
+      <link rel="alternate" hreflang="en" id="alternate-en" href={enUrl} />
+    )}
+    {csUrl && (
+      <link rel="alternate" hreflang="cs" id="alternate-cs" href={csUrl} />
+    )}
     {
       enUrl && csUrl && (
-        <link rel="alternate" hreflang="x-default" href={enUrl} />
+        <link
+          rel="alternate"
+          hreflang="x-default"
+          id="alternate-x-default"
+          href={enUrl}
+        />
       )
     }
 
     {
-      jsonLd && (
-        <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-      )
+      jsonLdBlocks.map((block) => (
+        <script type="application/ld+json" set:html={JSON.stringify(block)} />
+      ))
     }
 
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

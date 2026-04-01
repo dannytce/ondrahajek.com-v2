@@ -4,7 +4,7 @@ import Page from '~/components/Page.astro'
 import Player from '~/components/Player.astro'
 import PortfolioDescriptions from '~/components/PortfolioDescriptions.astro'
 import PortfolioDetailMeta from '~/components/PortfolioDetailMeta.astro'
-import { getAllPortfoliosWithSlug, getPortfolioBySlug } from '~/api'
+import { getAllPortfoliosWithSlug, getPortfolioBySlug, getPortfoliosByCategory } from '~/api'
 import {
   LOCALES,
   getLocaleFromParam,
@@ -12,7 +12,10 @@ import {
   localePath,
   getCategorySlug,
   getAlternateLocale,
+  fillTemplate,
+  CATEGORY_IDS,
 } from '~/i18n'
+import { buildSlugMapsFromPortfolios } from '~/lib/portfolio-filter-slugs'
 
 export async function getStaticPaths() {
   const portfolios = await getAllPortfoliosWithSlug()
@@ -57,6 +60,54 @@ const backLabel =
       ? t(locale, 'nav.video')
       : 'Portfolio'
 const backLinkText = `${t(locale, 'detail.backTo')} ${backLabel}`
+
+const categoryForLink =
+  categorySlug && categorySlug !== 'selected-work' ? categorySlug : null
+
+let moreForClientHref: string | undefined
+let moreInLocationHref: string | undefined
+
+if (
+  portfolio &&
+  categoryForLink &&
+  (categoryForLink === 'video-production' ||
+    categoryForLink === 'drone-cinematography')
+) {
+  const categoryPortfolios = await getPortfoliosByCategory(
+    CATEGORY_IDS[categoryForLink]
+  )
+  const { locationSlugByValue, clientSlugByValue } =
+    buildSlugMapsFromPortfolios(categoryPortfolios)
+
+  const clientTrim = portfolio.client?.trim()
+  if (clientTrim) {
+    const cl = clientSlugByValue.get(clientTrim)
+    if (cl) {
+      moreForClientHref = localePath(locale, `/${categoryForLink}?cl=${encodeURIComponent(cl)}`)
+    }
+  }
+
+  const locTrim = portfolio.location?.trim()
+  if (locTrim) {
+    const loc = locationSlugByValue.get(locTrim)
+    if (loc) {
+      moreInLocationHref = localePath(locale, `/${categoryForLink}?loc=${encodeURIComponent(loc)}`)
+    }
+  }
+}
+
+const moreForClientLabel =
+  portfolio?.client?.trim()
+    ? fillTemplate(t(locale, 'detail.moreForClient'), {
+        client: portfolio.client.trim(),
+      })
+    : undefined
+
+const moreInLocationLabel = portfolio?.location?.trim()
+  ? fillTemplate(t(locale, 'detail.moreInLocation'), {
+      location: portfolio.location.trim(),
+    })
+  : undefined
 
 // Locale-aware subtitle
 const subtitle =
@@ -172,6 +223,10 @@ const jsonLd = portfolio
                     client={portfolio.client}
                     location={portfolio.location}
                     class={subtitle ? 'mt-4' : undefined}
+                    moreForClientHref={moreForClientHref}
+                    moreForClientLabel={moreForClientLabel}
+                    moreInLocationHref={moreInLocationHref}
+                    moreInLocationLabel={moreInLocationLabel}
                   />
                 </div>
               )}
@@ -211,6 +266,10 @@ const jsonLd = portfolio
                   year={year}
                   client={portfolio.client}
                   location={portfolio.location}
+                  moreForClientHref={moreForClientHref}
+                  moreForClientLabel={moreForClientLabel}
+                  moreInLocationHref={moreInLocationHref}
+                  moreInLocationLabel={moreInLocationLabel}
                 />
               </aside>
             )}

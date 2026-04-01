@@ -10,18 +10,43 @@ export function getStaticPaths() {
   return localeStaticPaths()
 }
 
+const siteUrl = 'https://ondrahajek.com'
 const locale = getLocaleFromParam(Astro.params.locale)
 const portfolios = await getPortfoliosByCategory(
   CATEGORY_IDS['video-production']
 )
 const headerBackground = await getHeaderBackgroundByPage('/')
+
+const defaultSeoTitle = `${t(locale, 'category.video.title')} - ${t(locale, 'meta.title')}`
+const defaultSeoDescription = t(locale, 'category.video.description')
+
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: t(locale, 'category.video.title'),
+  description: defaultSeoDescription,
+  url: `${siteUrl}/${locale}/video-production`,
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: portfolios.filter((p) => p.slug).length,
+    itemListElement: portfolios
+      .filter((p) => p.slug)
+      .map((p, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: `${siteUrl}/${locale}/portfolio/${p.slug}`,
+        name: p.title ?? undefined,
+      })),
+  },
+}
 ---
 
 <BaseLayout
-  title={`${t(locale, 'category.video.title')} - ${t(locale, 'meta.title')}`}
-  description={t(locale, 'category.video.description')}
+  title={defaultSeoTitle}
+  description={defaultSeoDescription}
   locale={locale}
   canonicalPath="/video-production"
+  jsonLd={collectionJsonLd}
 >
   <Page locale={locale}>
     <Header
@@ -32,6 +57,12 @@ const headerBackground = await getHeaderBackgroundByPage('/')
       locale={locale}
       pagePath="/video-production"
     />
-    <CategoryPortfolioGrid portfolios={portfolios} locale={locale} />
+    <CategoryPortfolioGrid
+      portfolios={portfolios}
+      locale={locale}
+      categorySlug="video-production"
+      defaultSeoTitle={defaultSeoTitle}
+      defaultSeoDescription={defaultSeoDescription}
+    />
   </Page>
 </BaseLayout>

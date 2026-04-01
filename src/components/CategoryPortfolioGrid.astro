@@ -2,6 +2,7 @@
 import PortfolioCard from '~/components/PortfolioCard.astro'
 import { t, type Locale } from '~/i18n'
 import type { PortfolioListItem } from '~/api'
+import { buildSlugMapsFromPortfolios } from '~/lib/portfolio-filter-slugs'
 
 interface FilterOption {
   value: string
@@ -11,9 +12,15 @@ interface FilterOption {
 interface Props {
   portfolios: PortfolioListItem[]
   locale: Locale
+  /** Used for SEO meta + deep links from detail (e.g. video-production, drone-cinematography). */
+  categorySlug: 'video-production' | 'drone-cinematography'
+  /** Restored when no filters are active (client-side meta sync). */
+  defaultSeoTitle: string
+  defaultSeoDescription: string
 }
 
-const { portfolios, locale } = Astro.props
+const { portfolios, locale, categorySlug, defaultSeoTitle, defaultSeoDescription } =
+  Astro.props
 
 const subcategoryMap = new Map<string, string>()
 for (const portfolio of portfolios) {
@@ -46,21 +53,25 @@ const years: FilterOption[] = Array.from(yearSet)
   .sort((a, b) => Number(b) - Number(a))
   .map((value) => ({ value, label: value }))
 
-const locationSet = new Set<string>()
-for (const portfolio of portfolios) {
-  if (portfolio.location?.trim()) {
-    locationSet.add(portfolio.location.trim())
-  }
-}
+const { locationSlugByValue, clientSlugByValue } =
+  buildSlugMapsFromPortfolios(portfolios)
 
-const locations: FilterOption[] = Array.from(locationSet)
-  .sort()
-  .map((value) => ({ value, label: value }))
+const locations: FilterOption[] = [...locationSlugByValue.entries()]
+  .sort((a, b) => a[0].localeCompare(b[0]))
+  .map(([label, value]) => ({ value, label }))
+
+const clients: FilterOption[] = [...clientSlugByValue.entries()]
+  .sort((a, b) => a[0].localeCompare(b[0]))
+  .map(([label, value]) => ({ value, label }))
 ---
 
 <div
   class="mx-auto w-full max-w-container px-[15px] xl:px-0"
   data-portfolio-grid
+  data-category-slug={categorySlug}
+  data-locale={locale}
+  data-default-seo-title={defaultSeoTitle}
+  data-default-seo-description={defaultSeoDescription}
 >
   <div class="mb-10 flex flex-col gap-6">
     {
@@ -117,6 +128,20 @@ const locations: FilterOption[] = Array.from(locationSet)
         )
       }
 
+      {
+        clients.length > 0 && (
+          <select
+            data-filter-client
+            class="cursor-pointer border border-secondary/40 bg-transparent px-3 py-1 font-teko text-[1.6rem] uppercase text-secondary transition-colors hover:border-white hover:text-white focus:border-white focus:outline-none"
+          >
+            <option value="">{t(locale, 'filter.client')}</option>
+            {clients.map((client) => (
+              <option value={client.value}>{client.label}</option>
+            ))}
+          </select>
+        )
+      }
+
       <input
         type="text"
         data-filter-search
@@ -159,6 +184,13 @@ const locations: FilterOption[] = Array.from(locationSet)
           ? new Date(portfolio.date).getFullYear().toString()
           : ''
         const location = portfolio.location?.trim() ?? ''
+        const client = portfolio.client?.trim() ?? ''
+        const locationSlug = location
+          ? (locationSlugByValue.get(location) ?? '')
+          : ''
+        const clientSlug = client
+          ? (clientSlugByValue.get(client) ?? '')
+          : ''
         const search = [
           portfolio.title,
           portfolio.subtitle,
@@ -180,6 +212,9 @@ const locations: FilterOption[] = Array.from(locationSet)
               .join(',')}
             data-year={year !== 'NaN' ? year : ''}
             data-location={location}
+            data-client={client}
+            data-location-slug={locationSlug}
+            data-client-slug={clientSlug}
             data-search={search}
           >
             <PortfolioCard portfolio={portfolio} locale={locale} />
@@ -192,4 +227,5 @@ const locations: FilterOption[] = Array.from(locationSet)
 
 <script>
   import '~/scripts/portfolio-filters.ts'
+  import '~/scripts/category-seo-meta.ts'
 </script>

@@ -63,11 +63,41 @@ export const translations = {
       'Aerial drone cinematography portfolio by Ondra Hajek',
     'category.video.title': 'Video Production',
     'category.video.description': 'Video production portfolio by Ondra Hajek',
+    'category.video.seoTitleLocation':
+      'Video Production in {location} · {siteTitle}',
+    'category.video.seoTitleClient': 'Video Production for {client} · {siteTitle}',
+    'category.video.seoTitleLocationClient':
+      'Video Production in {location} · {client} · {siteTitle}',
+    'category.video.seoDescLocation':
+      'Video production work in {location} — portfolio by Ondra Hajek.',
+    'category.video.seoDescClient':
+      'Video production for {client} — portfolio by Ondra Hajek.',
+    'category.video.seoDescLocationClient':
+      'Video production in {location} for {client} — portfolio by Ondra Hajek.',
+    'category.video.seoTitleFiltered': 'Video Production · {siteTitle}',
+    'category.video.seoDescFiltered': 'Filtered video production portfolio by Ondra Hajek.',
+
+    'category.drone.seoTitleLocation':
+      'Drone Cinematography in {location} · {siteTitle}',
+    'category.drone.seoTitleClient':
+      'Drone Cinematography for {client} · {siteTitle}',
+    'category.drone.seoTitleLocationClient':
+      'Drone Cinematography in {location} · {client} · {siteTitle}',
+    'category.drone.seoDescLocation':
+      'Aerial drone cinematography in {location} — portfolio by Ondra Hajek.',
+    'category.drone.seoDescClient':
+      'Drone cinematography for {client} — portfolio by Ondra Hajek.',
+    'category.drone.seoDescLocationClient':
+      'Drone cinematography in {location} for {client} — portfolio by Ondra Hajek.',
+    'category.drone.seoTitleFiltered': 'Drone Cinematography · {siteTitle}',
+    'category.drone.seoDescFiltered':
+      'Filtered aerial drone cinematography portfolio by Ondra Hajek.',
 
     // Filters
     'filter.all': 'All',
     'filter.year': 'Year',
     'filter.location': 'Location',
+    'filter.client': 'Client',
     'filter.search': 'Search...',
     'filter.clear': 'Clear filters',
     'filter.results': 'results',
@@ -79,6 +109,8 @@ export const translations = {
     'detail.year': 'Year',
     'detail.client': 'Client',
     'detail.location': 'Location',
+    'detail.moreInLocation': 'More work in {location}',
+    'detail.moreForClient': 'More for {client}',
     'detail.description': 'Description',
     'detail.tags': 'Tags',
 
@@ -107,10 +139,40 @@ export const translations = {
       'Portfolio letecké kinematografie od Ondry Hajka',
     'category.video.title': 'Video Produkce',
     'category.video.description': 'Portfolio video produkce od Ondry Hajka',
+    'category.video.seoTitleLocation':
+      'Video produkce v lokalitě {location} · {siteTitle}',
+    'category.video.seoTitleClient': 'Video produkce pro {client} · {siteTitle}',
+    'category.video.seoTitleLocationClient':
+      'Video produkce v lokalitě {location} · {client} · {siteTitle}',
+    'category.video.seoDescLocation':
+      'Video produkce v lokalitě {location} — portfolio Ondry Hajka.',
+    'category.video.seoDescClient':
+      'Video produkce pro klienta {client} — portfolio Ondry Hajka.',
+    'category.video.seoDescLocationClient':
+      'Video produkce v lokalitě {location} pro {client} — portfolio Ondry Hajka.',
+    'category.video.seoTitleFiltered': 'Video produkce · {siteTitle}',
+    'category.video.seoDescFiltered': 'Filtrované portfolio video produkce od Ondry Hajka.',
+
+    'category.drone.seoTitleLocation':
+      'Letecká kinematografie v lokalitě {location} · {siteTitle}',
+    'category.drone.seoTitleClient':
+      'Letecká kinematografie pro {client} · {siteTitle}',
+    'category.drone.seoTitleLocationClient':
+      'Letecká kinematografie v lokalitě {location} · {client} · {siteTitle}',
+    'category.drone.seoDescLocation':
+      'Letecká kinematografie v lokalitě {location} — portfolio Ondry Hajka.',
+    'category.drone.seoDescClient':
+      'Letecká kinematografie pro klienta {client} — portfolio Ondry Hajka.',
+    'category.drone.seoDescLocationClient':
+      'Letecká kinematografie v lokalitě {location} pro {client} — portfolio Ondry Hajka.',
+    'category.drone.seoTitleFiltered': 'Letecká kinematografie · {siteTitle}',
+    'category.drone.seoDescFiltered':
+      'Filtrované portfolio letecké kinematografie od Ondry Hajka.',
 
     'filter.all': 'Vše',
     'filter.year': 'Rok',
     'filter.location': 'Lokace',
+    'filter.client': 'Klient',
     'filter.search': 'Hledat...',
     'filter.clear': 'Vymazat filtry',
     'filter.results': 'výsledků',
@@ -121,6 +183,8 @@ export const translations = {
     'detail.year': 'Rok',
     'detail.client': 'Klient',
     'detail.location': 'Lokace',
+    'detail.moreInLocation': 'Další práce v lokalitě {location}',
+    'detail.moreForClient': 'Další práce pro {client}',
     'detail.description': 'Popis',
     'detail.tags': 'Štítky',
 
@@ -137,6 +201,18 @@ export type TranslationKey = keyof (typeof translations)['en']
 
 export function t(locale: Locale, key: TranslationKey): string {
   return translations[locale][key] ?? translations.en[key] ?? key
+}
+
+/** Replace `{name}` placeholders in a string (used for SEO and detail link copy). */
+export function fillTemplate(
+  template: string,
+  vars: Record<string, string>
+): string {
+  let out = template
+  for (const [k, v] of Object.entries(vars)) {
+    out = out.split(`{${k}}`).join(v)
+  }
+  return out
 }
 
 /** Generate static paths for locales (used in getStaticPaths). */

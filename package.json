@@ -18,6 +18,7 @@
     "export:portfolio": "tsx scripts/export-portfolio-csv.ts"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.2",
     "@astrojs/tailwind": "^5.1.0",
     "@datocms/astro": "^0.6.12",
     "astro": "^5.0.3"
