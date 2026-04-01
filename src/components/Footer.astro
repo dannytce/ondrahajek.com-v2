@@ -1,57 +1,79 @@
 ---
-import { localePath, type Locale } from '~/i18n';
+import { localePath, type Locale } from '~/i18n'
 
 interface Props {
-  locale?: Locale;
+  locale?: Locale
 }
 
-const { locale = 'en' } = Astro.props;
+const { locale = 'en' } = Astro.props
 
 const footerLinks = [
-  { title: 'Go and see the', name: 'Gallery', link: localePath(locale, '/gallery') },
-  { title: 'Read something', name: 'About me', link: localePath(locale, '/about') },
+  {
+    title: 'Go and see the',
+    name: 'Gallery',
+    link: localePath(locale, '/gallery'),
+  },
+  {
+    title: 'Read something',
+    name: 'About me',
+    link: localePath(locale, '/about'),
+  },
   { title: 'Check out my', name: 'Portfolio', link: localePath(locale, '/') },
-  { title: 'Hit me up on', name: 'info', email: 'info@ondrahajek.com', phone: '+420 773 604 400' },
-];
+  {
+    title: 'Hit me up on',
+    name: 'info',
+    email: 'info@ondrahajek.com',
+    phone: '+420 773 604 400',
+  },
+]
 ---
 
-<footer class="py-16 px-6 pb-24 mt-0 md:py-[50px] md:px-0 md:pt-0 md:h-[80vh] md:flex md:mt-[100px]">
-  <div class="w-full flex flex-col gap-0 md:flex-row md:flex-nowrap">
-    {footerLinks.map((item, index) =>
-      item.link ? (
-        <a
-          href={item.link}
-          class:list={[
-            'w-full min-h-[120px] py-8 flex flex-col justify-center text-center border-b border-white/10 last:border-b-0 md:border-b-0 md:h-full md:flex-1 md:py-0 md:transition-colors md:hover:bg-[#17171a]',
-            index === 1 && 'md:bg-[#111114]',
-          ]}
-        >
-          <p class="p-0 m-0 mb-5 text-secondary font-roboto normal-case text-[1.8rem]">
-            {item.title}
-          </p>
-          <h3 class="m-0 p-0 text-[4rem] leading-6 uppercase text-primary font-teko no-underline">
-            {item.name}
-          </h3>
-        </a>
-      ) : (
-        <div class="w-full min-h-[120px] py-8 flex flex-col justify-center text-center border-b border-white/10 last:border-b-0 md:border-b-0 md:h-full md:flex-1 md:py-0 md:transition-colors md:hover:bg-[#17171a]">
-          <p class="p-0 m-0 mb-5 text-secondary font-roboto normal-case text-[1.8rem]">
-            {item.title}
-          </p>
-          <h3 class="m-0 p-0 text-[4rem] leading-6 uppercase text-primary font-teko">
-            <a href={`mailto:${item.email}`} class="no-underline text-primary">
-              {item.name}
-              <span class="block text-[2rem]">@{item.email?.split('@')[1]}</span>
-            </a>
-          </h3>
+<footer
+  class="mt-0 px-6 py-16 pb-24 md:mt-[100px] md:flex md:h-[80vh] md:px-0 md:py-[50px] md:pt-0"
+>
+  <div class="flex w-full flex-col gap-0 md:flex-row md:flex-nowrap">
+    {
+      footerLinks.map((item, index) =>
+        item.link ? (
           <a
-            href={`tel:${item.phone?.replace(/\s/g, '')}`}
-            class="font-teko no-underline text-secondary text-[2rem]"
+            href={item.link}
+            class:list={[
+              'flex min-h-[120px] w-full flex-col justify-center border-b border-white/10 py-8 text-center last:border-b-0 md:h-full md:flex-1 md:border-b-0 md:py-0 md:transition-colors md:hover:bg-[#17171a]',
+              index === 1 && 'md:bg-[#111114]',
+            ]}
           >
-            {item.phone}
+            <p class="m-0 mb-5 p-0 font-roboto text-[1.8rem] normal-case text-secondary">
+              {item.title}
+            </p>
+            <h3 class="m-0 p-0 font-teko text-[4rem] uppercase leading-6 text-primary no-underline">
+              {item.name}
+            </h3>
           </a>
-        </div>
+        ) : (
+          <div class="flex min-h-[120px] w-full flex-col justify-center border-b border-white/10 py-8 text-center last:border-b-0 md:h-full md:flex-1 md:border-b-0 md:py-0 md:transition-colors md:hover:bg-[#17171a]">
+            <p class="m-0 mb-5 p-0 font-roboto text-[1.8rem] normal-case text-secondary">
+              {item.title}
+            </p>
+            <h3 class="m-0 p-0 font-teko text-[4rem] uppercase leading-6 text-primary">
+              <a
+                href={`mailto:${item.email}`}
+                class="text-primary no-underline"
+              >
+                {item.name}
+                <span class="block text-[2rem]">
+                  @{item.email?.split('@')[1]}
+                </span>
+              </a>
+            </h3>
+            <a
+              href={`tel:${item.phone?.replace(/\s/g, '')}`}
+              class="font-teko text-[2rem] text-secondary no-underline"
+            >
+              {item.phone}
+            </a>
+          </div>
+        )
       )
-    )}
+    }
   </div>
 </footer>

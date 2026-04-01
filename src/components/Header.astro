@@ -1,24 +1,19 @@
 ---
-import DatoImageCover from '~/components/DatoImageCover.astro';
-import PlayShowreel from '~/components/PlayShowreel.astro';
-import TrustedBy from '~/components/About/TrustedBy.astro';
-import type { ResponsiveImage } from '~/api/generated/types';
-import {
-  t,
-  localePath,
-  getAlternateLocale,
-  type Locale,
-} from '~/i18n';
+import DatoImageCover from '~/components/DatoImageCover.astro'
+import PlayShowreel from '~/components/PlayShowreel.astro'
+import TrustedBy from '~/components/About/TrustedBy.astro'
+import type { ResponsiveImage } from '~/api/generated/types'
+import { t, localePath, getAlternateLocale, type Locale } from '~/i18n'
 
 interface Props {
-  isAboutPage?: boolean;
-  isHomepage?: boolean;
-  title: string;
-  subTitle?: string;
-  headerBackground: ResponsiveImage;
-  currentPath?: string;
-  locale?: Locale;
-  pagePath?: string;
+  isAboutPage?: boolean
+  isHomepage?: boolean
+  title: string
+  subTitle?: string
+  headerBackground: ResponsiveImage
+  currentPath?: string
+  locale?: Locale
+  pagePath?: string
 }
 
 const {
@@ -30,17 +25,23 @@ const {
   currentPath = '/',
   locale = 'en',
   pagePath = '/',
-} = Astro.props;
+} = Astro.props
 
 const navLinks = [
-  { text: t(locale, 'nav.drone'), link: localePath(locale, '/drone-cinematography') },
-  { text: t(locale, 'nav.video'), link: localePath(locale, '/video-production') },
+  {
+    text: t(locale, 'nav.drone'),
+    link: localePath(locale, '/drone-cinematography'),
+  },
+  {
+    text: t(locale, 'nav.video'),
+    link: localePath(locale, '/video-production'),
+  },
   { text: t(locale, 'nav.gallery'), link: localePath(locale, '/gallery') },
   { text: t(locale, 'nav.about'), link: localePath(locale, '/about') },
-];
+]
 
-const altLocale = getAlternateLocale(locale);
-const switchUrl = localePath(altLocale, pagePath);
+const altLocale = getAlternateLocale(locale)
+const switchUrl = localePath(altLocale, pagePath)
 ---
 
 <div
@@ -48,20 +49,24 @@ const switchUrl = localePath(altLocale, pagePath);
   data-homepage={isHomepage ? 'true' : 'false'}
   data-video-ready={isHomepage ? 'false' : 'true'}
 >
-  <header class="top-0 w-full h-header flex flex-col justify-center fixed z-header">
-    <div class="w-full max-w-container mx-auto px-[15px] xl:px-0 relative z-headerContainer flex flex-col flex-1 justify-center md:flex-none md:justify-start md:flex-row">
+  <header
+    class="fixed top-0 z-header flex h-header w-full flex-col justify-center"
+  >
+    <div
+      class="relative z-headerContainer mx-auto flex w-full max-w-container flex-1 flex-col justify-center px-[15px] md:flex-none md:flex-row md:justify-start xl:px-0"
+    >
       {
         subTitle ? (
           <div class="flex flex-col justify-center">
-            <h1 class="text-[6rem] md:text-[10rem] font-teko font-semibold uppercase m-0 p-0">
+            <h1 class="m-0 p-0 font-teko text-[6rem] font-semibold uppercase md:text-[10rem]">
               {title}
             </h1>
-            <h2 class="text-[1.8rem] md:text-[3rem] font-teko uppercase -mt-[0.75em] m-0 p-0">
+            <h2 class="m-0 -mt-[0.75em] p-0 font-teko text-[1.8rem] uppercase md:text-[3rem]">
               {subTitle}
             </h2>
           </div>
         ) : (
-          <h1 class="text-[6rem] md:text-[10rem] font-teko font-semibold uppercase m-0 p-0">
+          <h1 class="m-0 p-0 font-teko text-[6rem] font-semibold uppercase md:text-[10rem]">
             {title}
           </h1>
         )
@@ -71,28 +76,38 @@ const switchUrl = localePath(altLocale, pagePath);
 
     {
       isHomepage && (
-        <div class="header-video-wrap fixed top-0 w-full h-full overflow-hidden z-video">
+        <div class="header-video-wrap fixed top-0 z-video h-full w-full overflow-hidden">
           <video
             data-header-video
             autoplay
             playsinline
             loop
             muted
-            class="header-video box-border h-[56.25vw] left-1/2 min-h-full min-w-full -translate-x-1/2 -translate-y-1/2 absolute top-1/2 w-[177.78vh] pointer-events-none object-cover"
+            class="header-video pointer-events-none absolute left-1/2 top-1/2 box-border h-[56.25vw] min-h-full w-[177.78vh] min-w-full -translate-x-1/2 -translate-y-1/2 object-cover"
           >
-            <source src="/bg-mobile.mp4" type="video/mp4" media="(max-width: 375px)" />
-            <source src="/bg-tablet.mp4" type="video/mp4" media="(max-width: 767px)" />
+            <source
+              src="/bg-mobile.mp4"
+              type="video/mp4"
+              media="(max-width: 375px)"
+            />
+            <source
+              src="/bg-tablet.mp4"
+              type="video/mp4"
+              media="(max-width: 767px)"
+            />
             <source src="/bg-desktop.mp4" type="video/mp4" />
           </video>
         </div>
       )
     }
 
-    <div class="header-fallback absolute top-0 left-0 right-0 bottom-0 z-header transition-opacity duration-[400ms] ease-[ease]">
+    <div
+      class="header-fallback absolute bottom-0 left-0 right-0 top-0 z-header transition-opacity duration-[400ms] ease-[ease]"
+    >
       <div class="min-h-header">
         <DatoImageCover
           data={{ ...headerBackground, alt: '' }}
-          class="absolute inset-0 z-[2] min-h-header pointer-events-none"
+          class="pointer-events-none absolute inset-0 z-[2] min-h-header"
           imgClass="h-full w-full object-cover"
           priority
           layout="fill"
@@ -104,32 +119,44 @@ const switchUrl = localePath(altLocale, pagePath);
 
   {isAboutPage ? <TrustedBy /> : null}
 
-  <div data-site-nav data-visible="true" data-past-hero="false" class="site-nav fixed left-0 right-0 top-0 z-nav pointer-events-none">
-    <div class="site-nav-gradient absolute inset-x-0 h-48 pointer-events-none -z-10" />
-    <nav class="w-full top-[30px] md:top-[63px] relative">
-      <div class="w-full max-w-container mx-auto px-[15px] xl:px-0 flex justify-between">
+  <div
+    data-site-nav
+    data-visible="true"
+    data-past-hero="false"
+    class="site-nav pointer-events-none fixed left-0 right-0 top-0 z-nav"
+  >
+    <div
+      class="site-nav-gradient pointer-events-none absolute inset-x-0 -z-10 h-48"
+    >
+    </div>
+    <nav class="relative top-[30px] w-full md:top-[63px]">
+      <div
+        class="mx-auto flex w-full max-w-container justify-between px-[15px] xl:px-0"
+      >
         <a href={localePath(locale, '/')} class="pointer-events-auto">
           <img src="/logo-ondrahajek.svg" alt="ONDRAHAJEK.COM" />
         </a>
         <div class="flex flex-col items-end gap-1">
-          <ul class="p-0 m-0 list-none">
-            {navLinks.map((item) => (
-              <li class="first:[&_a]:pt-0">
-                <a
-                  href={item.link}
-                  class:list={[
-                    'block text-[2rem] font-teko text-white no-underline uppercase text-right pointer-events-auto py-[clamp(5px,1.2vh,10px)] link-animation',
-                    currentPath === item.link && 'active',
-                  ]}
-                >
-                  {item.text}
-                </a>
-              </li>
-            ))}
+          <ul class="m-0 list-none p-0">
+            {
+              navLinks.map((item) => (
+                <li class="first:[&_a]:pt-0">
+                  <a
+                    href={item.link}
+                    class:list={[
+                      'link-animation pointer-events-auto block py-[clamp(5px,1.2vh,10px)] text-right font-teko text-[2rem] uppercase text-white no-underline',
+                      currentPath === item.link && 'active',
+                    ]}
+                  >
+                    {item.text}
+                  </a>
+                </li>
+              ))
+            }
           </ul>
           <a
             href={switchUrl}
-            class="pointer-events-auto text-secondary text-[1.4rem] font-teko uppercase no-underline hover:text-white transition-colors"
+            class="pointer-events-auto font-teko text-[1.4rem] uppercase text-secondary no-underline transition-colors hover:text-white"
           >
             {t(locale, 'lang.switch')}
           </a>
@@ -140,7 +167,7 @@ const switchUrl = localePath(altLocale, pagePath);
 </div>
 
 <script>
-  import '~/scripts/header.ts';
+  import '~/scripts/header.ts'
 </script>
 
 <style>
@@ -152,7 +179,8 @@ const switchUrl = localePath(altLocale, pagePath);
     opacity: 1;
   }
 
-  [data-site-header][data-homepage='true'][data-video-ready='true'] .header-fallback {
+  [data-site-header][data-homepage='true'][data-video-ready='true']
+    .header-fallback {
     opacity: 0;
   }
 

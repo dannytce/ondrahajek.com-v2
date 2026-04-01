@@ -1,13 +1,13 @@
 ---
-import { getAllPortfoliosWithSlug } from '~/api';
+import { getAllPortfoliosWithSlug } from '~/api'
 
 export async function getStaticPaths() {
-  const portfolios = await getAllPortfoliosWithSlug();
-  return portfolios.map((p) => ({ params: { slug: p.slug } }));
+  const portfolios = await getAllPortfoliosWithSlug()
+  return portfolios.map((p) => ({ params: { slug: p.slug } }))
 }
 
-const { slug } = Astro.params;
-const redirectUrl = `/en/portfolio/${slug}`;
+const { slug } = Astro.params
+const redirectUrl = `/en/portfolio/${slug}`
 ---
 
 <!doctype html>
@@ -19,7 +19,9 @@ const redirectUrl = `/en/portfolio/${slug}`;
     <title>Redirecting...</title>
   </head>
   <body>
-    <script is:inline define:vars={{ redirectUrl }}>window.location.replace(redirectUrl);</script>
+    <script is:inline define:vars={{ redirectUrl }}>
+      window.location.replace(redirectUrl)
+    </script>
     <noscript><a href={redirectUrl}>Click here</a></noscript>
   </body>
 </html>

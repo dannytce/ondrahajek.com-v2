@@ -45,6 +45,13 @@ pnpm run type-check
 pnpm run lint
 ```
 
+**Format** (uses [prettier-plugin-astro](https://github.com/withastro/prettier-plugin-astro) and [prettier-plugin-tailwindcss](https://github.com/tailwindlabs/prettier-plugin-tailwindcss) for `.astro` and Tailwind class order):
+
+```sh
+pnpm run format
+pnpm run format:check
+```
+
 ## Environment
 
 Create a `.env` file with:

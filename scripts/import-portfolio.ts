@@ -32,7 +32,10 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { parse } from 'csv-parse/sync'
 import { buildClient } from '@datocms/cma-client-node'
-import { plainTextToStructuredTextRequest, type StructuredTextRequest } from './plain-text-to-dast'
+import {
+  plainTextToStructuredTextRequest,
+  type StructuredTextRequest,
+} from './plain-text-to-dast'
 import {
   buildTaxonomyMaps,
   loadTaxonomyAliasesFromDisk,
@@ -103,11 +106,15 @@ function buildShortSubtitle(row: Row): string {
   return parts.join(' · ')
 }
 
-async function findPortfolioItemTypeId(client: ReturnType<typeof buildClient>): Promise<string> {
+async function findPortfolioItemTypeId(
+  client: ReturnType<typeof buildClient>
+): Promise<string> {
   const types = await client.itemTypes.list()
   const portfolio = types.find((t) => t.api_key === 'portfolio')
   if (!portfolio) {
-    throw new Error('No item type with api_key "portfolio" found in this DatoCMS environment.')
+    throw new Error(
+      'No item type with api_key "portfolio" found in this DatoCMS environment.'
+    )
   }
   return portfolio.id
 }
@@ -141,7 +148,12 @@ function warnMissingTaxonomy(
     return
   }
   warnedMissingTaxonomy.add(k)
-  const sample = [...(modelApiKey === 'portfolio_category' ? maps.category : maps.subcategory).keys()]
+  const sample = [
+    ...(modelApiKey === 'portfolio_category'
+      ? maps.category
+      : maps.subcategory
+    ).keys(),
+  ]
     .slice(0, 12)
     .join(', ')
   console.warn(
@@ -184,9 +196,12 @@ async function main() {
   }
 
   const token =
-    process.env.DATOCMS_MANAGEMENT_API_TOKEN?.trim() || process.env.DATOCMS_API_TOKEN?.trim()
+    process.env.DATOCMS_MANAGEMENT_API_TOKEN?.trim() ||
+    process.env.DATOCMS_API_TOKEN?.trim()
   if (!token && !dryRun) {
-    console.error('Set DATOCMS_MANAGEMENT_API_TOKEN (or DATOCMS_API_TOKEN) in .env')
+    console.error(
+      'Set DATOCMS_MANAGEMENT_API_TOKEN (or DATOCMS_API_TOKEN) in .env'
+    )
     process.exit(1)
   }
 
@@ -201,7 +216,8 @@ async function main() {
   }) as Row[]
 
   const client = token ? buildClient({ apiToken: token }) : null
-  const itemTypeId = client && !dryRun ? await findPortfolioItemTypeId(client) : ''
+  const itemTypeId =
+    client && !dryRun ? await findPortfolioItemTypeId(client) : ''
   const taxonomyAliases = loadTaxonomyAliasesFromDisk()
   const taxonomyMaps = client ? await buildTaxonomyMaps(client) : null
 
@@ -233,8 +249,18 @@ async function main() {
       if (client && taxonomyMaps) {
         const k1 = row.kategorie1 ?? ''
         const k2 = row.kategorie2 ?? ''
-        const c1 = resolveTaxonomyId(taxonomyMaps, 'portfolio_category', k1, taxonomyAliases)
-        const c2 = resolveTaxonomyId(taxonomyMaps, 'portfolio_subcategory', k2, taxonomyAliases)
+        const c1 = resolveTaxonomyId(
+          taxonomyMaps,
+          'portfolio_category',
+          k1,
+          taxonomyAliases
+        )
+        const c2 = resolveTaxonomyId(
+          taxonomyMaps,
+          'portfolio_subcategory',
+          k2,
+          taxonomyAliases
+        )
         if (c1) {
           categoryIds = [c1]
         } else if (k1.trim()) {
@@ -256,11 +282,15 @@ async function main() {
         const descCsLen = (row.popis_cs ?? '').trim().length
         const descEnLen = (row.popis_en ?? '').trim().length
         const catLabel = client ? `${categoryIds.length ? 'yes' : '—'}` : 'n/a'
-        const subLabel = client ? `${subcategoryIds.length ? 'yes' : '—'}` : 'n/a'
+        const subLabel = client
+          ? `${subcategoryIds.length ? 'yes' : '—'}`
+          : 'n/a'
         let upsertHint = ''
         if (client) {
           if (updateOnly) {
-            upsertHint = existing ? ' | action: update' : ' | action: skip (no slug in Dato)'
+            upsertHint = existing
+              ? ' | action: update'
+              : ' | action: skip (no slug in Dato)'
           } else {
             upsertHint = existing ? ' | action: update' : ' | action: create'
           }
@@ -285,7 +315,9 @@ async function main() {
       }
 
       const subtitleLocales =
-        shortSubtitle.length > 0 ? { cs: shortSubtitle, en: shortSubtitle } : undefined
+        shortSubtitle.length > 0
+          ? { cs: shortSubtitle, en: shortSubtitle }
+          : undefined
 
       const tagsField = buildTagsField(row)
 

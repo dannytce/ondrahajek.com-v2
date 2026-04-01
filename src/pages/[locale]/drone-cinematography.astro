@@ -1,18 +1,20 @@
 ---
-import BaseLayout from '~/layouts/BaseLayout.astro';
-import Page from '~/components/Page.astro';
-import Header from '~/components/Header.astro';
-import CategoryPortfolioGrid from '~/components/CategoryPortfolioGrid.astro';
-import { getPortfoliosByCategory, getHeaderBackgroundByPage } from '~/api';
-import { localeStaticPaths, getLocaleFromParam, t, CATEGORY_IDS } from '~/i18n';
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import Page from '~/components/Page.astro'
+import Header from '~/components/Header.astro'
+import CategoryPortfolioGrid from '~/components/CategoryPortfolioGrid.astro'
+import { getPortfoliosByCategory, getHeaderBackgroundByPage } from '~/api'
+import { localeStaticPaths, getLocaleFromParam, t, CATEGORY_IDS } from '~/i18n'
 
 export function getStaticPaths() {
-  return localeStaticPaths();
+  return localeStaticPaths()
 }
 
-const locale = getLocaleFromParam(Astro.params.locale);
-const portfolios = await getPortfoliosByCategory(CATEGORY_IDS['drone-cinematography']);
-const headerBackground = await getHeaderBackgroundByPage('/');
+const locale = getLocaleFromParam(Astro.params.locale)
+const portfolios = await getPortfoliosByCategory(
+  CATEGORY_IDS['drone-cinematography']
+)
+const headerBackground = await getHeaderBackgroundByPage('/')
 ---
 
 <BaseLayout

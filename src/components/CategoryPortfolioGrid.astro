@@ -1,61 +1,67 @@
 ---
-import PortfolioCard from '~/components/PortfolioCard.astro';
-import { t, type Locale } from '~/i18n';
-import type { PortfolioListItem } from '~/api';
+import PortfolioCard from '~/components/PortfolioCard.astro'
+import { t, type Locale } from '~/i18n'
+import type { PortfolioListItem } from '~/api'
 
 interface FilterOption {
-  value: string;
-  label: string;
+  value: string
+  label: string
 }
 
 interface Props {
-  portfolios: PortfolioListItem[];
-  locale: Locale;
+  portfolios: PortfolioListItem[]
+  locale: Locale
 }
 
-const { portfolios, locale } = Astro.props;
+const { portfolios, locale } = Astro.props
 
-const subcategoryMap = new Map<string, string>();
+const subcategoryMap = new Map<string, string>()
 for (const portfolio of portfolios) {
   for (const subcategory of portfolio.subcategory) {
     if (subcategory.name) {
-      subcategoryMap.set(subcategory.id, subcategory.name);
+      subcategoryMap.set(subcategory.id, subcategory.name)
     }
   }
 }
 
-const subcategories: FilterOption[] = Array.from(subcategoryMap, ([value, label]) => ({
-  value,
-  label,
-})).sort((a, b) => a.label.localeCompare(b.label));
+const subcategories: FilterOption[] = Array.from(
+  subcategoryMap,
+  ([value, label]) => ({
+    value,
+    label,
+  })
+).sort((a, b) => a.label.localeCompare(b.label))
 
-const yearSet = new Set<string>();
+const yearSet = new Set<string>()
 for (const portfolio of portfolios) {
-  if (!portfolio.date) continue;
+  if (!portfolio.date) continue
 
-  const year = new Date(portfolio.date).getFullYear().toString();
+  const year = new Date(portfolio.date).getFullYear().toString()
   if (year !== 'NaN') {
-    yearSet.add(year);
+    yearSet.add(year)
   }
 }
 
 const years: FilterOption[] = Array.from(yearSet)
   .sort((a, b) => Number(b) - Number(a))
-  .map((value) => ({ value, label: value }));
+  .map((value) => ({ value, label: value }))
 
-const locationSet = new Set<string>();
+const locationSet = new Set<string>()
 for (const portfolio of portfolios) {
   if (portfolio.location?.trim()) {
-    locationSet.add(portfolio.location.trim());
+    locationSet.add(portfolio.location.trim())
   }
 }
 
 const locations: FilterOption[] = Array.from(locationSet)
   .sort()
-  .map((value) => ({ value, label: value }));
+  .map((value) => ({ value, label: value }))
 ---
 
-<div class="w-full max-w-container mx-auto px-[15px] xl:px-0" data-portfolio-grid>
+<div
+  class="mx-auto w-full max-w-container px-[15px] xl:px-0"
+  data-portfolio-grid
+>
   <div class="mb-10 flex flex-col gap-6">
     {
       subcategories.length > 0 && (
@@ -64,7 +70,7 @@ const locations: FilterOption[] = Array.from(locationSet)
             type="button"
             data-filter-subcategory=""
             data-active="true"
-            class="px-4 py-1 font-teko text-[1.6rem] uppercase border transition-colors cursor-pointer bg-white text-background border-white data-[active=false]:bg-transparent data-[active=false]:text-secondary data-[active=false]:border-secondary/40 data-[active=false]:hover:border-white data-[active=false]:hover:text-white"
+            class="cursor-pointer border border-white bg-white px-4 py-1 font-teko text-[1.6rem] uppercase text-background transition-colors data-[active=false]:border-secondary/40 data-[active=false]:bg-transparent data-[active=false]:text-secondary data-[active=false]:hover:border-white data-[active=false]:hover:text-white"
           >
             {t(locale, 'filter.all')}
           </button>
@@ -73,7 +79,7 @@ const locations: FilterOption[] = Array.from(locationSet)
               type="button"
               data-filter-subcategory={subcategory.value}
               data-active="false"
-              class="px-4 py-1 font-teko text-[1.6rem] uppercase border transition-colors cursor-pointer bg-white text-background border-white data-[active=false]:bg-transparent data-[active=false]:text-secondary data-[active=false]:border-secondary/40 data-[active=false]:hover:border-white data-[active=false]:hover:text-white"
+              class="cursor-pointer border border-white bg-white px-4 py-1 font-teko text-[1.6rem] uppercase text-background transition-colors data-[active=false]:border-secondary/40 data-[active=false]:bg-transparent data-[active=false]:text-secondary data-[active=false]:hover:border-white data-[active=false]:hover:text-white"
             >
               {subcategory.label}
             </button>
@@ -82,12 +88,12 @@ const locations: FilterOption[] = Array.from(locationSet)
       )
     }
 
-    <div class="flex flex-wrap gap-3 items-center">
+    <div class="flex flex-wrap items-center gap-3">
       {
         years.length > 0 && (
           <select
             data-filter-year
-            class="bg-transparent border border-secondary/40 text-secondary font-teko text-[1.6rem] uppercase px-3 py-1 cursor-pointer hover:border-white hover:text-white transition-colors focus:outline-none focus:border-white"
+            class="cursor-pointer border border-secondary/40 bg-transparent px-3 py-1 font-teko text-[1.6rem] uppercase text-secondary transition-colors hover:border-white hover:text-white focus:border-white focus:outline-none"
           >
             <option value="">{t(locale, 'filter.year')}</option>
             {years.map((year) => (
@@ -101,7 +107,7 @@ const locations: FilterOption[] = Array.from(locationSet)
         locations.length > 0 && (
           <select
             data-filter-location
-            class="bg-transparent border border-secondary/40 text-secondary font-teko text-[1.6rem] uppercase px-3 py-1 cursor-pointer hover:border-white hover:text-white transition-colors focus:outline-none focus:border-white"
+            class="cursor-pointer border border-secondary/40 bg-transparent px-3 py-1 font-teko text-[1.6rem] uppercase text-secondary transition-colors hover:border-white hover:text-white focus:border-white focus:outline-none"
           >
             <option value="">{t(locale, 'filter.location')}</option>
             {locations.map((location) => (
@@ -115,61 +121,75 @@ const locations: FilterOption[] = Array.from(locationSet)
         type="text"
         data-filter-search
         placeholder={t(locale, 'filter.search')}
-        class="bg-transparent border border-secondary/40 text-white font-roboto text-[1.4rem] px-3 py-[5px] min-w-[200px] placeholder:text-secondary/60 hover:border-white transition-colors focus:outline-none focus:border-white"
+        class="min-w-[200px] border border-secondary/40 bg-transparent px-3 py-[5px] font-roboto text-[1.4rem] text-white transition-colors placeholder:text-secondary/60 hover:border-white focus:border-white focus:outline-none"
       />
 
       <button
         type="button"
         data-filter-clear
         hidden
-        class="text-secondary font-teko text-[1.4rem] uppercase hover:text-white transition-colors cursor-pointer bg-transparent border-none"
+        class="cursor-pointer border-none bg-transparent font-teko text-[1.4rem] uppercase text-secondary transition-colors hover:text-white"
       >
         {t(locale, 'filter.clear')}
       </button>
 
-      <span class="text-secondary/60 font-roboto text-[1.3rem] ml-auto">
-        <span data-filter-result-count>{portfolios.length}</span> / {portfolios.length}{' '}
+      <span class="ml-auto font-roboto text-[1.3rem] text-secondary/60">
+        <span data-filter-result-count>{portfolios.length}</span> / {
+          portfolios.length
+        }{' '}
         {t(locale, 'filter.results')}
       </span>
     </div>
   </div>
 
-  <p data-filter-empty hidden class="text-secondary text-[1.8rem] font-roboto text-center py-20">
+  <p
+    data-filter-empty
+    hidden
+    class="py-20 text-center font-roboto text-[1.8rem] text-secondary"
+  >
     {t(locale, 'filter.noResults')}
   </p>
 
-  <ul class="m-0 p-0 list-none grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 w-full">
-    {portfolios.map((portfolio) => {
-      const year = portfolio.date ? new Date(portfolio.date).getFullYear().toString() : '';
-      const location = portfolio.location?.trim() ?? '';
-      const search = [
-        portfolio.title,
-        portfolio.subtitle,
-        portfolio.subtitleCs,
-        portfolio.subtitleEn,
-        portfolio.tags,
-        portfolio.client,
-        portfolio.location,
-      ]
-        .filter(Boolean)
-        .join(' ')
-        .toLowerCase();
+  <ul
+    class="m-0 grid w-full list-none grid-cols-1 gap-12 p-0 sm:grid-cols-2 lg:grid-cols-3"
+  >
+    {
+      portfolios.map((portfolio) => {
+        const year = portfolio.date
+          ? new Date(portfolio.date).getFullYear().toString()
+          : ''
+        const location = portfolio.location?.trim() ?? ''
+        const search = [
+          portfolio.title,
+          portfolio.subtitle,
+          portfolio.subtitleCs,
+          portfolio.subtitleEn,
+          portfolio.tags,
+          portfolio.client,
+          portfolio.location,
+        ]
+          .filter(Boolean)
+          .join(' ')
+          .toLowerCase()
 
-      return (
-        <li
-          data-portfolio-item
-          data-subcategories={portfolio.subcategory.map((subcategory) => subcategory.id).join(',')}
-          data-year={year !== 'NaN' ? year : ''}
-          data-location={location}
-          data-search={search}
-        >
-          <PortfolioCard portfolio={portfolio} locale={locale} />
-        </li>
-      );
-    })}
+        return (
+          <li
+            data-portfolio-item
+            data-subcategories={portfolio.subcategory
+              .map((subcategory) => subcategory.id)
+              .join(',')}
+            data-year={year !== 'NaN' ? year : ''}
+            data-location={location}
+            data-search={search}
+          >
+            <PortfolioCard portfolio={portfolio} locale={locale} />
+          </li>
+        )
+      })
+    }
   </ul>
 </div>
 
 <script>
-  import '~/scripts/portfolio-filters.ts';
+  import '~/scripts/portfolio-filters.ts'
 </script>

@@ -16,10 +16,7 @@ export type TaxonomyAliases = {
 
 /** Trim, collapse inner spaces, lowercase (ASCII + common Czech chars via toLowerCase). */
 export function normalizeTaxonomyLabel(s: string): string {
-  return s
-    .trim()
-    .replace(/\s+/g, ' ')
-    .toLowerCase()
+  return s.trim().replace(/\s+/g, ' ').toLowerCase()
 }
 
 function extractLocalizedName(raw: unknown): string {
@@ -93,7 +90,9 @@ export function loadTaxonomyAliasesFromDisk(): TaxonomyAliases {
   }
 }
 
-function normalizeAliasKeys(raw: Record<string, string> | undefined): Record<string, string> {
+function normalizeAliasKeys(
+  raw: Record<string, string> | undefined
+): Record<string, string> {
   if (!raw) {
     return {}
   }
@@ -184,6 +183,7 @@ export function resolveTaxonomyId(
   const afterAlias = aliasTable[nk] ?? trimmed
   const lookupKey = normalizeTaxonomyLabel(afterAlias)
 
-  const map = modelApiKey === 'portfolio_category' ? maps.category : maps.subcategory
+  const map =
+    modelApiKey === 'portfolio_category' ? maps.category : maps.subcategory
   return map.get(lookupKey) ?? null
 }

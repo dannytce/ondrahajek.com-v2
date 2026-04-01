@@ -27,33 +27,39 @@ const logos = [
     alt: 'Etnetera & Motion',
   },
   { src: '/logos/cd.svg', alt: 'České dráhy' },
-];
+]
 ---
 
-<div class="absolute w-full bottom-[30px] z-trustedBy">
-  <div class="w-full max-w-container mx-auto px-[15px] xl:px-0 flex flex-wrap">
-    <h3 class="w-full text-secondary uppercase text-[1.4rem] font-normal tracking-widest m-0 mb-4 p-0">
+<div class="absolute bottom-[30px] z-trustedBy w-full">
+  <div class="mx-auto flex w-full max-w-container flex-wrap px-[15px] xl:px-0">
+    <h3
+      class="m-0 mb-4 w-full p-0 text-[1.4rem] font-normal uppercase tracking-widest text-secondary"
+    >
       Trusted by
     </h3>
-    <ul class="w-full overflow-auto p-0 list-none flex items-center justify-between">
-      {logos.map((logo, i) => (
-        <li
-          class="mx-5 first:ml-0 last:mr-0 opacity-0 animate-fadeIn"
-          style={`animation-delay: ${i * 0.09}s`}
-        >
-          {'srcSet' in logo ? (
-            <img
-              src={logo.src}
-              srcset={logo.srcSet}
-              width={logo.width}
-              height={logo.height}
-              alt={logo.alt}
-            />
-          ) : (
-            <img src={logo.src} alt={logo.alt} />
-          )}
-        </li>
-      ))}
+    <ul
+      class="flex w-full list-none items-center justify-between overflow-auto p-0"
+    >
+      {
+        logos.map((logo, i) => (
+          <li
+            class="mx-5 animate-fadeIn opacity-0 first:ml-0 last:mr-0"
+            style={`animation-delay: ${i * 0.09}s`}
+          >
+            {'srcSet' in logo ? (
+              <img
+                src={logo.src}
+                srcset={logo.srcSet}
+                width={logo.width}
+                height={logo.height}
+                alt={logo.alt}
+              />
+            ) : (
+              <img src={logo.src} alt={logo.alt} />
+            )}
+          </li>
+        ))
+      }
     </ul>
   </div>
 </div>

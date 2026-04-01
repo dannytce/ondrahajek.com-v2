@@ -1,21 +1,21 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
-import '../styles/global.css';
-import type { Locale } from '~/i18n';
+import { ViewTransitions } from 'astro:transitions'
+import '../styles/global.css'
+import type { Locale } from '~/i18n'
 
-const FB_PIXEL_ID = '895557671255172';
-const GA_TRACKING_ID = 'UA-111398537-1';
+const FB_PIXEL_ID = '895557671255172'
+const GA_TRACKING_ID = 'UA-111398537-1'
 const fontsHref =
-  'https://fonts.googleapis.com/css2?family=Teko:wght@400;600&family=Roboto:wght@400;700&display=swap';
+  'https://fonts.googleapis.com/css2?family=Teko:wght@400;600&family=Roboto:wght@400;700&display=swap'
 
 interface Props {
-  title?: string;
-  description?: string;
-  locale?: Locale;
+  title?: string
+  description?: string
+  locale?: Locale
   /** Absolute path of the current page WITHOUT locale prefix (e.g. "/portfolio/my-slug") */
-  canonicalPath?: string;
+  canonicalPath?: string
   /** JSON-LD structured data object */
-  jsonLd?: Record<string, unknown>;
+  jsonLd?: Record<string, unknown>
 }
 
 const {
@@ -24,11 +24,15 @@ const {
   locale = 'en',
   canonicalPath,
   jsonLd,
-} = Astro.props;
+} = Astro.props
 
-const siteUrl = 'https://ondrahajek.com';
-const enUrl = canonicalPath ? `${siteUrl}/en${canonicalPath === '/' ? '' : canonicalPath}` : undefined;
-const csUrl = canonicalPath ? `${siteUrl}/cs${canonicalPath === '/' ? '' : canonicalPath}` : undefined;
+const siteUrl = 'https://ondrahajek.com'
+const enUrl = canonicalPath
+  ? `${siteUrl}/en${canonicalPath === '/' ? '' : canonicalPath}`
+  : undefined
+const csUrl = canonicalPath
+  ? `${siteUrl}/cs${canonicalPath === '/' ? '' : canonicalPath}`
+  : undefined
 ---
 
 <!doctype html>
@@ -48,11 +52,17 @@ const csUrl = canonicalPath ? `${siteUrl}/cs${canonicalPath === '/' ? '' : canon
 
     {enUrl && <link rel="alternate" hreflang="en" href={enUrl} />}
     {csUrl && <link rel="alternate" hreflang="cs" href={csUrl} />}
-    {enUrl && csUrl && <link rel="alternate" hreflang="x-default" href={enUrl} />}
+    {
+      enUrl && csUrl && (
+        <link rel="alternate" hreflang="x-default" href={enUrl} />
+      )
+    }
 
-    {jsonLd && (
-      <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-    )}
+    {
+      jsonLd && (
+        <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+      )
+    }
 
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://www.datocms-assets.com" />
@@ -67,40 +77,73 @@ const csUrl = canonicalPath ? `${siteUrl}/cs${canonicalPath === '/' ? '' : canon
     <link rel="preload" as="style" href={fontsHref} />
     <link rel="stylesheet" href={fontsHref} media="print" id="fonts-link" />
     <script is:inline>
-      (function(){var l=document.getElementById('fonts-link');if(l){l.onload=function(){this.media='all';};}})();
+      ;(function () {
+        var l = document.getElementById('fonts-link')
+        if (l) {
+          l.onload = function () {
+            this.media = 'all'
+          }
+        }
+      })()
     </script>
     <noscript>
       <link rel="stylesheet" href={fontsHref} />
     </noscript>
 
-    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}></script>
+    <script
+      is:inline
+      async
+      src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+    ></script>
     <script is:inline define:vars={{ GA_TRACKING_ID }}>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+      window.dataLayer = window.dataLayer || []
+      function gtag() {
+        dataLayer.push(arguments)
+      }
+      gtag('js', new Date())
       gtag('config', GA_TRACKING_ID, {
         page_path: window.location.pathname,
-      });
+      })
     </script>
 
     <script is:inline>
-      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','GTM-T58QC9G');
+      ;(function (w, d, s, l, i) {
+        w[l] = w[l] || []
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' })
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : ''
+        j.async = true
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl
+        f.parentNode.insertBefore(j, f)
+      })(window, document, 'script', 'dataLayer', 'GTM-T58QC9G')
     </script>
 
     <script is:inline define:vars={{ FB_PIXEL_ID }}>
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window,document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', FB_PIXEL_ID);
+      !(function (f, b, e, v, n, t, s) {
+        if (f.fbq) return
+        n = f.fbq = function () {
+          n.callMethod
+            ? n.callMethod.apply(n, arguments)
+            : n.queue.push(arguments)
+        }
+        if (!f._fbq) f._fbq = n
+        n.push = n
+        n.loaded = !0
+        n.version = '2.0'
+        n.queue = []
+        t = b.createElement(e)
+        t.async = !0
+        t.src = v
+        s = b.getElementsByTagName(e)[0]
+        s.parentNode.insertBefore(t, s)
+      })(
+        window,
+        document,
+        'script',
+        'https://connect.facebook.net/en_US/fbevents.js'
+      )
+      fbq('init', FB_PIXEL_ID)
     </script>
 
     <noscript>
@@ -128,8 +171,7 @@ const csUrl = canonicalPath ? `${siteUrl}/cs${canonicalPath === '/' ? '' : canon
         src="https://www.googletagmanager.com/ns.html?id=GTM-T58QC9G"
         height="0"
         width="0"
-        style="display:none;visibility:hidden"
-      ></iframe>
+        style="display:none;visibility:hidden"></iframe>
     </noscript>
     <slot />
   </body>

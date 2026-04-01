@@ -1,5 +1,9 @@
 import type { CdaStructuredTextValue } from 'datocms-structured-text-utils'
-import type { PortfolioRecord, FileField, ResponsiveImage } from './generated/types'
+import type {
+  PortfolioRecord,
+  FileField,
+  ResponsiveImage,
+} from './generated/types'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -87,7 +91,10 @@ const portfolioListFields = `
 
 const fetchAPI = async (
   query: string,
-  { variables, preview }: { variables?: Record<string, unknown>; preview?: boolean } = {}
+  {
+    variables,
+    preview,
+  }: { variables?: Record<string, unknown>; preview?: boolean } = {}
 ) => {
   const res = await fetch(API_URL + (preview ? '/preview' : ''), {
     method: 'POST',
@@ -137,7 +144,9 @@ export async function getAllPortfolios(): Promise<PortfolioListItem[]> {
 }
 
 /** Fetch portfolios filtered by DatoCMS category ID. */
-export async function getPortfoliosByCategory(categoryId: string): Promise<PortfolioListItem[]> {
+export async function getPortfoliosByCategory(
+  categoryId: string
+): Promise<PortfolioListItem[]> {
   const data = await fetchAPI(`
     {
       allPortfolios(
@@ -154,12 +163,16 @@ export async function getPortfoliosByCategory(categoryId: string): Promise<Portf
 }
 
 /** Fetch "Selected Work" / featured portfolios for homepage. */
-export async function getFeaturedPortfolios(categoryId: string): Promise<PortfolioListItem[]> {
+export async function getFeaturedPortfolios(
+  categoryId: string
+): Promise<PortfolioListItem[]> {
   return getPortfoliosByCategory(categoryId)
 }
 
 /** Fetch full portfolio detail by slug. */
-export async function getPortfolioBySlug(slug: string): Promise<PortfolioDetail | null> {
+export async function getPortfolioBySlug(
+  slug: string
+): Promise<PortfolioDetail | null> {
   const data = await fetchAPI(`
     {
       portfolio(filter: { slug: { eq: "${slug}" } }) {

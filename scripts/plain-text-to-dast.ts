@@ -5,17 +5,25 @@
 import { validate, type Document } from 'datocms-structured-text-utils'
 
 /** CMA / Delivery structured text: `schema` must be the string `"dast"` (required by API). */
-export type StructuredTextRequest = { schema: 'dast'; document: Document['document'] }
+export type StructuredTextRequest = {
+  schema: 'dast'
+  document: Document['document']
+}
 
 /**
  * Split on blank lines into paragraphs; normalize single newlines to spaces within a paragraph.
  */
-export function plainTextToStructuredTextRequest(text: string): StructuredTextRequest | null {
+export function plainTextToStructuredTextRequest(
+  text: string
+): StructuredTextRequest | null {
   const t = text.trim()
   if (!t) {
     return null
   }
-  const chunks = t.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean)
+  const chunks = t
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean)
   const paragraphs = chunks.length > 0 ? chunks : [t]
   const children = paragraphs.map((p) => ({
     type: 'paragraph' as const,

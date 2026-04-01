@@ -10,7 +10,8 @@
     "preview": "astro preview",
     "type-check": "astro check",
     "lint": "oxlint src scripts",
-    "format": "prettier --write 'src/**/*.{ts,astro}'",
+    "format": "prettier --write \"src/**/*.{ts,astro}\" \"scripts/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.{ts,astro}\" \"scripts/**/*.ts\"",
     "codegen": "graphql-codegen -r dotenv/config --config graphql-codegen.cjs",
     "import:portfolio": "tsx scripts/import-portfolio.ts",
     "update:portfolio": "tsx scripts/import-portfolio.ts --update-only",
@@ -33,13 +34,22 @@
     "graphql": "^15.5.0",
     "oxlint": "^1.58.0",
     "prettier": "^3.3.3",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^3.4.15",
     "tsx": "^4.21.0",
     "typescript": "^5.6.3"
   },
   "lint-staged": {
-    "*.{js,ts}": ["oxlint --fix", "prettier --write"],
-    "*.astro": ["prettier --write"],
-    "*.{json,md,html,css}": ["prettier --write"]
+    "*.{js,ts}": [
+      "oxlint --fix",
+      "prettier --write"
+    ],
+    "*.astro": [
+      "prettier --write"
+    ],
+    "*.{json,md,html,css}": [
+      "prettier --write"
+    ]
   }
 }

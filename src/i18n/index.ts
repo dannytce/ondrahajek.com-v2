@@ -59,7 +59,8 @@ export const translations = {
 
     // Category pages
     'category.drone.title': 'Drone Cinematography',
-    'category.drone.description': 'Aerial drone cinematography portfolio by Ondra Hajek',
+    'category.drone.description':
+      'Aerial drone cinematography portfolio by Ondra Hajek',
     'category.video.title': 'Video Production',
     'category.video.description': 'Video production portfolio by Ondra Hajek',
 
@@ -102,7 +103,8 @@ export const translations = {
     'home.viewAll': 'Zobrazit vše',
 
     'category.drone.title': 'Letecká Kinematografie',
-    'category.drone.description': 'Portfolio letecké kinematografie od Ondry Hajka',
+    'category.drone.description':
+      'Portfolio letecké kinematografie od Ondry Hajka',
     'category.video.title': 'Video Produkce',
     'category.video.description': 'Portfolio video produkce od Ondry Hajka',
 

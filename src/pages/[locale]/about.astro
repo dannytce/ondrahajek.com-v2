@@ -1,17 +1,17 @@
 ---
-import BaseLayout from '~/layouts/BaseLayout.astro';
-import Page from '~/components/Page.astro';
-import Header from '~/components/Header.astro';
-import Section from '~/components/About/Section.astro';
-import { getHeaderBackgroundByPage } from '~/api';
-import { localeStaticPaths, getLocaleFromParam, t } from '~/i18n';
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import Page from '~/components/Page.astro'
+import Header from '~/components/Header.astro'
+import Section from '~/components/About/Section.astro'
+import { getHeaderBackgroundByPage } from '~/api'
+import { localeStaticPaths, getLocaleFromParam, t } from '~/i18n'
 
 export function getStaticPaths() {
-  return localeStaticPaths();
+  return localeStaticPaths()
 }
 
-const locale = getLocaleFromParam(Astro.params.locale);
-const headerBackground = await getHeaderBackgroundByPage('/about');
+const locale = getLocaleFromParam(Astro.params.locale)
+const headerBackground = await getHeaderBackgroundByPage('/about')
 ---
 
 <BaseLayout
@@ -30,26 +30,38 @@ const headerBackground = await getHeaderBackgroundByPage('/about');
       pagePath="/about"
     />
     <Section title="Cool numbers">
-      <ul class="p-0 m-0 list-none md:flex md:justify-around">
+      <ul class="m-0 list-none p-0 md:flex md:justify-around">
         <li class="flex-1">
-          <h3 class="uppercase font-teko text-[#49494b] text-[2rem] md:text-[3rem] lg:text-[4rem]">
-            <strong class="text-white block leading-none text-[6rem] sm:text-[7rem] sm:leading-tight md:text-[8rem] lg:text-[10rem] lg:leading-snug xl:text-[12rem]">
+          <h3
+            class="font-teko text-[2rem] uppercase text-[#49494b] md:text-[3rem] lg:text-[4rem]"
+          >
+            <strong
+              class="block text-[6rem] leading-none text-white sm:text-[7rem] sm:leading-tight md:text-[8rem] lg:text-[10rem] lg:leading-snug xl:text-[12rem]"
+            >
               135
             </strong>
             Projects
           </h3>
         </li>
         <li class="flex-1">
-          <h3 class="uppercase font-teko text-[#49494b] text-[2rem] md:text-[3rem] lg:text-[4rem]">
-            <strong class="text-white block leading-none text-[6rem] sm:text-[7rem] sm:leading-tight md:text-[8rem] lg:text-[10rem] lg:leading-snug xl:text-[12rem]">
+          <h3
+            class="font-teko text-[2rem] uppercase text-[#49494b] md:text-[3rem] lg:text-[4rem]"
+          >
+            <strong
+              class="block text-[6rem] leading-none text-white sm:text-[7rem] sm:leading-tight md:text-[8rem] lg:text-[10rem] lg:leading-snug xl:text-[12rem]"
+            >
               22
             </strong>
             Different countries
           </h3>
         </li>
         <li class="flex-1">
-          <h3 class="uppercase font-teko text-[#49494b] text-[2rem] md:text-[3rem] lg:text-[4rem]">
-            <strong class="text-white block leading-none text-[6rem] sm:text-[7rem] sm:leading-tight md:text-[8rem] lg:text-[10rem] lg:leading-snug xl:text-[12rem]">
+          <h3
+            class="font-teko text-[2rem] uppercase text-[#49494b] md:text-[3rem] lg:text-[4rem]"
+          >
+            <strong
+              class="block text-[6rem] leading-none text-white sm:text-[7rem] sm:leading-tight md:text-[8rem] lg:text-[10rem] lg:leading-snug xl:text-[12rem]"
+            >
               800+
             </strong>
             Flight hours
@@ -59,46 +71,68 @@ const headerBackground = await getHeaderBackgroundByPage('/about');
     </Section>
 
     <Section title="I can help with" gray>
-      <ul class="list-none p-0 m-0">
-        <li class="uppercase text-[3rem] md:text-[4rem] leading-none font-teko font-semibold text-secondary my-[10px] py-[10px] transition-colors duration-200 hover:text-white">
+      <ul class="m-0 list-none p-0">
+        <li
+          class="my-[10px] py-[10px] font-teko text-[3rem] font-semibold uppercase leading-none text-secondary transition-colors duration-200 hover:text-white md:text-[4rem]"
+        >
           Documentary
         </li>
-        <li class="uppercase text-[3rem] md:text-[4rem] leading-none font-teko font-semibold text-secondary my-[10px] py-[10px] transition-colors duration-200 hover:text-white">
+        <li
+          class="my-[10px] py-[10px] font-teko text-[3rem] font-semibold uppercase leading-none text-secondary transition-colors duration-200 hover:text-white md:text-[4rem]"
+        >
           Film
         </li>
-        <li class="uppercase text-[3rem] md:text-[4rem] leading-none font-teko font-semibold text-secondary my-[10px] py-[10px] transition-colors duration-200 hover:text-white">
+        <li
+          class="my-[10px] py-[10px] font-teko text-[3rem] font-semibold uppercase leading-none text-secondary transition-colors duration-200 hover:text-white md:text-[4rem]"
+        >
           Commercial promo
         </li>
-        <li class="uppercase text-[3rem] md:text-[4rem] leading-none font-teko font-semibold text-secondary my-[10px] py-[10px] transition-colors duration-200 hover:text-white">
+        <li
+          class="my-[10px] py-[10px] font-teko text-[3rem] font-semibold uppercase leading-none text-secondary transition-colors duration-200 hover:text-white md:text-[4rem]"
+        >
           Architecture
         </li>
-        <li class="uppercase text-[3rem] md:text-[4rem] leading-none font-teko font-semibold text-secondary my-[10px] py-[10px] transition-colors duration-200 hover:text-white">
+        <li
+          class="my-[10px] py-[10px] font-teko text-[3rem] font-semibold uppercase leading-none text-secondary transition-colors duration-200 hover:text-white md:text-[4rem]"
+        >
           Music video
         </li>
       </ul>
     </Section>
 
     <Section title="Tech specs">
-      <ul class="p-0 m-0 list-none md:flex md:justify-around">
+      <ul class="m-0 list-none p-0 md:flex md:justify-around">
         <li class="flex-1">
-          <h3 class="uppercase font-teko text-[#49494b] text-[2rem] md:text-[3rem] lg:text-[4rem]">
-            <strong class="text-white block leading-none text-[6rem] sm:text-[7rem] sm:leading-tight md:text-[8rem] lg:text-[10rem] lg:leading-snug xl:text-[12rem]">
+          <h3
+            class="font-teko text-[2rem] uppercase text-[#49494b] md:text-[3rem] lg:text-[4rem]"
+          >
+            <strong
+              class="block text-[6rem] leading-none text-white sm:text-[7rem] sm:leading-tight md:text-[8rem] lg:text-[10rem] lg:leading-snug xl:text-[12rem]"
+            >
               4K/60<span class="text-[5rem]">FPS</span>
             </strong>
             AERIAL VIDEO
           </h3>
         </li>
         <li class="flex-1">
-          <h3 class="uppercase font-teko text-[#49494b] text-[2rem] md:text-[3rem] lg:text-[4rem]">
-            <strong class="text-white block leading-none text-[6rem] sm:text-[7rem] sm:leading-tight md:text-[8rem] lg:text-[10rem] lg:leading-snug xl:text-[12rem]">
+          <h3
+            class="font-teko text-[2rem] uppercase text-[#49494b] md:text-[3rem] lg:text-[4rem]"
+          >
+            <strong
+              class="block text-[6rem] leading-none text-white sm:text-[7rem] sm:leading-tight md:text-[8rem] lg:text-[10rem] lg:leading-snug xl:text-[12rem]"
+            >
               20<span class="text-[5rem]">MPX</span>
             </strong>
             AERIAL PHOTOGRAPHY
           </h3>
         </li>
         <li class="flex-1">
-          <h3 class="uppercase font-teko text-[#49494b] text-[2rem] md:text-[3rem] lg:text-[4rem]">
-            <strong class="text-white block leading-none text-[6rem] sm:text-[7rem] sm:leading-tight md:text-[8rem] lg:text-[10rem] lg:leading-snug xl:text-[12rem]">
+          <h3
+            class="font-teko text-[2rem] uppercase text-[#49494b] md:text-[3rem] lg:text-[4rem]"
+          >
+            <strong
+              class="block text-[6rem] leading-none text-white sm:text-[7rem] sm:leading-tight md:text-[8rem] lg:text-[10rem] lg:leading-snug xl:text-[12rem]"
+            >
               162<span class="text-[5rem]">MPX</span>
             </strong>
             360° PHOTOGRAPHY
@@ -108,16 +142,24 @@ const headerBackground = await getHeaderBackgroundByPage('/about');
     </Section>
 
     <Section title="Credentials">
-      <div class="text-secondary max-w-[420px] mx-auto">
-        <h3 class="text-white text-[4rem] font-semibold font-teko uppercase my-[2em] mt-[25px]">
+      <div class="mx-auto max-w-[420px] text-secondary">
+        <h3
+          class="my-[2em] mt-[25px] font-teko text-[4rem] font-semibold uppercase text-white"
+        >
           ONDŘEJ HÁJEK
         </h3>
-        Tel.: <a href="tel:+420773604400" class="no-underline text-secondary">+420 773 604 400</a>
+        Tel.: <a href="tel:+420773604400" class="text-secondary no-underline"
+          >+420 773 604 400</a
+        >
         <br />
-        <a href="mailto:info@ondrahajek.com" class="no-underline text-secondary">info@ondrahajek.com</a>
+        <a href="mailto:info@ondrahajek.com" class="text-secondary no-underline"
+          >info@ondrahajek.com</a
+        >
         <br />
         <br />
-        <h3 class="text-white text-[4rem] font-semibold font-teko uppercase my-[2em] mt-[25px]">
+        <h3
+          class="my-[2em] mt-[25px] font-teko text-[4rem] font-semibold uppercase text-white"
+        >
           COPTER VISION S.R.O.
         </h3>
         držitel povolení k provozování leteckých prací od Úřadu pro civilní letectví

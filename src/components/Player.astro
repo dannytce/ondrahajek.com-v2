@@ -1,39 +1,42 @@
 ---
-import DatoImageCover from '~/components/DatoImageCover.astro';
-import type { ResponsiveImage } from '~/api/generated/types';
+import DatoImageCover from '~/components/DatoImageCover.astro'
+import type { ResponsiveImage } from '~/api/generated/types'
 
 interface Props {
-  title: string;
-  video: string;
-  poster?: ResponsiveImage | null;
-  transitionName?: string;
-  deferLoad?: boolean;
+  title: string
+  video: string
+  poster?: ResponsiveImage | null
+  transitionName?: string
+  deferLoad?: boolean
 }
 
 function buildIframeSrc(video: string): string {
-  const base = video.trim().replace(/\/$/, '');
+  const base = video.trim().replace(/\/$/, '')
 
   try {
-    const url = new URL(base);
-    url.searchParams.set('autoplay', '1');
-    url.searchParams.set('loop', '1');
-    url.searchParams.set('autopause', '0');
+    const url = new URL(base)
+    url.searchParams.set('autoplay', '1')
+    url.searchParams.set('loop', '1')
+    url.searchParams.set('autopause', '0')
 
-    if (url.hostname.includes('youtube.com') && url.pathname.includes('/embed/')) {
-      const id = url.pathname.split('/').pop();
+    if (
+      url.hostname.includes('youtube.com') &&
+      url.pathname.includes('/embed/')
+    ) {
+      const id = url.pathname.split('/').pop()
       if (id) {
-        url.searchParams.set('playlist', id);
+        url.searchParams.set('playlist', id)
       }
     }
 
-    return url.toString();
+    return url.toString()
   } catch {
-    return `${base}/?autoplay=1&loop=1&autopause=0`;
+    return `${base}/?autoplay=1&loop=1&autopause=0`
   }
 }
 
-const { title, video, poster, transitionName, deferLoad = false } = Astro.props;
-const iframeSrc = buildIframeSrc(video);
+const { title, video, poster, transitionName, deferLoad = false } = Astro.props
+const iframeSrc = buildIframeSrc(video)
 ---
 
 <div class="h-full">
@@ -46,7 +49,11 @@ const iframeSrc = buildIframeSrc(video);
       poster && (
         <div
           class="player-poster absolute inset-0 z-10 transition-opacity duration-[220ms] ease-[cubic-bezier(0.23,1,0.32,1)]"
-          style={transitionName ? `view-transition-name:${transitionName}` : undefined}
+          style={
+            transitionName
+              ? `view-transition-name:${transitionName}`
+              : undefined
+          }
         >
           <DatoImageCover
             data={{
@@ -62,20 +69,20 @@ const iframeSrc = buildIframeSrc(video);
         </div>
       )
     }
-    <div class="w-full h-0 pb-[56.25%] relative">
+    <div class="relative h-0 w-full pb-[56.25%]">
       <iframe
         src={deferLoad ? undefined : iframeSrc}
         data-player-src={deferLoad ? iframeSrc : undefined}
         title={`${title} video`}
         allow="autoplay; fullscreen"
-        class="player-frame absolute w-full h-full max-h-[calc(100vh-120px)] top-0 left-0 transition-opacity duration-[260ms] ease-[cubic-bezier(0.23,1,0.32,1)] border-0"
-      />
+        class="player-frame absolute left-0 top-0 h-full max-h-[calc(100vh-120px)] w-full border-0 transition-opacity duration-[260ms] ease-[cubic-bezier(0.23,1,0.32,1)]"
+      ></iframe>
     </div>
   </div>
 </div>
 
 <script>
-  import '~/scripts/player.ts';
+  import '~/scripts/player.ts'
 </script>
 
 <style>

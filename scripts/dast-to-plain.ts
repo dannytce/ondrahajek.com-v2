@@ -43,7 +43,10 @@ function blockToPlain(node: Node): string {
       .join('\n')
   }
   if (isBlockquote(node)) {
-    return node.children.map((p) => blockToPlain(p as Node)).filter(Boolean).join('\n\n')
+    return node.children
+      .map((p) => blockToPlain(p as Node))
+      .filter(Boolean)
+      .join('\n\n')
   }
   if (isCode(node)) {
     return node.code
@@ -55,7 +58,10 @@ function blockToPlain(node: Node): string {
     return ''
   }
   if (hasChildren(node)) {
-    return node.children.map((c) => blockToPlain(c as Node)).filter(Boolean).join('\n\n')
+    return node.children
+      .map((c) => blockToPlain(c as Node))
+      .filter(Boolean)
+      .join('\n\n')
   }
   return ''
 }
@@ -104,7 +110,10 @@ function localeStructuredToPlain(raw: unknown, locale: 'cs' | 'en'): string {
   return structuredTextValueToPlain(v)
 }
 
-export function localizedDescriptionToPlainCsEn(description: unknown): { cs: string; en: string } {
+export function localizedDescriptionToPlainCsEn(description: unknown): {
+  cs: string
+  en: string
+} {
   if (description == null) {
     return { cs: '', en: '' }
   }

@@ -14,7 +14,10 @@ import 'dotenv/config'
 import fs from 'node:fs'
 import path from 'node:path'
 import { buildClient } from '@datocms/cma-client-node'
-import { buildTaxonomyIdToNameMaps, fetchAllItemsOfType } from './import-taxonomy-lookup'
+import {
+  buildTaxonomyIdToNameMaps,
+  fetchAllItemsOfType,
+} from './import-taxonomy-lookup'
 import { localizedDescriptionToPlainCsEn } from './dast-to-plain'
 
 const HEADER_ROW =
@@ -97,7 +100,10 @@ function getMetaStatus(item: Record<string, unknown>): string | undefined {
   return inner?.status
 }
 
-function getAttrNumber(item: Record<string, unknown>, key: string): number | null {
+function getAttrNumber(
+  item: Record<string, unknown>,
+  key: string
+): number | null {
   const v = getItemField(item, key)
   if (typeof v === 'number' && !Number.isNaN(v)) {
     return v
@@ -111,7 +117,9 @@ function getAttrNumber(item: Record<string, unknown>, key: string): number | nul
 
 type Client = ReturnType<typeof buildClient>
 
-async function fetchAllPortfolios(client: Client): Promise<Record<string, unknown>[]> {
+async function fetchAllPortfolios(
+  client: Client
+): Promise<Record<string, unknown>[]> {
   return fetchAllItemsOfType(client, 'portfolio')
 }
 
@@ -130,11 +138,12 @@ function portfolioToRow(
 
   const catId = firstLinkId(getItemField(item, 'category'))
   const subId = firstLinkId(getItemField(item, 'subcategory'))
-  const kategorie1 = catId ? catNames.get(catId) ?? '' : ''
-  const kategorie2 = subId ? subNames.get(subId) ?? '' : ''
+  const kategorie1 = catId ? (catNames.get(catId) ?? '') : ''
+  const kategorie2 = subId ? (subNames.get(subId) ?? '') : ''
 
   const description = getItemField(item, 'description')
-  const { cs: popisCs, en: popisEn } = localizedDescriptionToPlainCsEn(description)
+  const { cs: popisCs, en: popisEn } =
+    localizedDescriptionToPlainCsEn(description)
 
   return [
     video,
@@ -154,22 +163,28 @@ function portfolioToRow(
 async function main() {
   const { outPath, publishedOnly } = parseArgs(process.argv)
   if (!outPath) {
-    console.error('Usage: pnpm export:portfolio -- <path-to-output.csv> [--published-only]')
+    console.error(
+      'Usage: pnpm export:portfolio -- <path-to-output.csv> [--published-only]'
+    )
     process.exit(1)
   }
 
   const token =
-    process.env.DATOCMS_MANAGEMENT_API_TOKEN?.trim() || process.env.DATOCMS_API_TOKEN?.trim()
+    process.env.DATOCMS_MANAGEMENT_API_TOKEN?.trim() ||
+    process.env.DATOCMS_API_TOKEN?.trim()
   if (!token) {
-    console.error('Set DATOCMS_MANAGEMENT_API_TOKEN (or DATOCMS_API_TOKEN) in .env')
+    console.error(
+      'Set DATOCMS_MANAGEMENT_API_TOKEN (or DATOCMS_API_TOKEN) in .env'
+    )
     process.exit(1)
   }
 
   const client = buildClient({ apiToken: token })
-  const [{ category: catNames, subcategory: subNames }, portfolios] = await Promise.all([
-    buildTaxonomyIdToNameMaps(client),
-    fetchAllPortfolios(client),
-  ])
+  const [{ category: catNames, subcategory: subNames }, portfolios] =
+    await Promise.all([
+      buildTaxonomyIdToNameMaps(client),
+      fetchAllPortfolios(client),
+    ])
 
   let list = portfolios
   if (publishedOnly) {
@@ -193,10 +208,15 @@ async function main() {
     if (ta !== tb) {
       return ta.localeCompare(tb)
     }
-    return strField(getItemField(a, 'slug')).localeCompare(strField(getItemField(b, 'slug')))
+    return strField(getItemField(a, 'slug')).localeCompare(
+      strField(getItemField(b, 'slug'))
+    )
   })
 
-  const lines = [HEADER_ROW, ...list.map((item) => portfolioToRow(item, catNames, subNames).join(','))]
+  const lines = [
+    HEADER_ROW,
+    ...list.map((item) => portfolioToRow(item, catNames, subNames).join(',')),
+  ]
   const resolved = path.resolve(outPath)
   fs.writeFileSync(resolved, lines.join('\n') + '\n', 'utf8')
   console.log(`Wrote ${list.length} rows to ${resolved}`)

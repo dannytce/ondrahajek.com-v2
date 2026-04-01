@@ -1,34 +1,40 @@
 ---
-import { Image } from '@datocms/astro';
-import { localePath, type Locale } from '~/i18n';
-import type { PortfolioListItem } from '~/api';
+import { Image } from '@datocms/astro'
+import { localePath, type Locale } from '~/i18n'
+import type { PortfolioListItem } from '~/api'
 
 interface Props {
-  portfolio: PortfolioListItem;
-  locale: Locale;
+  portfolio: PortfolioListItem
+  locale: Locale
 }
 
-const { portfolio, locale } = Astro.props;
+const { portfolio, locale } = Astro.props
 
-const thumb = portfolio.thumbnail;
-const responsiveImage = thumb?.responsiveImage;
+const thumb = portfolio.thumbnail
+const responsiveImage = thumb?.responsiveImage
 const subtitle =
   locale === 'cs'
     ? portfolio.subtitleCs || portfolio.subtitleEn
-    : portfolio.subtitleEn || portfolio.subtitleCs;
-const transitionName = portfolio.slug ? `portfolio-media-${portfolio.slug}` : undefined;
+    : portfolio.subtitleEn || portfolio.subtitleCs
+const transitionName = portfolio.slug
+  ? `portfolio-media-${portfolio.slug}`
+  : undefined
 ---
 
 {
   responsiveImage && (
     <a
       href={localePath(locale, `/portfolio/${portfolio.slug}`)}
-      class="portfolio-card block w-full relative no-underline group"
+      class="portfolio-card group relative block w-full no-underline"
     >
       <div class="portfolio-card-frame relative overflow-hidden bg-black">
         <div
           class="portfolio-card-media"
-          style={transitionName ? `view-transition-name:${transitionName}` : undefined}
+          style={
+            transitionName
+              ? `view-transition-name:${transitionName}`
+              : undefined
+          }
         >
           <Image
             data={{
@@ -39,12 +45,12 @@ const transitionName = portfolio.slug ? `portfolio-media-${portfolio.slug}` : un
             imgClass="block h-auto w-full"
           />
         </div>
-        <div class="portfolio-card-overlay absolute inset-0 pointer-events-none" />
+        <div class="portfolio-card-overlay pointer-events-none absolute inset-0" />
       </div>
-      <h3 class="portfolio-card-title text-white text-[2.4rem] xs:text-[2.6rem] md:text-[3rem] lg:text-[4rem] font-teko font-semibold uppercase -mt-[0.5em] leading-none ml-5 relative z-10">
+      <h3 class="portfolio-card-title relative z-10 -mt-[0.5em] ml-5 font-teko text-[2.4rem] font-semibold uppercase leading-none text-white md:text-[3rem] lg:text-[4rem] xs:text-[2.6rem]">
         {portfolio.title}
       </h3>
-      <h4 class="portfolio-card-subtitle text-secondary text-[1.5rem] font-normal ml-5 relative z-10">
+      <h4 class="portfolio-card-subtitle relative z-10 ml-5 text-[1.5rem] font-normal text-secondary">
         {subtitle}
       </h4>
     </a>

@@ -1,63 +1,71 @@
 function initShowreelDialogs() {
-  const dialogs = document.querySelectorAll<HTMLDialogElement>('[data-showreel-dialog]');
+  const dialogs = document.querySelectorAll<HTMLDialogElement>(
+    '[data-showreel-dialog]'
+  )
 
   dialogs.forEach((dialog) => {
-    if (dialog.dataset.bound === 'true') return;
+    if (dialog.dataset.bound === 'true') return
 
     const triggers = document.querySelectorAll<HTMLElement>(
       `[data-showreel-trigger="${dialog.id}"]`
-    );
-    const closeButtons = dialog.querySelectorAll<HTMLElement>('[data-dialog-close]');
-    const iframe = dialog.querySelector<HTMLIFrameElement>('iframe[data-player-src]');
-    const playerRoot = dialog.querySelector<HTMLElement>('[data-player-root]');
+    )
+    const closeButtons = dialog.querySelectorAll<HTMLElement>(
+      '[data-dialog-close]'
+    )
+    const iframe = dialog.querySelector<HTMLIFrameElement>(
+      'iframe[data-player-src]'
+    )
+    const playerRoot = dialog.querySelector<HTMLElement>('[data-player-root]')
 
     const open = () => {
       if (iframe?.dataset.playerSrc && !iframe.src) {
-        iframe.src = iframe.dataset.playerSrc;
-        playerRoot?.setAttribute('data-loaded', 'false');
+        iframe.src = iframe.dataset.playerSrc
+        playerRoot?.setAttribute('data-loaded', 'false')
       }
-      dialog.showModal();
-    };
+      dialog.showModal()
+    }
 
     const close = () => {
-      dialog.close();
+      dialog.close()
       if (iframe) {
-        iframe.removeAttribute('src');
+        iframe.removeAttribute('src')
       }
-      playerRoot?.setAttribute('data-loaded', 'false');
-    };
+      playerRoot?.setAttribute('data-loaded', 'false')
+    }
 
     triggers.forEach((trigger) => {
       trigger.addEventListener('click', (event) => {
-        event.preventDefault();
-        open();
-      });
-    });
+        event.preventDefault()
+        open()
+      })
+    })
 
     closeButtons.forEach((button) => {
-      button.addEventListener('click', close);
-    });
+      button.addEventListener('click', close)
+    })
 
     dialog.addEventListener('click', (event) => {
-      const bounds = dialog.getBoundingClientRect();
+      const bounds = dialog.getBoundingClientRect()
       const isInDialog =
         bounds.top <= event.clientY &&
         event.clientY <= bounds.top + bounds.height &&
         bounds.left <= event.clientX &&
-        event.clientX <= bounds.left + bounds.width;
+        event.clientX <= bounds.left + bounds.width
 
       if (!isInDialog) {
-        close();
+        close()
       }
-    });
+    })
 
-    dialog.dataset.bound = 'true';
-  });
+    dialog.dataset.bound = 'true'
+  })
 }
 
-document.addEventListener('astro:page-load', initShowreelDialogs);
+document.addEventListener('astro:page-load', initShowreelDialogs)
 if (document.readyState !== 'loading') {
-  initShowreelDialogs();
+  initShowreelDialogs()
 } else {
-  document.addEventListener('DOMContentLoaded', initShowreelDialogs, { once: true });
+  document.addEventListener('DOMContentLoaded', initShowreelDialogs, {
+    once: true,
+  })
 }

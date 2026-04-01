@@ -1,20 +1,20 @@
 ---
-import Footer from './Footer.astro';
-import type { Locale } from '~/i18n';
+import Footer from './Footer.astro'
+import type { Locale } from '~/i18n'
 
 interface Props {
-  isHomepage?: boolean;
-  isAboutPage?: boolean;
-  locale?: Locale;
+  isHomepage?: boolean
+  isAboutPage?: boolean
+  locale?: Locale
 }
 
-const { isHomepage, locale = 'en' } = Astro.props;
+const { isHomepage, locale = 'en' } = Astro.props
 ---
 
 <slot name="header" />
 <main
   id={isHomepage ? 'portfolio' : undefined}
-  class="relative z-main bg-background before:content-[''] before:absolute before:left-0 before:top-0.5 before:w-full before:h-[45vh] before:-translate-y-full before:pointer-events-none before:bg-gradient-to-b before:from-[rgba(13,13,16,0)] before:to-background"
+  class="relative z-main bg-background before:pointer-events-none before:absolute before:left-0 before:top-0.5 before:h-[45vh] before:w-full before:-translate-y-full before:bg-gradient-to-b before:from-[rgba(13,13,16,0)] before:to-background before:content-['']"
 >
   <slot />
   <Footer locale={locale} />
