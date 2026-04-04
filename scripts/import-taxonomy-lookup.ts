@@ -48,12 +48,60 @@ function extractLocalizedName(raw: unknown): string {
   return ''
 }
 
+/** Prefer one locale, then the other, then any string value (for localized CMA `name`). */
+function extractLocalizedNameLocale(
+  raw: unknown,
+  preferred: 'cs' | 'en'
+): string {
+  if (typeof raw === 'string') {
+    return raw.trim()
+  }
+  if (raw && typeof raw === 'object' && !Array.isArray(raw)) {
+    const o = raw as Record<string, unknown>
+    const alt: 'cs' | 'en' = preferred === 'cs' ? 'en' : 'cs'
+    const primary = o[preferred]
+    if (typeof primary === 'string' && primary.trim()) {
+      return primary.trim()
+    }
+    const secondary = o[alt]
+    if (typeof secondary === 'string' && secondary.trim()) {
+      return secondary.trim()
+    }
+    for (const k of ['en', 'cs', 'default']) {
+      const v = o[k]
+      if (typeof v === 'string' && v.trim()) {
+        return v.trim()
+      }
+    }
+    for (const v of Object.values(o)) {
+      if (typeof v === 'string' && v.trim()) {
+        return v.trim()
+      }
+    }
+  }
+  return ''
+}
+
 /** Display name for a taxonomy item (used by import and portfolio CSV export). */
 export function taxonomyItemDisplayName(item: Record<string, unknown>): string {
   const top = item.name
   const attrs = item.attributes as Record<string, unknown> | undefined
   const fromAttrs = attrs?.name
   return extractLocalizedName(top) || extractLocalizedName(fromAttrs)
+}
+
+/** Localized display name (e.g. English for stable CSV `Kategorie 2` export). */
+export function taxonomyItemDisplayNameForLocale(
+  item: Record<string, unknown>,
+  locale: 'cs' | 'en'
+): string {
+  const top = item.name
+  const attrs = item.attributes as Record<string, unknown> | undefined
+  const fromAttrs = attrs?.name
+  return (
+    extractLocalizedNameLocale(top, locale) ||
+    extractLocalizedNameLocale(fromAttrs, locale)
+  )
 }
 
 export async function fetchAllItemsOfType(
@@ -153,11 +201,14 @@ export async function buildTaxonomyIdToNameMaps(client: Client): Promise<{
     fetchAllItemsOfType(client, 'portfolio_subcategory'),
   ])
 
-  function toIdMap(items: Record<string, unknown>[]): Map<string, string> {
+  function toIdMap(
+    items: Record<string, unknown>[],
+    nameFor: (item: Record<string, unknown>) => string
+  ): Map<string, string> {
     const m = new Map<string, string>()
     for (const item of items) {
       const id = item.id as string
-      const name = taxonomyItemDisplayName(item)
+      const name = nameFor(item)
       if (id && name) {
         m.set(id, name)
       }
@@ -166,8 +217,10 @@ export async function buildTaxonomyIdToNameMaps(client: Client): Promise<{
   }
 
   return {
-    category: toIdMap(catItems),
-    subcategory: toIdMap(subItems),
+    category: toIdMap(catItems, taxonomyItemDisplayName),
+    subcategory: toIdMap(subItems, (it) =>
+      taxonomyItemDisplayNameForLocale(it, 'en')
+    ),
   }
 }
 

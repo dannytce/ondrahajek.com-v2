@@ -1,3 +1,7 @@
+/**
+ * Portfolio grid filters. Subcategory `?sub=` uses Dato **slug** for the active locale
+ * (not record IDs); old bookmarked URLs with numeric/sub-id tokens will no longer apply.
+ */
 function normalize(value: string | null | undefined) {
   return (value ?? '').trim().toLowerCase()
 }
@@ -120,11 +124,11 @@ function itemMatchesAll(item: HTMLElement, st: FilterState): boolean {
 function shouldShowSubcategoryButton(
   items: HTMLElement[],
   st: FilterState,
-  subId: string
+  subSlug: string
 ): boolean {
   for (const item of items) {
     const subs = item.dataset.subcategories?.split(',').filter(Boolean) ?? []
-    if (!subs.includes(subId)) continue
+    if (!subs.includes(subSlug)) continue
     if (itemMatchesExcept(item, st, 'sub')) return true
   }
   return false
@@ -270,7 +274,7 @@ function readUrlIntoGrid(grid: HTMLElement) {
 
   if (!searchInput) return
 
-  const validSubIds = new Set(
+  const validSubSlugs = new Set(
     subcategoryButtons
       .map((b) => b.dataset.filterSubcategory ?? '')
       .filter(Boolean)
@@ -278,7 +282,7 @@ function readUrlIntoGrid(grid: HTMLElement) {
 
   const params = new URLSearchParams(window.location.search)
   let sub = params.get('sub') ?? ''
-  if (sub && !validSubIds.has(sub)) sub = ''
+  if (sub && !validSubSlugs.has(sub)) sub = ''
 
   subcategoryButtons.forEach((button) => {
     const val = button.dataset.filterSubcategory ?? ''
@@ -373,12 +377,12 @@ function bindGrid(grid: HTMLElement) {
     }
 
     for (const button of subcategoryButtons) {
-      const subId = button.dataset.filterSubcategory ?? ''
-      if (subId === '') {
+      const subSlug = button.dataset.filterSubcategory ?? ''
+      if (subSlug === '') {
         button.hidden = false
         continue
       }
-      button.hidden = !shouldShowSubcategoryButton(items, st, subId)
+      button.hidden = !shouldShowSubcategoryButton(items, st, subSlug)
     }
 
     const activeBtn = subcategoryButtons.find((b) => b.dataset.active === 'true')
@@ -408,12 +412,12 @@ function bindGrid(grid: HTMLElement) {
         searchInput
       )
       for (const button of subcategoryButtons) {
-        const subId = button.dataset.filterSubcategory ?? ''
-        if (subId === '') {
+        const subSlug = button.dataset.filterSubcategory ?? ''
+        if (subSlug === '') {
           button.hidden = false
           continue
         }
-        button.hidden = !shouldShowSubcategoryButton(items, st, subId)
+        button.hidden = !shouldShowSubcategoryButton(items, st, subSlug)
       }
     }
 

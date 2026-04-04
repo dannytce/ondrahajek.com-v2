@@ -30,8 +30,10 @@ const {
 const subcategoryMap = new Map<string, string>()
 for (const portfolio of portfolios) {
   for (const subcategory of portfolio.subcategory) {
-    if (subcategory.name) {
-      subcategoryMap.set(subcategory.id, subcategory.name)
+    const slug = subcategory.slug?.trim()
+    const label = subcategory.name?.trim()
+    if (slug && label) {
+      subcategoryMap.set(slug, label)
     }
   }
 }
@@ -80,33 +82,6 @@ const clients: FilterOption[] = [...clientSlugByValue.entries()]
 >
   <div class="portfolio-toolbar-enter mb-10 flex flex-col gap-4">
     <div class="flex flex-wrap items-center justify-between gap-4">
-      <div class="flex min-w-0 flex-1 flex-wrap gap-2">
-        {
-          subcategories.length > 0 && (
-            <div class="flex flex-wrap gap-2">
-              <button
-                type="button"
-                data-filter-subcategory=""
-                data-active="true"
-                class="filter-subcategory-chip cursor-pointer border border-white bg-white px-4 py-1 font-teko text-[1.6rem] uppercase text-background transition-colors data-[active=false]:border-secondary/40 data-[active=false]:bg-transparent data-[active=false]:text-secondary data-[active=false]:hover:border-white data-[active=false]:hover:text-white"
-              >
-                {t(locale, 'filter.all')}
-              </button>
-              {subcategories.map((subcategory) => (
-                <button
-                  type="button"
-                  data-filter-subcategory={subcategory.value}
-                  data-active="false"
-                  class="filter-subcategory-chip cursor-pointer border border-white bg-white px-4 py-1 font-teko text-[1.6rem] uppercase text-background transition-colors data-[active=false]:border-secondary/40 data-[active=false]:bg-transparent data-[active=false]:text-secondary data-[active=false]:hover:border-white data-[active=false]:hover:text-white"
-                >
-                  {subcategory.label}
-                </button>
-              ))}
-            </div>
-          )
-        }
-      </div>
-
       <div
         class="flex w-full shrink-0 items-center justify-end gap-2 sm:w-auto"
       >
@@ -146,6 +121,33 @@ const clients: FilterOption[] = [...clientSlugByValue.entries()]
           }{' '}
           {t(locale, 'filter.results')}
         </span>
+      </div>
+
+      <div class="flex min-w-0 flex-1 flex-wrap gap-2">
+        {
+          subcategories.length > 0 && (
+            <div class="flex flex-wrap gap-2">
+              <button
+                type="button"
+                data-filter-subcategory=""
+                data-active="true"
+                class="filter-subcategory-chip cursor-pointer border border-white bg-white px-4 py-1 font-teko text-[1.6rem] uppercase text-background transition-colors data-[active=false]:border-secondary/40 data-[active=false]:bg-transparent data-[active=false]:text-secondary data-[active=false]:hover:border-white data-[active=false]:hover:text-white"
+              >
+                {t(locale, 'filter.all')}
+              </button>
+              {subcategories.map((subcategory) => (
+                <button
+                  type="button"
+                  data-filter-subcategory={subcategory.value}
+                  data-active="false"
+                  class="filter-subcategory-chip cursor-pointer border border-white bg-white px-4 py-1 font-teko text-[1.6rem] uppercase text-background transition-colors data-[active=false]:border-secondary/40 data-[active=false]:bg-transparent data-[active=false]:text-secondary data-[active=false]:hover:border-white data-[active=false]:hover:text-white"
+                >
+                  {subcategory.label}
+                </button>
+              ))}
+            </div>
+          )
+        }
       </div>
     </div>
 
@@ -255,7 +257,8 @@ const clients: FilterOption[] = [...clientSlugByValue.entries()]
             style={{ '--stagger': String(Math.min(index, 20)) }}
             data-portfolio-item
             data-subcategories={portfolio.subcategory
-              .map((subcategory) => subcategory.id)
+              .map((subcategory) => subcategory.slug?.trim())
+              .filter(Boolean)
               .join(',')}
             data-year={year !== 'NaN' ? year : ''}
             data-location={location}

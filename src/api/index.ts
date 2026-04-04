@@ -44,7 +44,11 @@ export interface PortfolioListItem {
   location: string | null
   position: number | null
   category: Array<{ id: string; name: string | null }>
-  subcategory: Array<{ id: string; name: string | null }>
+  subcategory: Array<{
+    id: string
+    name: string | null
+    slug: string | null
+  }>
   thumbnail: {
     responsiveImage: ResponsiveImage | null
     smartTags: string[]
@@ -66,7 +70,7 @@ type RawPortfolioListRow = {
   } | null
   position: number | null
   category: Array<{ id: string; name: string | null }>
-  subcategory: Array<{ id: string; name: string | null }>
+  subcategory: Array<{ id: string; name: string | null; slug: string | null }>
   thumbnail: PortfolioListItem['thumbnail']
 } & Record<string, unknown>
 
@@ -127,7 +131,9 @@ const responsiveImageFragment = `
   }
 `
 
-const portfolioListFields = `
+function portfolioListFields(locale: Locale): string {
+  const loc = locale === 'cs' ? 'cs' : 'en'
+  return `
   title
   subtitleCs: subtitle(locale: cs)
   subtitleEn: subtitle(locale: en)
@@ -145,7 +151,11 @@ const portfolioListFields = `
   }
   position
   category { id name }
-  subcategory { id name }
+  subcategory {
+    id
+    name(locale: ${loc})
+    slug(locale: ${loc})
+  }
   thumbnail {
     responsiveImage(imgixParams: {h: "460", w: "836", fit: crop }) {
       ...responsiveImageFragment
@@ -153,6 +163,7 @@ const portfolioListFields = `
     smartTags
   }
 `
+}
 
 // ---------------------------------------------------------------------------
 // Fetch helper
@@ -206,7 +217,7 @@ export async function getAllPortfolios(
   const data = await fetchAPI(`
     {
       allPortfolios(first: ${PORTFOLIO_LIST_FIRST}, orderBy: position_ASC) {
-        ${portfolioListFields}
+        ${portfolioListFields(locale)}
       }
     }
     ${responsiveImageFragment}
@@ -227,7 +238,7 @@ export async function getPortfoliosByCategory(
         filter: { category: { anyIn: ["${categoryId}"] } }
         orderBy: position_ASC
       ) {
-        ${portfolioListFields}
+        ${portfolioListFields(locale)}
       }
     }
     ${responsiveImageFragment}
@@ -249,6 +260,7 @@ export async function getPortfolioBySlug(
   slug: string,
   locale: Locale
 ): Promise<PortfolioDetail | null> {
+  const loc = locale === 'cs' ? 'cs' : 'en'
   const data = await fetchAPI(`
     {
       portfolio(filter: { slug: { eq: "${slug}" } }) {
@@ -269,7 +281,11 @@ export async function getPortfolioBySlug(
         }
         position
         category { id name }
-        subcategory { id name }
+        subcategory {
+          id
+          name(locale: ${loc})
+          slug(locale: ${loc})
+        }
         thumbnail {
           responsiveImage(imgixParams: {h: "900", w: "1600", fit: crop }) {
             ...responsiveImageFragment
@@ -325,6 +341,7 @@ export async function getPortfolioBySlug(
 export interface TaxonomyItem {
   id: string
   name: string | null
+  slug?: string | null
 }
 
 export async function getAllCategories(): Promise<TaxonomyItem[]> {
@@ -333,7 +350,15 @@ export async function getAllCategories(): Promise<TaxonomyItem[]> {
 }
 
 export async function getAllSubcategories(): Promise<TaxonomyItem[]> {
-  const data = await fetchAPI(`{ allPortfolioSubcategories { id name } }`)
+  const data = await fetchAPI(`
+    {
+      allPortfolioSubcategories {
+        id
+        name(locale: en)
+        slug(locale: en)
+      }
+    }
+  `)
   return data?.allPortfolioSubcategories ?? []
 }
 
