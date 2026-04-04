@@ -13,7 +13,8 @@ export function getStaticPaths() {
 const siteUrl = 'https://ondrahajek.com'
 const locale = getLocaleFromParam(Astro.params.locale)
 const portfolios = await getPortfoliosByCategory(
-  CATEGORY_IDS['video-production']
+  CATEGORY_IDS['video-production'],
+  locale
 )
 const headerBackground = await getHeaderBackgroundByPage('/')
 

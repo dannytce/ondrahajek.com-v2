@@ -19,6 +19,9 @@
  *   pnpm import:portfolio -- path/to/PORTFOLIO-list.csv --update-only --verify-skipped
  *   pnpm import:portfolio -- path/to/PORTFOLIO-list.csv --update-only --skipped-report skipped.csv
  *
+ * Tag keys (canonical EN slugs, `;`-separated) are written to the Portfolio string field `tags`
+ * (override with `DATOCMS_PORTFOLIO_TAGS_FIELD` if your API identifier differs).
+ *
  * @see https://www.datocms.com/docs/content-management-api
  */
 
@@ -53,6 +56,10 @@ import {
   resolveDatocmsEnvironment,
   resolveGraphqlContentToken,
 } from './datocms-portfolio-editing-url'
+
+/** CMA attribute for semicolon-separated tag keys; must match Portfolio single-line string field (default `tags`). */
+const PORTFOLIO_TAGS_CMA_FIELD =
+  process.env.DATOCMS_PORTFOLIO_TAGS_FIELD?.trim() || 'tags'
 
 /** Same column order as [scripts/import-clients-locations-tags.ts](scripts/import-clients-locations-tags.ts). */
 const COLUMN_NAMES = [
@@ -669,14 +676,12 @@ async function main() {
   let portfolioEnriched: PortfolioEnriched[] = []
   const clientBySlug = new Map<string, string>()
   const locByCsName = new Map<string, string>()
-  const tagByDedupeKey = new Map<string, string>()
 
   {
-    const [portfolios, clients, locations, tags] = await Promise.all([
+    const [portfolios, clients, locations] = await Promise.all([
       fetchAllItemsOfType(client, 'portfolio'),
       fetchAllItemsOfType(client, 'client'),
       fetchAllItemsOfType(client, 'location'),
-      fetchAllItemsOfType(client, 'tag'),
     ])
 
     for (const it of clients) {
@@ -692,17 +697,6 @@ async function main() {
       const id = itemId(it)
       if (nameCs && id) {
         locByCsName.set(nameCs, id)
-      }
-    }
-
-    for (const it of tags) {
-      const slugEn =
-        localizedLocale(getItemField(it, 'slug'), 'en') ||
-        slugifyAscii(localizedLocale(getItemField(it, 'name'), 'en'))
-      const id = itemId(it)
-      const key = slugifyAscii(slugEn)
-      if (key && id) {
-        tagByDedupeKey.set(key, id)
       }
     }
 
@@ -809,15 +803,12 @@ async function main() {
       const czTags = splitTagList(row.stitky_cz)
       const enTags = splitTagList(row.stitky_en)
       const tagPairCount = Math.min(czTags.length, enTags.length)
-      const tagIds: string[] = []
+      const tagKeys: string[] = []
       for (let t = 0; t < tagPairCount; t++) {
         const enLab = enTags[t]!
-        const dedupeKey = slugifyAscii(enLab)
-        const tid = tagByDedupeKey.get(dedupeKey)
-        if (tid) {
-          tagIds.push(tid)
-        }
+        tagKeys.push(slugifyAscii(enLab))
       }
+      const tagsValue = tagKeys.join(';')
 
       let existingId: string | null = null
       let matchTier: 'tier1' | 'tier2' | null = null
@@ -915,8 +906,9 @@ async function main() {
           (csvVk ? 'create' : 'create-no-video-key')
         const scoreLabel =
           matchScore != null ? matchScore.toFixed(3) : '—'
+        const tagPart = `${PORTFOLIO_TAGS_CMA_FIELD}=${tagsValue || '—'}`
         console.log(
-          `[dry-run] line ${line} videoKey=${csvVk ?? '—'} match=${tierLabel} id=${existingId ?? '—'} reason=${matchReason || '—'} score=${scoreLabel} | slugs ${slugDelta} | priority=${priority ?? '—'} | client=${clientIdForCsv ? 'yes' : '—'} loc=${locationId ? 'yes' : '—'} tags=${tagIds.length} | cat=${categoryIds.length ? 'yes' : '—'} sub=${subcategoryIds.length ? 'yes' : '—'} | action=${action}`
+          `[dry-run] line ${line} videoKey=${csvVk ?? '—'} match=${tierLabel} id=${existingId ?? '—'} reason=${matchReason || '—'} score=${scoreLabel} | slugs ${slugDelta} | priority=${priority ?? '—'} | client=${clientIdForCsv ? 'yes' : '—'} loc=${locationId ? 'yes' : '—'} ${tagPart} | cat=${categoryIds.length ? 'yes' : '—'} sub=${subcategoryIds.length ? 'yes' : '—'} | action=${action}`
         )
         dryOk++
         continue
@@ -934,16 +926,17 @@ async function main() {
           : undefined
 
       // CMA `items.update` only serializes `item_type` + `creator` as JSON:API relationships.
-      // Link fields (client, location, tags, category, …) are sent as *attributes* and must be
+      // Link fields (client, location, category, …) are sent as *attributes* and must be
       // record id string(s), not `{ type: 'item', id }`. See INVALID_FIELD in API errors.
       // Portfolio `slug` is localized in Dato (`slug_cs` / `slug_en` from CSV).
+      // `tags` is a single-line string (canonical keys, `;`-separated).
       const baseFields: Record<string, unknown> = {
         title: { cs: titleCs, en: titleEn },
         slug: { cs: slugCs, en: slugEn },
         video: videoUrl,
         ...(clientIdForCsv ? { client: clientIdForCsv } : {}),
         ...(locationId ? { location: locationId } : {}),
-        ...(tagIds.length ? { tags: tagIds } : {}),
+        [PORTFOLIO_TAGS_CMA_FIELD]: tagsValue || null,
         ...(dateStr ? { date: dateStr } : {}),
         ...(priority != null ? { priority } : {}),
         category: categoryIds,
@@ -988,7 +981,9 @@ async function main() {
   if (dryRun) {
     const mode = updateOnly ? ' [update-only]' : ''
     const fz = noFuzzy ? ' [no-fuzzy]' : ''
-    console.log(`Dry run${mode}${fz}: ${dryOk} rows OK, ${errors} skipped/errors`)
+    console.log(
+      `Dry run${mode}${fz}: ${dryOk} rows OK, ${errors} skipped/errors`
+    )
   } else {
     const skipPart =
       updateOnly && skippedUpdateOnly > 0

@@ -16,7 +16,9 @@
     "import:portfolio": "tsx scripts/import-portfolio.ts",
     "update:portfolio": "tsx scripts/import-portfolio.ts --update-only",
     "export:portfolio": "tsx scripts/export-portfolio-csv.ts",
-    "import:references": "tsx scripts/import-clients-locations-tags.ts"
+    "import:references": "tsx scripts/import-clients-locations-tags.ts",
+    "datocms:item-counts": "tsx scripts/datocms-item-counts.ts",
+    "generate:tag-labels": "tsx scripts/generate-portfolio-tag-labels.ts"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.2",

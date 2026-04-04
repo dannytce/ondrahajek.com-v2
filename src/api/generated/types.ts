@@ -2591,8 +2591,7 @@ export type PortfolioModelFilter = {
   slug?: InputMaybe<SlugFilter>;
   subcategory?: InputMaybe<LinksFilter>;
   subtitle?: InputMaybe<StringFilter>;
-  tags?: InputMaybe<LinksFilter>;
-  tagsLegacy?: InputMaybe<StringFilter>;
+  tags?: InputMaybe<StringFilter>;
   thumbnail?: InputMaybe<FileFilter>;
   title?: InputMaybe<StringFilter>;
   updatedAt?: InputMaybe<UpdatedAtFilter>;
@@ -2633,8 +2632,8 @@ export enum PortfolioModelOrderBy {
   priority_DESC = 'priority_DESC',
   subtitle_ASC = 'subtitle_ASC',
   subtitle_DESC = 'subtitle_DESC',
-  tagsLegacy_ASC = 'tagsLegacy_ASC',
-  tagsLegacy_DESC = 'tagsLegacy_DESC',
+  tags_ASC = 'tags_ASC',
+  tags_DESC = 'tags_DESC',
   title_ASC = 'title_ASC',
   title_DESC = 'title_DESC',
   updatedAt_ASC = 'updatedAt_ASC',
@@ -2677,8 +2676,7 @@ export type PortfolioRecord = RecordInterface & {
   slug?: Maybe<Scalars['String']['output']>;
   subcategory: Array<PortfolioSubcategoryRecord>;
   subtitle?: Maybe<Scalars['String']['output']>;
-  tags: Array<TagRecord>;
-  tagsLegacy?: Maybe<Scalars['String']['output']>;
+  tags?: Maybe<Scalars['String']['output']>;
   thumbnail?: Maybe<FileField>;
   title?: Maybe<Scalars['String']['output']>;
   updatedAt: Scalars['DateTime']['output'];

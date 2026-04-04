@@ -1,4 +1,10 @@
 import type { CdaStructuredTextValue } from 'datocms-structured-text-utils'
+import { buildTagsSearchBlob } from '~/lib/portfolio-tags'
+import {
+  PORTFOLIO_TAGS_FIELD,
+  readTagsStringFromRecord,
+} from '~/lib/datocms-portfolio-tags-field'
+import type { Locale } from '~/i18n'
 import type {
   PortfolioRecord,
   FileField,
@@ -10,11 +16,15 @@ import type {
 // ---------------------------------------------------------------------------
 
 /** Single portfolio detail – localized subtitles & descriptions. */
-export type PortfolioDetail = PortfolioRecord & {
+export type PortfolioDetail = Omit<PortfolioRecord, 'client' | 'location'> & {
   subtitleCs?: string | null
   subtitleEn?: string | null
   descriptionCs?: CdaStructuredTextValue | null
   descriptionEn?: CdaStructuredTextValue | null
+  /** Resolved display name from linked Client. */
+  client: string | null
+  /** Resolved display name from linked Location (locale-aware). */
+  location: string | null
 }
 
 /** Lightweight portfolio item for list/grid pages. */
@@ -24,7 +34,10 @@ export interface PortfolioListItem {
   subtitleCs: string | null
   subtitleEn: string | null
   slug: string | null
+  /** Semicolon-separated canonical tag keys (see `portfolio-tag-labels.json`). */
   tags: string | null
+  /** Keys + localized labels for client-side search. */
+  tagsSearchText: string
   video: string | null
   date: string | null
   client: string | null
@@ -36,6 +49,57 @@ export interface PortfolioListItem {
     responsiveImage: ResponsiveImage | null
     smartTags: string[]
   } | null
+}
+
+type RawPortfolioListRow = {
+  title: string | null
+  subtitle: string | null
+  subtitleCs: string | null
+  subtitleEn: string | null
+  slug: string | null
+  video: string | null
+  date: string | null
+  client?: { name?: string | null } | null
+  location?: {
+    nameCs?: string | null
+    nameEn?: string | null
+  } | null
+  position: number | null
+  category: Array<{ id: string; name: string | null }>
+  subcategory: Array<{ id: string; name: string | null }>
+  thumbnail: PortfolioListItem['thumbnail']
+} & Record<string, unknown>
+
+function mapPortfolioListItem(
+  raw: RawPortfolioListRow,
+  locale: Locale
+): PortfolioListItem {
+  const tags = readTagsStringFromRecord(raw)
+  const clientStr = raw.client?.name?.trim() ? raw.client.name.trim() : null
+  const nameCs = raw.location?.nameCs?.trim() ?? ''
+  const nameEn = raw.location?.nameEn?.trim() ?? ''
+  const locationStr =
+    locale === 'cs'
+      ? nameCs || nameEn || null
+      : nameEn || nameCs || null
+
+  return {
+    title: raw.title,
+    subtitle: raw.subtitle,
+    subtitleCs: raw.subtitleCs,
+    subtitleEn: raw.subtitleEn,
+    slug: raw.slug,
+    tags,
+    tagsSearchText: buildTagsSearchBlob(tags).toLowerCase(),
+    video: raw.video,
+    date: raw.date,
+    client: clientStr,
+    location: locationStr,
+    position: raw.position,
+    category: raw.category,
+    subcategory: raw.subcategory,
+    thumbnail: raw.thumbnail,
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -69,11 +133,16 @@ const portfolioListFields = `
   subtitleEn: subtitle(locale: en)
   subtitle
   slug
-  tags
+  ${PORTFOLIO_TAGS_FIELD}
   video
   date
-  client
-  location
+  client {
+    name
+  }
+  location {
+    nameCs: name(locale: cs)
+    nameEn: name(locale: en)
+  }
   position
   category { id name }
   subcategory { id name }
@@ -131,7 +200,9 @@ export async function getAllPortfoliosWithSlug() {
 }
 
 /** Fetch all portfolios (full list fields). Used on old homepage fallback. */
-export async function getAllPortfolios(): Promise<PortfolioListItem[]> {
+export async function getAllPortfolios(
+  locale: Locale
+): Promise<PortfolioListItem[]> {
   const data = await fetchAPI(`
     {
       allPortfolios(first: ${PORTFOLIO_LIST_FIRST}, orderBy: position_ASC) {
@@ -140,12 +211,14 @@ export async function getAllPortfolios(): Promise<PortfolioListItem[]> {
     }
     ${responsiveImageFragment}
   `)
-  return data?.allPortfolios ?? []
+  const rows = (data?.allPortfolios ?? []) as RawPortfolioListRow[]
+  return rows.map((r) => mapPortfolioListItem(r, locale))
 }
 
 /** Fetch portfolios filtered by DatoCMS category ID. */
 export async function getPortfoliosByCategory(
-  categoryId: string
+  categoryId: string,
+  locale: Locale
 ): Promise<PortfolioListItem[]> {
   const data = await fetchAPI(`
     {
@@ -159,19 +232,22 @@ export async function getPortfoliosByCategory(
     }
     ${responsiveImageFragment}
   `)
-  return data?.allPortfolios ?? []
+  const rows = (data?.allPortfolios ?? []) as RawPortfolioListRow[]
+  return rows.map((r) => mapPortfolioListItem(r, locale))
 }
 
 /** Fetch "Selected Work" / featured portfolios for homepage. */
 export async function getFeaturedPortfolios(
-  categoryId: string
+  categoryId: string,
+  locale: Locale
 ): Promise<PortfolioListItem[]> {
-  return getPortfoliosByCategory(categoryId)
+  return getPortfoliosByCategory(categoryId, locale)
 }
 
 /** Fetch full portfolio detail by slug. */
 export async function getPortfolioBySlug(
-  slug: string
+  slug: string,
+  locale: Locale
 ): Promise<PortfolioDetail | null> {
   const data = await fetchAPI(`
     {
@@ -182,10 +258,15 @@ export async function getPortfolioBySlug(
         subtitle
         slug
         video
-        tags
+        ${PORTFOLIO_TAGS_FIELD}
         date
-        client
-        location
+        client {
+          name
+        }
+        location {
+          nameCs: name(locale: cs)
+          nameEn: name(locale: en)
+        }
         position
         category { id name }
         subcategory { id name }
@@ -205,7 +286,36 @@ export async function getPortfolioBySlug(
     }
     ${responsiveImageFragment}
   `)
-  return data?.portfolio ?? null
+  const raw = data?.portfolio
+  if (!raw) {
+    return null
+  }
+  const p = raw as PortfolioRecord & {
+    subtitleCs?: string | null
+    subtitleEn?: string | null
+    descriptionCs?: CdaStructuredTextValue | null
+    descriptionEn?: CdaStructuredTextValue | null
+    client?: { name?: string | null } | null
+    location?: {
+      nameCs?: string | null
+      nameEn?: string | null
+    } | null
+  }
+  const clientStr = p.client?.name?.trim() ? p.client.name.trim() : null
+  const nameCs = p.location?.nameCs?.trim() ?? ''
+  const nameEn = p.location?.nameEn?.trim() ?? ''
+  const locationStr =
+    locale === 'cs'
+      ? nameCs || nameEn || null
+      : nameEn || nameCs || null
+
+  const asRecord = p as Record<string, unknown>
+  return {
+    ...p,
+    tags: readTagsStringFromRecord(asRecord),
+    client: clientStr,
+    location: locationStr,
+  } as PortfolioDetail
 }
 
 // ---------------------------------------------------------------------------

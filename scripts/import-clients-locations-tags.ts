@@ -1,7 +1,7 @@
 /**
- * Phase 1: Upsert Client, Location, and Tag records from PORTFOLIO-list.csv (DatoCMS CMA).
- * Location and Tag use localized slugs: distinct `cs` and `en` URL segments (SEO).
- * Does not create or update Portfolio items.
+ * Phase 1: Upsert Client and Location records from PORTFOLIO-list.csv (DatoCMS CMA).
+ * Locations use localized slugs: distinct `cs` and `en` URL segments (SEO).
+ * Does not create Portfolio items. Tags are stored on Portfolio as a string field via import:portfolio.
  *
  * Usage:
  *   pnpm import:references -- path/to/PORTFOLIO-list.csv
@@ -145,24 +145,13 @@ function sleep(ms: number) {
   return new Promise((r) => setTimeout(r, ms))
 }
 
-/** Tag dedupe key = slugify(EN label); slugs differ per locale for SEO. */
-type TagPair = {
-  cs: string
-  en: string
-  slugCs: string
-  slugEn: string
-  dedupeKey: string
-}
-
 function collectFromRows(rows: CsvRow[], locationEn: Record<string, string>) {
   const clients = new Map<string, string>()
   const locations = new Map<
     string,
     { cs: string; en: string; slugCs: string; slugEn: string }
   >()
-  const tagPairs = new Map<string, TagPair>()
   const unknownLocations = new Set<string>()
-  const tagConflictWarnings: string[] = []
 
   for (const row of rows) {
     const c = row.client?.trim()
@@ -187,64 +176,19 @@ function collectFromRows(rows: CsvRow[], locationEn: Record<string, string>) {
         })
       }
     }
-
-    const czTags = splitTagList(row.stitky_cz)
-    const enTags = splitTagList(row.stitky_en)
-    const n = Math.min(czTags.length, enTags.length)
-    if (czTags.length !== enTags.length) {
-      console.warn(
-        `Tag count mismatch (${czTags.length} CZ vs ${enTags.length} EN) for row link=${row.link?.slice(0, 50)}… — pairing first ${n} only`
-      )
-    }
-    for (let i = 0; i < n; i++) {
-      const cs = czTags[i]!
-      const en = enTags[i]!
-      const dedupeKey = slugifyAscii(en)
-      const slugCs = slugifyAscii(cs)
-      const slugEn = slugifyAscii(en)
-      const existing = tagPairs.get(dedupeKey)
-      if (existing && existing.cs !== cs) {
-        tagConflictWarnings.push(
-          `Tag dedupe "${dedupeKey}": keeping CZ "${existing.cs}", also saw "${cs}" (EN "${en}")`
-        )
-      }
-      if (!existing) {
-        tagPairs.set(dedupeKey, {
-          cs,
-          en,
-          slugCs,
-          slugEn,
-          dedupeKey,
-        })
-      }
-    }
   }
 
   return {
     clients,
     locations,
-    tagPairs,
     unknownLocations,
-    tagConflictWarnings,
   }
-}
-
-function splitTagList(raw: string): string[] {
-  if (!raw?.trim()) {
-    return []
-  }
-  return raw
-    .split(',')
-    .map((s) => s.trim())
-    .filter(Boolean)
 }
 
 async function main() {
   const { csvPath, dryRun } = parseArgs(process.argv)
   if (!csvPath) {
-    console.error(
-      'Usage: pnpm import:references -- <path-to.csv> [--dry-run]'
-    )
+    console.error('Usage: pnpm import:references -- <path-to.csv> [--dry-run]')
     process.exit(1)
   }
 
@@ -287,18 +231,8 @@ async function main() {
     process.exit(1)
   }
 
-  if (collected.tagConflictWarnings.length > 0) {
-    console.warn(
-      `\nTag CZ variants for same English slug (${collected.tagConflictWarnings.length} notes; first CZ kept per slug):\n`
-    )
-    for (const c of collected.tagConflictWarnings) {
-      console.warn(`  - ${c}`)
-    }
-    console.warn('')
-  }
-
   console.log(
-    `Collected: ${collected.clients.size} clients, ${collected.locations.size} locations, ${collected.tagPairs.size} tags (${rows.length} CSV rows)`
+    `Collected: ${collected.clients.size} clients, ${collected.locations.size} locations (${rows.length} CSV rows)`
   )
 
   if (dryRun || !token) {
@@ -315,28 +249,19 @@ async function main() {
         `  location cs/${slugCs} en/${slugEn} ← "${cs}" / "${en}"`
       )
     }
-    for (const t of [...collected.tagPairs.values()].sort((a, b) =>
-      a.slugEn.localeCompare(b.slugEn)
-    )) {
-      console.log(
-        `  tag     cs/${t.slugCs} en/${t.slugEn} ← "${t.cs}" / "${t.en}"`
-      )
-    }
     console.log('\nDry run OK (no API calls).')
     process.exit(0)
   }
 
   const client = buildClient({ apiToken: token })
-  const [clientTypeId, locationTypeId, tagTypeId] = await Promise.all([
+  const [clientTypeId, locationTypeId] = await Promise.all([
     findItemTypeId(client, 'client'),
     findItemTypeId(client, 'location'),
-    findItemTypeId(client, 'tag'),
   ])
 
-  const [existingClients, existingLocs, existingTags] = await Promise.all([
+  const [existingClients, existingLocs] = await Promise.all([
     fetchAllItemsOfType(client, 'client'),
     fetchAllItemsOfType(client, 'location'),
-    fetchAllItemsOfType(client, 'tag'),
   ])
 
   function itemId(it: Record<string, unknown>): string {
@@ -363,19 +288,6 @@ async function main() {
     const id = itemId(it)
     if (nameCs && id) {
       locByCsName.set(nameCs, { id })
-    }
-  }
-
-  /** Match Tag by EN slug (dedupe key); fallback to slugify(localized en name). */
-  const tagByDedupeKey = new Map<string, { id: string }>()
-  for (const it of existingTags) {
-    const slugEn =
-      localizedLocale(getItemField(it, 'slug'), 'en') ||
-      slugifyAscii(localizedLocale(getItemField(it, 'name'), 'en'))
-    const id = itemId(it)
-    const key = slugifyAscii(slugEn)
-    if (key && id) {
-      tagByDedupeKey.set(key, { id })
     }
   }
 
@@ -423,28 +335,6 @@ async function main() {
       })
       created++
       console.log(`Created location: cs/${slugCs} en/${slugEn}`)
-    }
-    await sleep(120)
-  }
-
-  for (const t of collected.tagPairs.values()) {
-    const body = {
-      name: { cs: t.cs, en: t.en },
-      slug: { cs: t.slugCs, en: t.slugEn },
-      meta: { status: 'published' as const },
-    }
-    const existing = tagByDedupeKey.get(t.dedupeKey)
-    if (existing) {
-      await client.items.update(existing.id, body)
-      updated++
-      console.log(`Updated tag: cs/${t.slugCs} en/${t.slugEn}`)
-    } else {
-      await client.items.create({
-        item_type: { type: 'item_type' as const, id: tagTypeId },
-        ...body,
-      })
-      created++
-      console.log(`Created tag: cs/${t.slugCs} en/${t.slugEn}`)
     }
     await sleep(120)
   }

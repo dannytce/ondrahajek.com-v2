@@ -1,0 +1,1038 @@
+{
+  "heavy-industry": {
+    "cs": "Těžký průmysl",
+    "en": "Heavy Industry"
+  },
+  "ndt-testing": {
+    "cs": "NDT testování",
+    "en": "NDT Testing"
+  },
+  "automation": {
+    "cs": "Automatizace",
+    "en": "Automation"
+  },
+  "aerospace": {
+    "cs": "Aerospace",
+    "en": "Aerospace"
+  },
+  "automotive": {
+    "cs": "Automotive",
+    "en": "Automotive"
+  },
+  "quality-assurance": {
+    "cs": "Kontrola kvality",
+    "en": "Quality Assurance"
+  },
+  "manufacturing": {
+    "cs": "Strojírenství",
+    "en": "Manufacturing"
+  },
+  "b2b": {
+    "cs": "B2B",
+    "en": "B2B"
+  },
+  "precision-engineering": {
+    "cs": "Přesné strojírenství",
+    "en": "Precision Engineering"
+  },
+  "innovation": {
+    "cs": "Inovace",
+    "en": "Innovation"
+  },
+  "ndt": {
+    "cs": "NDT",
+    "en": "NDT"
+  },
+  "steel-production": {
+    "cs": "Ocelářství",
+    "en": "Steel Production"
+  },
+  "quality-control": {
+    "cs": "Kontrola kvality",
+    "en": "Quality Control"
+  },
+  "documentary": {
+    "cs": "Dokument",
+    "en": "Documentary"
+  },
+  "cultural-heritage": {
+    "cs": "Kulturní dědictví",
+    "en": "Cultural Heritage"
+  },
+  "landscape": {
+    "cs": "Krajina",
+    "en": "Landscape"
+  },
+  "history": {
+    "cs": "Historie",
+    "en": "History"
+  },
+  "tv-production": {
+    "cs": "TV produkce",
+    "en": "TV Production"
+  },
+  "reality-show": {
+    "cs": "Reality Show",
+    "en": "Reality Show"
+  },
+  "mystery": {
+    "cs": "Napětí",
+    "en": "Mystery"
+  },
+  "entertainment": {
+    "cs": "Zábava",
+    "en": "Entertainment"
+  },
+  "sport": {
+    "cs": "Sport",
+    "en": "Sport"
+  },
+  "community": {
+    "cs": "Komunita",
+    "en": "Community"
+  },
+  "lifestyle": {
+    "cs": "Lifestyle",
+    "en": "Lifestyle"
+  },
+  "beverage": {
+    "cs": "Gastro",
+    "en": "Beverage"
+  },
+  "education": {
+    "cs": "Vzdělávání",
+    "en": "Education"
+  },
+  "university": {
+    "cs": "Univerzita",
+    "en": "University"
+  },
+  "campus-life": {
+    "cs": "Studentský život",
+    "en": "Campus Life"
+  },
+  "architecture": {
+    "cs": "Architektura",
+    "en": "Architecture"
+  },
+  "tv-series": {
+    "cs": "TV seriál",
+    "en": "TV Series"
+  },
+  "action": {
+    "cs": "Akce",
+    "en": "Action"
+  },
+  "behind-the-scenes": {
+    "cs": "Ze zákulisí",
+    "en": "Behind the Scenes"
+  },
+  "film-production": {
+    "cs": "Filmová produkce",
+    "en": "Film Production"
+  },
+  "celebrity": {
+    "cs": "Celebrity",
+    "en": "Celebrity"
+  },
+  "glamour": {
+    "cs": "Glamour",
+    "en": "Glamour"
+  },
+  "fashion": {
+    "cs": "Móda",
+    "en": "Fashion"
+  },
+  "luxury": {
+    "cs": "Luxus",
+    "en": "Luxury"
+  },
+  "portrait": {
+    "cs": "Portrét",
+    "en": "Portrait"
+  },
+  "high-fashion": {
+    "cs": "High Fashion",
+    "en": "High Fashion"
+  },
+  "motorsport": {
+    "cs": "Motorsport",
+    "en": "Motorsport"
+  },
+  "creative-marketing": {
+    "cs": "Kreativní marketing",
+    "en": "Creative Marketing"
+  },
+  "conceptual": {
+    "cs": "Koncept",
+    "en": "Conceptual"
+  },
+  "studio": {
+    "cs": "Studio",
+    "en": "Studio"
+  },
+  "action-sport": {
+    "cs": "Akční sport",
+    "en": "Action Sport"
+  },
+  "outdoor": {
+    "cs": "Outdoor",
+    "en": "Outdoor"
+  },
+  "cycling": {
+    "cs": "Cyklistika",
+    "en": "Cycling"
+  },
+  "adventure": {
+    "cs": "Dobrodružství",
+    "en": "Adventure"
+  },
+  "craftsmanship": {
+    "cs": "Řemeslo",
+    "en": "Craftsmanship"
+  },
+  "restoration": {
+    "cs": "Restaurování",
+    "en": "Restoration"
+  },
+  "engineering": {
+    "cs": "Strojírenství",
+    "en": "Engineering"
+  },
+  "csr": {
+    "cs": "CSR",
+    "en": "CSR"
+  },
+  "charity": {
+    "cs": "Charita",
+    "en": "Charity"
+  },
+  "infrastructure": {
+    "cs": "Infrastruktura",
+    "en": "Infrastructure"
+  },
+  "construction": {
+    "cs": "Stavebnictví",
+    "en": "Construction"
+  },
+  "public-works": {
+    "cs": "Veřejné stavby",
+    "en": "Public Works"
+  },
+  "railway-industry": {
+    "cs": "Železnice",
+    "en": "Railway Industry"
+  },
+  "heavy-machinery": {
+    "cs": "Těžká technika",
+    "en": "Heavy Machinery"
+  },
+  "maintenance": {
+    "cs": "Údržba",
+    "en": "Maintenance"
+  },
+  "urban-design": {
+    "cs": "Urbanismus",
+    "en": "Urban Design"
+  },
+  "real-estate": {
+    "cs": "Reality",
+    "en": "Real Estate"
+  },
+  "fpv-cinematography": {
+    "cs": "FPV kinematografie",
+    "en": "FPV Cinematography"
+  },
+  "railway": {
+    "cs": "Železnice",
+    "en": "Railway"
+  },
+  "industry": {
+    "cs": "Průmysl",
+    "en": "Industry"
+  },
+  "logistics": {
+    "cs": "Logistika",
+    "en": "Logistics"
+  },
+  "transport": {
+    "cs": "Transport",
+    "en": "Transport"
+  },
+  "global-trade": {
+    "cs": "Mezinárodní obchod",
+    "en": "Global Trade"
+  },
+  "eco-architecture": {
+    "cs": "Eko architektura",
+    "en": "Eco Architecture"
+  },
+  "timber-housing": {
+    "cs": "Dřevostavby",
+    "en": "Timber Housing"
+  },
+  "design": {
+    "cs": "Design",
+    "en": "Design"
+  },
+  "automotive-history": {
+    "cs": "Historie automotive",
+    "en": "Automotive History"
+  },
+  "industrial-heritage": {
+    "cs": "Průmyslové dědictví",
+    "en": "Industrial Heritage"
+  },
+  "event": {
+    "cs": "Event",
+    "en": "Event"
+  },
+  "nostalgia": {
+    "cs": "Nostalgie",
+    "en": "Nostalgia"
+  },
+  "interview": {
+    "cs": "Rozhovor",
+    "en": "Interview"
+  },
+  "personality": {
+    "cs": "Osobnost",
+    "en": "Personality"
+  },
+  "e-mobility": {
+    "cs": "Elektromobilita",
+    "en": "E-mobility"
+  },
+  "travel": {
+    "cs": "Cestování",
+    "en": "Travel"
+  },
+  "tourism": {
+    "cs": "Turismus",
+    "en": "Tourism"
+  },
+  "landmark": {
+    "cs": "Památky",
+    "en": "Landmark"
+  },
+  "tradition": {
+    "cs": "Tradice",
+    "en": "Tradition"
+  },
+  "agriculture": {
+    "cs": "Zemědělství",
+    "en": "Agriculture"
+  },
+  "eco-farming": {
+    "cs": "Eko-farma",
+    "en": "Eco-Farming"
+  },
+  "culture": {
+    "cs": "Kultura",
+    "en": "Culture"
+  },
+  "nature": {
+    "cs": "Příroda",
+    "en": "Nature"
+  },
+  "conservation": {
+    "cs": "Ochrana přírody",
+    "en": "Conservation"
+  },
+  "ecology": {
+    "cs": "Ekologie",
+    "en": "Ecology"
+  },
+  "national-park": {
+    "cs": "Národní park",
+    "en": "National Park"
+  },
+  "industry-4-0": {
+    "cs": "Průmysl 4.0",
+    "en": "Industry 4.0"
+  },
+  "robotics": {
+    "cs": "Robotika",
+    "en": "Robotics"
+  },
+  "industrial-automation": {
+    "cs": "Průmyslová automatizace",
+    "en": "Industrial Automation"
+  },
+  "technology": {
+    "cs": "Technologie",
+    "en": "Technology"
+  },
+  "fmcg-packaging": {
+    "cs": "FMCG balení",
+    "en": "FMCG Packaging"
+  },
+  "agv": {
+    "cs": "AGV",
+    "en": "AGV"
+  },
+  "smart-logistics": {
+    "cs": "Chytrá logistika",
+    "en": "Smart Logistics"
+  },
+  "food-industry": {
+    "cs": "Potravinářství",
+    "en": "Food Industry"
+  },
+  "packaging": {
+    "cs": "Balení",
+    "en": "Packaging"
+  },
+  "textile-industry": {
+    "cs": "Textilní průmysl",
+    "en": "Textile Industry"
+  },
+  "heritage": {
+    "cs": "Tradice",
+    "en": "Heritage"
+  },
+  "branding": {
+    "cs": "Branding",
+    "en": "Branding"
+  },
+  "time-lapse": {
+    "cs": "Časosběr",
+    "en": "Time-lapse"
+  },
+  "sustainability": {
+    "cs": "Udržitelnost",
+    "en": "Sustainability"
+  },
+  "art-project": {
+    "cs": "Umělecký projekt",
+    "en": "Art Project"
+  },
+  "environment": {
+    "cs": "Ekologie",
+    "en": "Environment"
+  },
+  "music-video": {
+    "cs": "Hudební video",
+    "en": "Music Video"
+  },
+  "social-campaign": {
+    "cs": "Sociální kampaň",
+    "en": "Social Campaign"
+  },
+  "awareness": {
+    "cs": "Osvěta",
+    "en": "Awareness"
+  },
+  "art": {
+    "cs": "Umění",
+    "en": "Art"
+  },
+  "creative": {
+    "cs": "Kreativní",
+    "en": "Creative"
+  },
+  "non-profit": {
+    "cs": "Neziskový sektor",
+    "en": "Non-Profit"
+  },
+  "medical": {
+    "cs": "Medicína",
+    "en": "Medical"
+  },
+  "social-impact": {
+    "cs": "Sociální dopad",
+    "en": "Social Impact"
+  },
+  "healthcare": {
+    "cs": "Zdravotnictví",
+    "en": "Healthcare"
+  },
+  "medical-documentary": {
+    "cs": "Dokument",
+    "en": "Medical Documentary"
+  },
+  "social-issue": {
+    "cs": "Sociální téma",
+    "en": "Social Issue"
+  },
+  "hope": {
+    "cs": "Naděje",
+    "en": "Hope"
+  },
+  "science": {
+    "cs": "Věda",
+    "en": "Science"
+  },
+  "oncology": {
+    "cs": "Onkologie",
+    "en": "Oncology"
+  },
+  "medical-research": {
+    "cs": "Medicínský výzkum",
+    "en": "Medical Research"
+  },
+  "biology": {
+    "cs": "Biologie",
+    "en": "Biology"
+  },
+  "research": {
+    "cs": "Výzkum",
+    "en": "Research"
+  },
+  "academic": {
+    "cs": "Akademická sféra",
+    "en": "Academic"
+  },
+  "science-communication": {
+    "cs": "Komunikace vědy",
+    "en": "Science Communication"
+  },
+  "health": {
+    "cs": "Zdraví",
+    "en": "Health"
+  },
+  "podcast": {
+    "cs": "Podcast",
+    "en": "Podcast"
+  },
+  "surgery": {
+    "cs": "Chirurgie",
+    "en": "Surgery"
+  },
+  "medical-training": {
+    "cs": "Medicínský trénink",
+    "en": "Medical Training"
+  },
+  "human-story": {
+    "cs": "Lidský příběh",
+    "en": "Human Story"
+  },
+  "teaser": {
+    "cs": "Teaser",
+    "en": "Teaser"
+  },
+  "baseball": {
+    "cs": "Baseball",
+    "en": "Baseball"
+  },
+  "national-team": {
+    "cs": "Národní tým",
+    "en": "National Team"
+  },
+  "film-industry": {
+    "cs": "Filmový průmysl",
+    "en": "Film Industry"
+  },
+  "vfx": {
+    "cs": "VFX",
+    "en": "VFX"
+  },
+  "global-production": {
+    "cs": "Globální produkce",
+    "en": "Global Production"
+  },
+  "fantasy": {
+    "cs": "Fantasy",
+    "en": "Fantasy"
+  },
+  "retail": {
+    "cs": "Retail",
+    "en": "Retail"
+  },
+  "apple": {
+    "cs": "Apple",
+    "en": "Apple"
+  },
+  "hospitality": {
+    "cs": "Hospitality",
+    "en": "Hospitality"
+  },
+  "luxury-real-estate": {
+    "cs": "Luxusní reality",
+    "en": "Luxury Real Estate"
+  },
+  "interior": {
+    "cs": "Interiér",
+    "en": "Interior"
+  },
+  "family-business": {
+    "cs": "Rodinná firma",
+    "en": "Family Business"
+  },
+  "woodwork": {
+    "cs": "Práce se dřevem",
+    "en": "Woodwork"
+  },
+  "craft": {
+    "cs": "Řemeslo",
+    "en": "Craft"
+  },
+  "legend": {
+    "cs": "Legendy",
+    "en": "Legend"
+  },
+  "developer": {
+    "cs": "Developer",
+    "en": "Developer"
+  },
+  "housing": {
+    "cs": "Bydlení",
+    "en": "Housing"
+  },
+  "industrial-luxury": {
+    "cs": "Industriální luxus",
+    "en": "Industrial Luxury"
+  },
+  "urbanism": {
+    "cs": "Urbanismus",
+    "en": "Urbanism"
+  },
+  "city-development": {
+    "cs": "Rozvoj města",
+    "en": "City Development"
+  },
+  "city-life": {
+    "cs": "Městský život",
+    "en": "City Life"
+  },
+  "marketing": {
+    "cs": "Marketing",
+    "en": "Marketing"
+  },
+  "office-real-estate": {
+    "cs": "Kancelářské reality",
+    "en": "Office Real Estate"
+  },
+  "business": {
+    "cs": "Business",
+    "en": "Business"
+  },
+  "luxury-living": {
+    "cs": "Luxusní bydlení",
+    "en": "Luxury Living"
+  },
+  "leisure": {
+    "cs": "Volný čas",
+    "en": "Leisure"
+  },
+  "corporate": {
+    "cs": "Firemní video",
+    "en": "Corporate"
+  },
+  "spain": {
+    "cs": "Španělsko",
+    "en": "Spain"
+  },
+  "expert": {
+    "cs": "Expert",
+    "en": "Expert"
+  },
+  "investment": {
+    "cs": "Investice",
+    "en": "Investment"
+  },
+  "prague": {
+    "cs": "Praha",
+    "en": "Prague"
+  },
+  "reconstruction": {
+    "cs": "Rekonstrukce",
+    "en": "Reconstruction"
+  },
+  "awards": {
+    "cs": "Ocenění",
+    "en": "Awards"
+  },
+  "football": {
+    "cs": "Fotbal",
+    "en": "Football"
+  },
+  "management": {
+    "cs": "Management",
+    "en": "Management"
+  },
+  "corporate-event": {
+    "cs": "Firemní akce",
+    "en": "Corporate Event"
+  },
+  "celebration": {
+    "cs": "Oslava",
+    "en": "Celebration"
+  },
+  "ai": {
+    "cs": "AI",
+    "en": "AI"
+  },
+  "wellness": {
+    "cs": "Wellness",
+    "en": "Wellness"
+  },
+  "renewable-energy": {
+    "cs": "Obnovitelné zdroje",
+    "en": "Renewable Energy"
+  },
+  "solar-power": {
+    "cs": "Fotovoltaika",
+    "en": "Solar Power"
+  },
+  "solar-energy": {
+    "cs": "Solární energie",
+    "en": "Solar Energy"
+  },
+  "healthcare-facility": {
+    "cs": "Zdravotnické zařízení",
+    "en": "Healthcare Facility"
+  },
+  "festival": {
+    "cs": "Festival",
+    "en": "Festival"
+  },
+  "spirituality": {
+    "cs": "Spiritualita",
+    "en": "Spirituality"
+  },
+  "music": {
+    "cs": "Hudba",
+    "en": "Music"
+  },
+  "sma-awareness": {
+    "cs": "SMA Osvěta",
+    "en": "SMA Awareness"
+  },
+  "social": {
+    "cs": "Sociální",
+    "en": "Social"
+  },
+  "wildlife": {
+    "cs": "Divočina",
+    "en": "Wildlife"
+  },
+  "e-commerce": {
+    "cs": "E-commerce",
+    "en": "E-commerce"
+  },
+  "extreme-sport": {
+    "cs": "Extrémní sport",
+    "en": "Extreme Sport"
+  },
+  "freediving": {
+    "cs": "Freediving",
+    "en": "Freediving"
+  },
+  "product": {
+    "cs": "Produkt",
+    "en": "Product"
+  },
+  "sales": {
+    "cs": "Prodej",
+    "en": "Sales"
+  },
+  "tv-show": {
+    "cs": "TV show",
+    "en": "TV Show"
+  },
+  "reality-tv": {
+    "cs": "Reality TV",
+    "en": "Reality TV"
+  },
+  "product-design": {
+    "cs": "Produktový design",
+    "en": "Product Design"
+  },
+  "land": {
+    "cs": "Pozemky",
+    "en": "Land"
+  },
+  "sponsorship": {
+    "cs": "Sponzoring",
+    "en": "Sponsorship"
+  },
+  "record": {
+    "cs": "Rekord",
+    "en": "Record"
+  },
+  "carsharing": {
+    "cs": "Sdílená ekonomika",
+    "en": "Carsharing"
+  },
+  "mobility": {
+    "cs": "Mobilita",
+    "en": "Mobility"
+  },
+  "public-transport": {
+    "cs": "Veřejná doprava",
+    "en": "Public Transport"
+  },
+  "region": {
+    "cs": "Region",
+    "en": "Region"
+  },
+  "sport-documentary": {
+    "cs": "Sportovní dokument",
+    "en": "Sport Documentary"
+  },
+  "swimming": {
+    "cs": "Plavání",
+    "en": "Swimming"
+  },
+  "endurance": {
+    "cs": "Vytrvalost",
+    "en": "Endurance"
+  },
+  "red-bull": {
+    "cs": "Red Bull",
+    "en": "Red Bull"
+  },
+  "aviation": {
+    "cs": "Letectví",
+    "en": "Aviation"
+  },
+  "partnership": {
+    "cs": "Partnerství",
+    "en": "Partnership"
+  },
+  "energy-industry": {
+    "cs": "Energetika",
+    "en": "Energy Industry"
+  },
+  "iceland": {
+    "cs": "Island",
+    "en": "Iceland"
+  },
+  "surf": {
+    "cs": "Surfování",
+    "en": "Surf"
+  },
+  "luxury-design": {
+    "cs": "Luxusní design",
+    "en": "Luxury Design"
+  },
+  "china": {
+    "cs": "Čína",
+    "en": "China"
+  },
+  "art-installation": {
+    "cs": "Umělecká instalace",
+    "en": "Art Installation"
+  },
+  "film-trailer": {
+    "cs": "Filmový trailer",
+    "en": "Film Trailer"
+  },
+  "atmospheric-sound": {
+    "cs": "Atmosférický zvuk",
+    "en": "Atmospheric Sound"
+  },
+  "tv-commercial": {
+    "cs": "TV reklama",
+    "en": "TV Commercial"
+  },
+  "insurance": {
+    "cs": "Pojišťovnictví",
+    "en": "Insurance"
+  },
+  "creative-campaign": {
+    "cs": "Kreativní kampaň",
+    "en": "Creative Campaign"
+  },
+  "drone": {
+    "cs": "Dron",
+    "en": "Drone"
+  },
+  "saipan": {
+    "cs": "Saipan",
+    "en": "Saipan"
+  },
+  "luxury-resort": {
+    "cs": "Luxusní resort",
+    "en": "Luxury Resort"
+  },
+  "tv-spot": {
+    "cs": "TV spot",
+    "en": "TV Spot"
+  },
+  "showreel": {
+    "cs": "Showreel",
+    "en": "Showreel"
+  },
+  "drone-cinematography": {
+    "cs": "Letecké záběry",
+    "en": "Drone Cinematography"
+  },
+  "portfolio": {
+    "cs": "Portfolio",
+    "en": "Portfolio"
+  },
+  "editing": {
+    "cs": "Střih",
+    "en": "Editing"
+  },
+  "story": {
+    "cs": "Příběh",
+    "en": "Story"
+  },
+  "karlstejn": {
+    "cs": "Karlštejn",
+    "en": "Karlštejn"
+  },
+  "atmosphere": {
+    "cs": "Atmosféra",
+    "en": "Atmosphere"
+  },
+  "dubai": {
+    "cs": "Dubaj",
+    "en": "Dubai"
+  },
+  "interior-design": {
+    "cs": "Interiérový design",
+    "en": "Interior Design"
+  },
+  "family-trip": {
+    "cs": "Rodinný výlet",
+    "en": "Family Trip"
+  },
+  "promo": {
+    "cs": "Promo",
+    "en": "Promo"
+  },
+  "golf": {
+    "cs": "Golf",
+    "en": "Golf"
+  },
+  "luxury-stay": {
+    "cs": "Luxusní ubytování",
+    "en": "Luxury Stay"
+  },
+  "beskydy": {
+    "cs": "Beskydy",
+    "en": "Beskydy"
+  },
+  "relaxation": {
+    "cs": "Relaxace",
+    "en": "Relaxation"
+  },
+  "karlovy-vary": {
+    "cs": "Karlovy Vary",
+    "en": "Karlovy Vary"
+  },
+  "spa": {
+    "cs": "Lázně",
+    "en": "Spa"
+  },
+  "gaming": {
+    "cs": "Hry",
+    "en": "Gaming"
+  },
+  "game-dev": {
+    "cs": "Vývoj her",
+    "en": "Game Dev"
+  },
+  "krkonose": {
+    "cs": "Krkonoše",
+    "en": "Krkonoše"
+  },
+  "unesco": {
+    "cs": "UNESCO",
+    "en": "UNESCO"
+  },
+  "interior-drone": {
+    "cs": "Letecké záběry",
+    "en": "Interior Drone"
+  },
+  "adrenaline": {
+    "cs": "Adrenalin",
+    "en": "Adrenaline"
+  },
+  "full-service-production": {
+    "cs": "Video produkce",
+    "en": "Full-service Production"
+  },
+  "food": {
+    "cs": "Gastro",
+    "en": "Food"
+  },
+  "urban-lifestyle": {
+    "cs": "Moderní město",
+    "en": "Urban Lifestyle"
+  },
+  "skate": {
+    "cs": "Skate",
+    "en": "Skate"
+  },
+  "energy": {
+    "cs": "Energie",
+    "en": "Energy"
+  },
+  "authenticity": {
+    "cs": "Autenticita",
+    "en": "Authenticity"
+  },
+  "test-drive": {
+    "cs": "Testovací jízda",
+    "en": "Test Drive"
+  },
+  "precision": {
+    "cs": "Přesnost",
+    "en": "Precision"
+  },
+  "fun": {
+    "cs": "Zábava",
+    "en": "Fun"
+  },
+  "racing": {
+    "cs": "Závody",
+    "en": "Racing"
+  },
+  "octavia-rs": {
+    "cs": "Octavia RS",
+    "en": "Octavia RS"
+  },
+  "residential": {
+    "cs": "Rezidenční bydlení",
+    "en": "Residential"
+  },
+  "home": {
+    "cs": "Domov",
+    "en": "Home"
+  },
+  "germany": {
+    "cs": "Německo",
+    "en": "Germany"
+  },
+  "precision-pilot": {
+    "cs": "Přesná pilotáž",
+    "en": "Precision Pilot"
+  },
+  "climbing": {
+    "cs": "Lezení",
+    "en": "Climbing"
+  },
+  "adam-ondra": {
+    "cs": "Adam Ondra",
+    "en": "Adam Ondra"
+  },
+  "rowing": {
+    "cs": "Veslování",
+    "en": "Rowing"
+  },
+  "georgia": {
+    "cs": "Gruzie",
+    "en": "Georgia"
+  },
+  "caucasus": {
+    "cs": "Kavkaz",
+    "en": "Caucasus"
+  },
+  "dance": {
+    "cs": "Tanec",
+    "en": "Dance"
+  },
+  "contemporary": {
+    "cs": "Praha",
+    "en": "Contemporary"
+  },
+  "theatre": {
+    "cs": "Divadlo",
+    "en": "Theatre"
+  }
+}

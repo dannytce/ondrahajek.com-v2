@@ -16,6 +16,7 @@ import {
   CATEGORY_IDS,
 } from '~/i18n'
 import { buildSlugMapsFromPortfolios } from '~/lib/portfolio-filter-slugs'
+import { resolvePortfolioDetailTagLabels } from '~/lib/portfolio-tags'
 
 export async function getStaticPaths() {
   const portfolios = await getAllPortfoliosWithSlug()
@@ -26,25 +27,14 @@ export async function getStaticPaths() {
 
 const locale = getLocaleFromParam(Astro.params.locale)
 const { slug } = Astro.params
-const portfolio = await getPortfolioBySlug(slug as string)
+const portfolio = await getPortfolioBySlug(slug as string, locale)
 
-function splitPortfolioTags(raw: string | null | undefined): string[] {
-  const str = raw?.trim()
-  if (!str) return []
-  if (str.includes('#'))
-    return str
-      .split(/#+/)
-      .map((s) => s.trim())
-      .filter(Boolean)
-  if (str.includes(';'))
-    return str
-      .split(';')
-      .map((s) => s.trim())
-      .filter(Boolean)
-  return [str]
-}
-
-const tagItems = portfolio ? splitPortfolioTags(portfolio.tags) : []
+const tagItems = portfolio
+  ? resolvePortfolioDetailTagLabels({
+      tags: portfolio.tags,
+      locale,
+    })
+  : []
 
 // Determine back link based on primary category
 const primaryCategoryId = portfolio?.category?.[0]?.id
@@ -74,7 +64,8 @@ if (
     categoryForLink === 'drone-cinematography')
 ) {
   const categoryPortfolios = await getPortfoliosByCategory(
-    CATEGORY_IDS[categoryForLink]
+    CATEGORY_IDS[categoryForLink],
+    locale
   )
   const { locationSlugByValue, clientSlugByValue } =
     buildSlugMapsFromPortfolios(categoryPortfolios)
@@ -251,9 +242,7 @@ const jsonLd = portfolio
                 <ul class="detail-reveal detail-reveal-delay-3 m-0 mt-8 flex max-w-[70ch] list-none flex-wrap gap-2 p-0">
                   {tagItems.map((tag) => (
                     <li class="rounded-sm border border-secondary/40 px-3 py-1 font-teko text-[1.5rem] uppercase tracking-wide text-secondary">
-                      {tag.includes('-') && !tag.includes(' ')
-                        ? tag.replace(/-/g, ' ')
-                        : tag}
+                      {tag}
                     </li>
                   ))}
                 </ul>
