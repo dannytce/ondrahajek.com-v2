@@ -18,25 +18,9 @@ import path from 'node:path'
 import { parse } from 'csv-parse/sync'
 import { buildClient } from '@datocms/cma-client-node'
 import { fetchAllItemsOfType } from './import-taxonomy-lookup'
+import { PORTFOLIO_CSV_COLUMNS } from './portfolio-csv-columns'
 
-/** Matches PORTFOLIO-list.csv column order (column 11 has empty header in file → `client`). */
-const CSV_COLUMNS = [
-  'link',
-  'title_cs',
-  'title_en',
-  'desc_cs',
-  'desc_en',
-  'slug_cs',
-  'slug_en',
-  'rok',
-  'kategorie1',
-  'kategorie2',
-  'priorita',
-  'client',
-  'země',
-  'stitky_cz',
-  'stitky_en',
-] as const
+const CSV_COLUMNS = PORTFOLIO_CSV_COLUMNS
 
 type CsvRow = Record<(typeof CSV_COLUMNS)[number], string>
 

@@ -10,24 +10,9 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { parse } from 'csv-parse/sync'
+import { PORTFOLIO_CSV_COLUMNS } from './portfolio-csv-columns'
 
-const CSV_COLUMNS = [
-  'link',
-  'title_cs',
-  'title_en',
-  'desc_cs',
-  'desc_en',
-  'slug_cs',
-  'slug_en',
-  'rok',
-  'kategorie1',
-  'kategorie2',
-  'priorita',
-  'client',
-  'země',
-  'stitky_cz',
-  'stitky_en',
-] as const
+const CSV_COLUMNS = PORTFOLIO_CSV_COLUMNS
 
 type CsvRow = Record<(typeof CSV_COLUMNS)[number], string>
 

@@ -1,7 +1,7 @@
 /**
  * Import portfolio rows from PORTFOLIO-list.csv into DatoCMS Portfolio records (CMA).
  *
- * CSV columns: same 15-column layout as Phase 1 (see import-clients-locations-tags.ts).
+ * CSV columns: same layout as Phase 1 (see `portfolio-csv-columns.ts`).
  *
  * Matching (existing Dato rows):
  *   Tier 1 — canonical video key (YouTube / Vimeo) from `link` vs stored `video`.
@@ -56,29 +56,16 @@ import {
   resolveDatocmsEnvironment,
   resolveGraphqlContentToken,
 } from './datocms-portfolio-editing-url'
+import { PORTFOLIO_CSV_COLUMNS } from './portfolio-csv-columns'
 
 /** CMA attribute for semicolon-separated tag keys; must match Portfolio single-line string field (default `tags`). */
 const PORTFOLIO_TAGS_CMA_FIELD =
   process.env.DATOCMS_PORTFOLIO_TAGS_FIELD?.trim() || 'tags'
 
-/** Same column order as [scripts/import-clients-locations-tags.ts](scripts/import-clients-locations-tags.ts). */
-const COLUMN_NAMES = [
-  'link',
-  'title_cs',
-  'title_en',
-  'desc_cs',
-  'desc_en',
-  'slug_cs',
-  'slug_en',
-  'rok',
-  'kategorie1',
-  'kategorie2',
-  'priorita',
-  'client',
-  'země',
-  'stitky_cz',
-  'stitky_en',
-] as const
+/** Same as `CATEGORY_IDS['selected-work']` in `src/i18n/index.ts` — "Selected Work (homepage)" in CMS. */
+const SELECTED_WORK_CATEGORY_ID = 'MB-MnGx_RlWwUyXvE4LNPQ'
+
+const COLUMN_NAMES = PORTFOLIO_CSV_COLUMNS
 
 type Row = Record<(typeof COLUMN_NAMES)[number], string>
 
@@ -293,6 +280,12 @@ function yearToIsoDate(rok: string): string | null {
 function parsePriority(priorita: string): number | undefined {
   const n = parseInt(priorita?.trim() ?? '', 10)
   return Number.isFinite(n) ? n : undefined
+}
+
+/** `video na titulní stránce?` — add Selected Work category when truthy. */
+function parseHomepageFlag(homepage: string): boolean {
+  const s = homepage?.trim().toLowerCase()
+  return s === 'ano' || s === 'yes' || s === '1' || s === 'true'
 }
 
 function yearFromDateField(raw: unknown): number | null {
@@ -756,6 +749,7 @@ async function main() {
       const dateStr = yearToIsoDate(row.rok ?? '')
       const description = buildLocalizedDescription(row)
       const priority = parsePriority(row.priorita ?? '')
+      const onHomepage = parseHomepageFlag(row.homepage ?? '')
 
       let categoryIds: string[] = []
       let subcategoryIds: string[] = []
@@ -783,6 +777,12 @@ async function main() {
           subcategoryIds = [c2]
         } else if (k2.trim()) {
           warnMissingTaxonomy('portfolio_subcategory', k2, taxonomyMaps)
+        }
+        if (
+          onHomepage &&
+          !categoryIds.includes(SELECTED_WORK_CATEGORY_ID)
+        ) {
+          categoryIds = [...categoryIds, SELECTED_WORK_CATEGORY_ID]
         }
       }
 
@@ -908,7 +908,7 @@ async function main() {
           matchScore != null ? matchScore.toFixed(3) : '—'
         const tagPart = `${PORTFOLIO_TAGS_CMA_FIELD}=${tagsValue || '—'}`
         console.log(
-          `[dry-run] line ${line} videoKey=${csvVk ?? '—'} match=${tierLabel} id=${existingId ?? '—'} reason=${matchReason || '—'} score=${scoreLabel} | slugs ${slugDelta} | priority=${priority ?? '—'} | client=${clientIdForCsv ? 'yes' : '—'} loc=${locationId ? 'yes' : '—'} ${tagPart} | cat=${categoryIds.length ? 'yes' : '—'} sub=${subcategoryIds.length ? 'yes' : '—'} | action=${action}`
+          `[dry-run] line ${line} videoKey=${csvVk ?? '—'} match=${tierLabel} id=${existingId ?? '—'} reason=${matchReason || '—'} score=${scoreLabel} | slugs ${slugDelta} | priority=${priority ?? '—'} | homepage=${onHomepage ? 'yes' : '—'} | client=${clientIdForCsv ? 'yes' : '—'} loc=${locationId ? 'yes' : '—'} ${tagPart} | cat=${categoryIds.length ? 'yes' : '—'} sub=${subcategoryIds.length ? 'yes' : '—'} | action=${action}`
         )
         dryOk++
         continue

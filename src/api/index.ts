@@ -43,6 +43,8 @@ export interface PortfolioListItem {
   client: string | null
   location: string | null
   position: number | null
+  /** CSV `priorita` / Dato `priority` (1 = top). Falls back to `position` when sorting. */
+  priority: number | null
   category: Array<{ id: string; name: string | null }>
   subcategory: Array<{
     id: string
@@ -69,6 +71,7 @@ type RawPortfolioListRow = {
     nameEn?: string | null
   } | null
   position: number | null
+  priority: number | null
   category: Array<{ id: string; name: string | null }>
   subcategory: Array<{ id: string; name: string | null; slug: string | null }>
   thumbnail: PortfolioListItem['thumbnail']
@@ -100,10 +103,36 @@ function mapPortfolioListItem(
     client: clientStr,
     location: locationStr,
     position: raw.position,
+    priority: raw.priority ?? null,
     category: raw.category,
     subcategory: raw.subcategory,
     thumbnail: raw.thumbnail,
   }
+}
+
+function portfolioYear(item: PortfolioListItem): number {
+  if (!item.date) return 0
+  const y = new Date(item.date).getFullYear()
+  return Number.isNaN(y) ? 0 : y
+}
+
+/** Priority (1 = top), then newest year. Missing priority sorts after keyed items; ties by year desc. */
+export function sortPortfolioListItems(
+  items: PortfolioListItem[]
+): PortfolioListItem[] {
+  return [...items].sort((a, b) => {
+    const pa = a.priority ?? a.position
+    const pb = b.priority ?? b.position
+    const hasA = pa != null
+    const hasB = pb != null
+    if (hasA && hasB) {
+      if (pa !== pb) return pa - pb
+      return portfolioYear(b) - portfolioYear(a)
+    }
+    if (hasA && !hasB) return -1
+    if (!hasA && hasB) return 1
+    return portfolioYear(b) - portfolioYear(a)
+  })
 }
 
 // ---------------------------------------------------------------------------
@@ -150,6 +179,7 @@ function portfolioListFields(locale: Locale): string {
     nameEn: name(locale: en)
   }
   position
+  priority
   category { id name }
   subcategory {
     id
@@ -211,7 +241,7 @@ export async function getAllPortfoliosWithSlug(): Promise<Array<{ slug: string }
   while (true) {
     const data = await fetchAPI(`
       {
-        allPortfolios(first: ${batch}, skip: ${skip}, orderBy: position_ASC) {
+        allPortfolios(first: ${batch}, skip: ${skip}, orderBy: priority_ASC) {
           slug
         }
       }
@@ -237,7 +267,7 @@ export async function getAllPortfolios(
   while (true) {
     const data = await fetchAPI(`
       {
-        allPortfolios(first: ${batch}, skip: ${skip}, orderBy: position_ASC) {
+        allPortfolios(first: ${batch}, skip: ${skip}, orderBy: priority_ASC) {
           ${portfolioListFields(locale)}
         }
       }
@@ -249,7 +279,7 @@ export async function getAllPortfolios(
     if (rows.length < batch) break
     skip += batch
   }
-  return all
+  return sortPortfolioListItems(all)
 }
 
 /** Fetch portfolios filtered by DatoCMS category ID. Paginates past 100 per category. */
@@ -267,7 +297,7 @@ export async function getPortfoliosByCategory(
           first: ${batch}
           skip: ${skip}
           filter: { category: { anyIn: ["${categoryId}"] } }
-          orderBy: position_ASC
+          orderBy: priority_ASC
         ) {
           ${portfolioListFields(locale)}
         }
@@ -280,7 +310,7 @@ export async function getPortfoliosByCategory(
     if (rows.length < batch) break
     skip += batch
   }
-  return all
+  return sortPortfolioListItems(all)
 }
 
 /** Fetch "Selected Work" / featured portfolios for homepage. */
@@ -316,6 +346,7 @@ export async function getPortfolioBySlug(
           nameEn: name(locale: en)
         }
         position
+        priority
         category { id name }
         subcategory {
           id
