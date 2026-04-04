@@ -1,0 +1,113 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import Page from '~/components/Page.astro'
+import Header from '~/components/Header.astro'
+import PortfolioCard from '~/components/PortfolioCard.astro'
+import { getAllPortfolios, getHeaderBackgroundByPage } from '~/api'
+import { LOCALES, getLocaleFromParam, t, localePath } from '~/i18n'
+import {
+  locationsSegment,
+  locationHubCanonicalPath,
+  hreflangPairForLocationHub,
+  languageSwitchHrefForLocation,
+} from '~/i18n/routes'
+import { uniqueSlugsForValues } from '~/lib/portfolio-filter-slugs'
+
+export async function getStaticPaths() {
+  const portfolios = await getAllPortfolios('en')
+  const locs = portfolios
+    .map((p) => p.location?.trim())
+    .filter((v): v is string => Boolean(v))
+  const slugByValue = uniqueSlugsForValues(locs)
+  const paths: {
+    params: { locale: string; locationsSeg: string; locationSlug: string }
+  }[] = []
+  for (const locale of LOCALES) {
+    for (const [, slug] of slugByValue) {
+      paths.push({
+        params: {
+          locale,
+          locationsSeg: locationsSegment(locale),
+          locationSlug: slug,
+        },
+      })
+    }
+  }
+  return paths
+}
+
+const locale = getLocaleFromParam(Astro.params.locale)
+const { locationSlug } = Astro.params
+
+const all = await getAllPortfolios(locale)
+const locs = all
+  .map((p) => p.location?.trim())
+  .filter((v): v is string => Boolean(v))
+const slugByValue = uniqueSlugsForValues(locs)
+const locationValues = [...slugByValue.entries()]
+  .filter(([, s]) => s === locationSlug)
+  .map(([v]) => v)
+const locationLabel = locationValues[0] ?? locationSlug
+
+const filtered = all.filter((p) => {
+  const v = p.location?.trim()
+  if (!v) return false
+  return slugByValue.get(v) === locationSlug
+})
+
+if (filtered.length === 0) {
+  return new Response(null, { status: 404 })
+}
+
+const headerBackground = await getHeaderBackgroundByPage('/')
+const canonicalPath = locationHubCanonicalPath(locale, locationSlug as string)
+const href = hreflangPairForLocationHub(locationSlug as string)
+const switchHref = languageSwitchHrefForLocation(locale, locationSlug as string)
+const title = `${locationLabel} · ${t(locale, 'meta.title')}`
+const description = `${t(locale, 'category.drone.description')} ${locationLabel}.`
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  locale={locale}
+  compactHeader
+  canonicalPath={canonicalPath}
+  hreflangPaths={href}
+>
+  <Page locale={locale} compactTopSpacing>
+    <Header
+      slot="header"
+      compact
+      title={locationLabel}
+      headerBackground={headerBackground}
+      currentPath={`/${locale}${canonicalPath}`}
+      locale={locale}
+      pagePath={canonicalPath}
+      switchHref={switchHref}
+    />
+    <div class="mx-auto w-full max-w-container px-[15px] pb-16 pt-[10.5rem] xl:px-0">
+      <p class="mb-10 font-teko text-[2rem] uppercase text-secondary">
+        <a
+          href={localePath(locale, '/')}
+          class="text-secondary no-underline hover:text-white"
+        >
+          {t(locale, 'detail.back')}
+        </a>
+      </p>
+      <h1 class="mb-12 font-teko text-[4rem] font-semibold uppercase text-white md:text-[6rem]">
+        {locationLabel}
+      </h1>
+      <ul class="m-0 grid w-full list-none grid-cols-1 gap-12 p-0 sm:grid-cols-2 lg:grid-cols-3">
+        {filtered.map((portfolio, index) => (
+          <li
+            class="portfolio-grid-item-enter"
+            style={{ '--stagger': String(Math.min(index, 20)) }}
+          >
+            <PortfolioCard portfolio={portfolio} locale={locale} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </Page>
+</BaseLayout>

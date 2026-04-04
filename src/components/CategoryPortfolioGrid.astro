@@ -3,6 +3,7 @@ import PortfolioCard from '~/components/PortfolioCard.astro'
 import { t, type Locale } from '~/i18n'
 import type { PortfolioListItem } from '~/api'
 import { buildSlugMapsFromPortfolios } from '~/lib/portfolio-filter-slugs'
+import { splitPortfolioTags } from '~/lib/portfolio-tags'
 
 interface FilterOption {
   value: string
@@ -260,6 +261,7 @@ const clients: FilterOption[] = [...clientSlugByValue.entries()]
               .map((subcategory) => subcategory.slug?.trim())
               .filter(Boolean)
               .join(',')}
+            data-tag-keys={splitPortfolioTags(portfolio.tags).join(',')}
             data-year={year !== 'NaN' ? year : ''}
             data-location={location}
             data-client={client}

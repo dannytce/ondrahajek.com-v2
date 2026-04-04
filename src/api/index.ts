@@ -199,52 +199,88 @@ const fetchAPI = async (
 // Portfolio queries
 // ---------------------------------------------------------------------------
 
-export async function getAllPortfoliosWithSlug() {
-  const data = await fetchAPI(`
-    {
-      allPortfolios(first: ${PORTFOLIO_LIST_FIRST}) {
-        slug
+/**
+ * All portfolio slugs for static paths. Paginates past `PORTFOLIO_LIST_FIRST`
+ * so detail pages exist for every item that can appear in category grids
+ * (those queries are also capped per batch; see `getPortfoliosByCategory`).
+ */
+export async function getAllPortfoliosWithSlug(): Promise<Array<{ slug: string }>> {
+  const all: Array<{ slug: string }> = []
+  let skip = 0
+  const batch = PORTFOLIO_LIST_FIRST
+  while (true) {
+    const data = await fetchAPI(`
+      {
+        allPortfolios(first: ${batch}, skip: ${skip}, orderBy: position_ASC) {
+          slug
+        }
       }
+    `)
+    const rows = (data?.allPortfolios ?? []) as Array<{ slug: string | null }>
+    if (rows.length === 0) break
+    for (const r of rows) {
+      if (r.slug) all.push({ slug: r.slug })
     }
-  `)
-  return data?.allPortfolios as Array<{ slug: string }>
+    if (rows.length < batch) break
+    skip += batch
+  }
+  return all
 }
 
-/** Fetch all portfolios (full list fields). Used on old homepage fallback. */
+/** Fetch all portfolios (full list fields). Paginates to include every record. */
 export async function getAllPortfolios(
   locale: Locale
 ): Promise<PortfolioListItem[]> {
-  const data = await fetchAPI(`
-    {
-      allPortfolios(first: ${PORTFOLIO_LIST_FIRST}, orderBy: position_ASC) {
-        ${portfolioListFields(locale)}
+  const all: PortfolioListItem[] = []
+  let skip = 0
+  const batch = PORTFOLIO_LIST_FIRST
+  while (true) {
+    const data = await fetchAPI(`
+      {
+        allPortfolios(first: ${batch}, skip: ${skip}, orderBy: position_ASC) {
+          ${portfolioListFields(locale)}
+        }
       }
-    }
-    ${responsiveImageFragment}
-  `)
-  const rows = (data?.allPortfolios ?? []) as RawPortfolioListRow[]
-  return rows.map((r) => mapPortfolioListItem(r, locale))
+      ${responsiveImageFragment}
+    `)
+    const rows = (data?.allPortfolios ?? []) as RawPortfolioListRow[]
+    if (rows.length === 0) break
+    all.push(...rows.map((r) => mapPortfolioListItem(r, locale)))
+    if (rows.length < batch) break
+    skip += batch
+  }
+  return all
 }
 
-/** Fetch portfolios filtered by DatoCMS category ID. */
+/** Fetch portfolios filtered by DatoCMS category ID. Paginates past 100 per category. */
 export async function getPortfoliosByCategory(
   categoryId: string,
   locale: Locale
 ): Promise<PortfolioListItem[]> {
-  const data = await fetchAPI(`
-    {
-      allPortfolios(
-        first: ${PORTFOLIO_LIST_FIRST}
-        filter: { category: { anyIn: ["${categoryId}"] } }
-        orderBy: position_ASC
-      ) {
-        ${portfolioListFields(locale)}
+  const all: PortfolioListItem[] = []
+  let skip = 0
+  const batch = PORTFOLIO_LIST_FIRST
+  while (true) {
+    const data = await fetchAPI(`
+      {
+        allPortfolios(
+          first: ${batch}
+          skip: ${skip}
+          filter: { category: { anyIn: ["${categoryId}"] } }
+          orderBy: position_ASC
+        ) {
+          ${portfolioListFields(locale)}
+        }
       }
-    }
-    ${responsiveImageFragment}
-  `)
-  const rows = (data?.allPortfolios ?? []) as RawPortfolioListRow[]
-  return rows.map((r) => mapPortfolioListItem(r, locale))
+      ${responsiveImageFragment}
+    `)
+    const rows = (data?.allPortfolios ?? []) as RawPortfolioListRow[]
+    if (rows.length === 0) break
+    all.push(...rows.map((r) => mapPortfolioListItem(r, locale)))
+    if (rows.length < batch) break
+    skip += batch
+  }
+  return all
 }
 
 /** Fetch "Selected Work" / featured portfolios for homepage. */

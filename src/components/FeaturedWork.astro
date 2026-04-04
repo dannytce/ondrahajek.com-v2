@@ -1,6 +1,7 @@
 ---
 import PortfolioCard from '~/components/PortfolioCard.astro'
 import { t, localePath, type Locale } from '~/i18n'
+import { localizedPagePath } from '~/i18n/routes'
 import type { PortfolioListItem } from '~/api'
 
 interface Props {
@@ -30,13 +31,13 @@ const { portfolios, locale } = Astro.props
 
       <div class="portfolio-toolbar-enter-delayed mt-16 flex justify-center gap-8">
         <a
-          href={localePath(locale, '/drone-cinematography')}
+          href={localePath(locale, localizedPagePath(locale, 'drone'))}
           class="border border-white/20 px-8 py-3 font-teko text-[2.4rem] uppercase text-white no-underline transition-colors hover:bg-white/10"
         >
           {t(locale, 'nav.drone')}
         </a>
         <a
-          href={localePath(locale, '/video-production')}
+          href={localePath(locale, localizedPagePath(locale, 'video'))}
           class="border border-white/20 px-8 py-3 font-teko text-[2.4rem] uppercase text-white no-underline transition-colors hover:bg-white/10"
         >
           {t(locale, 'nav.video')}

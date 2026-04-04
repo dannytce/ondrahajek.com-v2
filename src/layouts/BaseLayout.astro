@@ -15,6 +15,11 @@ interface Props {
   compactHeader?: boolean
   /** Absolute path of the current page WITHOUT locale prefix (e.g. "/portfolio/my-slug") */
   canonicalPath?: string
+  /**
+   * When EN and CS use different path segments, set explicit hreflang targets.
+   * Paths are without locale prefix (same shape as canonicalPath).
+   */
+  hreflangPaths?: { en: string; cs: string }
   /** JSON-LD structured data (one or more blocks) */
   jsonLd?: Record<string, unknown> | Record<string, unknown>[]
 }
@@ -25,15 +30,18 @@ const {
   locale = 'en',
   compactHeader = false,
   canonicalPath,
+  hreflangPaths,
   jsonLd,
 } = Astro.props
 
 const siteUrl = 'https://ondrahajek.com'
-const enUrl = canonicalPath
-  ? `${siteUrl}/en${canonicalPath === '/' ? '' : canonicalPath}`
+const enPathForAlt = hreflangPaths?.en ?? canonicalPath
+const csPathForAlt = hreflangPaths?.cs ?? canonicalPath
+const enUrl = enPathForAlt
+  ? `${siteUrl}/en${enPathForAlt === '/' ? '' : enPathForAlt}`
   : undefined
-const csUrl = canonicalPath
-  ? `${siteUrl}/cs${canonicalPath === '/' ? '' : canonicalPath}`
+const csUrl = csPathForAlt
+  ? `${siteUrl}/cs${csPathForAlt === '/' ? '' : csPathForAlt}`
   : undefined
 const canonicalHref =
   canonicalPath !== undefined && canonicalPath !== null

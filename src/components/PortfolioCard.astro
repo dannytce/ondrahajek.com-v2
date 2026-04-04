@@ -1,6 +1,7 @@
 ---
 import { Image } from '@datocms/astro'
 import { localePath, type Locale } from '~/i18n'
+import { portfolioCanonicalPath } from '~/i18n/routes'
 import type { PortfolioListItem } from '~/api'
 
 interface Props {
@@ -24,7 +25,7 @@ const transitionName = portfolio.slug
 {
   responsiveImage && (
     <a
-      href={localePath(locale, `/portfolio/${portfolio.slug}`)}
+      href={localePath(locale, portfolioCanonicalPath(locale, portfolio.slug!))}
       class="portfolio-card group relative block w-full no-underline"
     >
       <div class="portfolio-card-frame relative overflow-hidden bg-black">

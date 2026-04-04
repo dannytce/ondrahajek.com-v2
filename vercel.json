@@ -1,0 +1,29 @@
+{
+  "redirects": [
+    {
+      "source": "/cs/portfolio/:path*",
+      "destination": "/cs/projekty/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/cs/drone-cinematography",
+      "destination": "/cs/letecka-kinematografie",
+      "permanent": true
+    },
+    {
+      "source": "/cs/video-production",
+      "destination": "/cs/video-produkce",
+      "permanent": true
+    },
+    {
+      "source": "/cs/gallery",
+      "destination": "/cs/galerie",
+      "permanent": true
+    },
+    {
+      "source": "/cs/about",
+      "destination": "/cs/o-mne",
+      "permanent": true
+    }
+  ]
+}

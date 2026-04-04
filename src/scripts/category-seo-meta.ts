@@ -4,6 +4,7 @@ import {
   type Locale,
   type TranslationKey,
 } from '~/i18n'
+import { pathnameToLocale } from '~/i18n/routes'
 
 const SITE = 'https://ondrahajek.com'
 
@@ -16,7 +17,8 @@ function hasActiveFilters(): boolean {
       p.get('cl') ||
       p.get('location') ||
       p.get('client') ||
-      p.get('q')
+      p.get('q') ||
+      p.get('tag')
   )
 }
 
@@ -39,22 +41,13 @@ function updateHrefById(id: string, href: string) {
   if (el) el.href = href
 }
 
-function buildLocalizedPath(locale: Locale, pathname: string): string {
-  const parts = pathname.split('/').filter(Boolean)
-  if (parts[0] === 'en' || parts[0] === 'cs') {
-    parts[0] = locale
-  }
-  return `/${parts.join('/')}`
-}
-
-function syncCanonicalAndAlternates(query: string) {
+function syncCanonicalAndAlternates() {
   const locale = document.documentElement.lang as Locale
   const pathname = window.location.pathname
-  const pathEn = buildLocalizedPath('en', pathname)
-  const pathCs = buildLocalizedPath('cs', pathname)
-  const q = query ? (query.startsWith('?') ? query : `?${query}`) : ''
-  const enUrl = `${SITE}${pathEn}${q}`
-  const csUrl = `${SITE}${pathCs}${q}`
+  const pathEn = pathnameToLocale(pathname, 'en')
+  const pathCs = pathnameToLocale(pathname, 'cs')
+  const enUrl = `${SITE}${pathEn}`
+  const csUrl = `${SITE}${pathCs}`
   const canonical = locale === 'cs' ? csUrl : enUrl
 
   updateHrefById('seo-canonical', canonical)
@@ -157,14 +150,12 @@ function applyCategorySeo() {
   const defaultTitle = grid.dataset.defaultSeoTitle ?? ''
   const defaultDesc = grid.dataset.defaultSeoDescription ?? ''
 
-  const query = window.location.search.replace(/^\?/, '')
-
   if (!hasActiveFilters()) {
     document.title = defaultTitle
     setMetaName('description', defaultDesc)
     setMetaProperty('og:title', defaultTitle)
     setMetaProperty('og:description', defaultDesc)
-    syncCanonicalAndAlternates('')
+    syncCanonicalAndAlternates()
     return
   }
 
@@ -174,7 +165,7 @@ function applyCategorySeo() {
   setMetaName('description', computed.description)
   setMetaProperty('og:title', computed.title)
   setMetaProperty('og:description', computed.description)
-  syncCanonicalAndAlternates(query)
+  syncCanonicalAndAlternates()
 }
 
 function initCategorySeoMeta() {

@@ -34,7 +34,8 @@ function hasUrlAdvancedFilterParams(): boolean {
       p.get('location') ||
       p.get('cl') ||
       p.get('client') ||
-      p.get('q')
+      p.get('q') ||
+      p.get('tag')
   )
 }
 
@@ -62,6 +63,8 @@ interface FilterState {
   locSlug: string
   clientSlug: string
   q: string
+  /** Canonical tag key from `portfolio.tags` (see `data-tag-keys`). */
+  tag: string
 }
 
 function countActiveFilters(st: FilterState): number {
@@ -71,6 +74,7 @@ function countActiveFilters(st: FilterState): number {
   if (st.locSlug) n += 1
   if (st.clientSlug) n += 1
   if (st.q) n += 1
+  if (st.tag) n += 1
   return n
 }
 
@@ -79,7 +83,8 @@ function readStateFromControls(
   yearSelect: HTMLSelectElement | null | undefined,
   locationSelect: HTMLSelectElement | null | undefined,
   clientSelect: HTMLSelectElement | null | undefined,
-  searchInput: HTMLInputElement
+  searchInput: HTMLInputElement,
+  grid: HTMLElement
 ): FilterState {
   const activeSubcategory =
     subcategoryButtons.find((button) => button.dataset.active === 'true')
@@ -90,13 +95,14 @@ function readStateFromControls(
     locSlug: locationSelect?.value ?? '',
     clientSlug: clientSelect?.value ?? '',
     q: normalize(searchInput.value),
+    tag: (grid.dataset.filterTag ?? '').trim(),
   }
 }
 
 function itemMatchesExcept(
   item: HTMLElement,
   st: FilterState,
-  except?: 'sub' | 'year' | 'loc' | 'client' | 'q'
+  except?: 'sub' | 'year' | 'loc' | 'client' | 'q' | 'tag'
 ): boolean {
   const subcategories =
     item.dataset.subcategories?.split(',').filter(Boolean) ?? []
@@ -104,6 +110,7 @@ function itemMatchesExcept(
   const locSlug = item.dataset.locationSlug ?? ''
   const clientSlug = item.dataset.clientSlug ?? ''
   const haystack = item.dataset.search ?? ''
+  const tagKeys = item.dataset.tagKeys?.split(',').filter(Boolean) ?? []
 
   if (except !== 'sub' && st.sub && !subcategories.includes(st.sub)) {
     return false
@@ -114,6 +121,7 @@ function itemMatchesExcept(
     return false
   }
   if (except !== 'q' && st.q && !haystack.includes(st.q)) return false
+  if (except !== 'tag' && st.tag && !tagKeys.includes(st.tag)) return false
   return true
 }
 
@@ -257,6 +265,24 @@ const gridFilterActions = new WeakMap<
   { readUrl: () => void; apply: () => void }
 >()
 
+function tagParamAllowed(raw: string): string {
+  const v = raw.trim()
+  if (!v) return ''
+  if (!/^[a-z0-9][a-z0-9-]*$/i.test(v)) return ''
+  return v
+}
+
+/** Drop `tag` if no grid item carries that canonical key. */
+function tagMatchesGrid(grid: HTMLElement, tag: string): string {
+  if (!tag) return ''
+  const items = grid.querySelectorAll<HTMLElement>('[data-portfolio-item]')
+  for (const item of items) {
+    const keys = item.dataset.tagKeys?.split(',').filter(Boolean) ?? []
+    if (keys.includes(tag)) return tag
+  }
+  return ''
+}
+
 function readUrlIntoGrid(grid: HTMLElement) {
   const subcategoryButtons = Array.from(
     grid.querySelectorAll<HTMLButtonElement>('[data-filter-subcategory]')
@@ -300,6 +326,9 @@ function readUrlIntoGrid(grid: HTMLElement) {
 
   const q = params.get('q') ?? ''
   searchInput.value = q
+
+  const rawTag = params.get('tag') ?? ''
+  grid.dataset.filterTag = tagMatchesGrid(grid, tagParamAllowed(rawTag))
 }
 
 function bindGrid(grid: HTMLElement) {
@@ -360,7 +389,8 @@ function bindGrid(grid: HTMLElement) {
       yearSelect,
       locationSelect,
       clientSelect,
-      searchInput
+      searchInput,
+      grid
     )
 
     for (let pass = 0; pass < 4; pass++) {
@@ -372,7 +402,8 @@ function bindGrid(grid: HTMLElement) {
         yearSelect,
         locationSelect,
         clientSelect,
-        searchInput
+        searchInput,
+        grid
       )
     }
 
@@ -399,7 +430,8 @@ function bindGrid(grid: HTMLElement) {
         yearSelect,
         locationSelect,
         clientSelect,
-        searchInput
+        searchInput,
+        grid
       )
       rebuildYearSelect(yearSelect, items, st, yearPlaceholder)
       rebuildLocationSelect(locationSelect, items, st, locPlaceholder)
@@ -409,7 +441,8 @@ function bindGrid(grid: HTMLElement) {
         yearSelect,
         locationSelect,
         clientSelect,
-        searchInput
+        searchInput,
+        grid
       )
       for (const button of subcategoryButtons) {
         const subSlug = button.dataset.filterSubcategory ?? ''
@@ -454,6 +487,7 @@ function bindGrid(grid: HTMLElement) {
     if (st.locSlug) params.set('loc', st.locSlug)
     if (st.clientSlug) params.set('cl', st.clientSlug)
     if (searchInput.value.trim()) params.set('q', searchInput.value.trim())
+    if (st.tag) params.set('tag', st.tag)
 
     syncUrlFromState(pathname, params)
     window.dispatchEvent(
@@ -508,6 +542,7 @@ function bindGrid(grid: HTMLElement) {
     if (locationSelect) locationSelect.value = ''
     if (clientSelect) clientSelect.value = ''
     searchInput.value = ''
+    grid.dataset.filterTag = ''
 
     subcategoryButtons.forEach((button) => {
       button.dataset.active =

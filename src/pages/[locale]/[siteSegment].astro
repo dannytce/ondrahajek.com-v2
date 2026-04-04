@@ -1,0 +1,306 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import Page from '~/components/Page.astro'
+import Header from '~/components/Header.astro'
+import CategoryPortfolioGrid from '~/components/CategoryPortfolioGrid.astro'
+import GalleryComponent from '~/components/Gallery.astro'
+import Section from '~/components/About/Section.astro'
+import {
+  getPortfoliosByCategory,
+  getHeaderBackgroundByPage,
+  getGallery,
+} from '~/api'
+import { LOCALES, getLocaleFromParam, t, CATEGORY_IDS } from '~/i18n'
+import {
+  localizedPagePath,
+  sitePageKeyFromSegment,
+  hreflangPairForSitePage,
+  languageSwitchHref,
+  portfolioCanonicalPath,
+  type SitePageKey,
+} from '~/i18n/routes'
+
+export function getStaticPaths() {
+  const keys: SitePageKey[] = ['drone', 'video', 'gallery', 'about']
+  return LOCALES.flatMap((locale) =>
+    keys.map((key) => ({
+      params: {
+        locale,
+        siteSegment: localizedPagePath(locale, key).slice(1),
+      },
+    }))
+  )
+}
+
+const locale = getLocaleFromParam(Astro.params.locale)
+const { siteSegment } = Astro.params
+const pageKey = sitePageKeyFromSegment(locale, siteSegment as string)
+
+if (!pageKey) {
+  return new Response(null, { status: 404 })
+}
+
+const siteUrl = 'https://ondrahajek.com'
+const href = hreflangPairForSitePage(pageKey)
+const switchHref = languageSwitchHref(locale, pageKey)
+const canonicalPath = localizedPagePath(locale, pageKey)
+
+const photos =
+  pageKey === 'gallery' ? await getGallery() : null
+const headerBackgroundGallery =
+  pageKey === 'gallery' ? await getHeaderBackgroundByPage('/gallery') : null
+const headerBackgroundAbout =
+  pageKey === 'about' ? await getHeaderBackgroundByPage('/about') : null
+const headerBackgroundCategory =
+  pageKey === 'drone' || pageKey === 'video'
+    ? await getHeaderBackgroundByPage('/')
+    : null
+
+const categorySlug =
+  pageKey === 'drone'
+    ? 'drone-cinematography'
+    : pageKey === 'video'
+      ? 'video-production'
+      : null
+
+const portfolios =
+  categorySlug != null
+    ? await getPortfoliosByCategory(CATEGORY_IDS[categorySlug], locale)
+    : null
+
+const defaultSeoTitle =
+  pageKey === 'drone'
+    ? `${t(locale, 'category.drone.title')} - ${t(locale, 'meta.title')}`
+    : pageKey === 'video'
+      ? `${t(locale, 'category.video.title')} - ${t(locale, 'meta.title')}`
+      : ''
+
+const defaultSeoDescription =
+  pageKey === 'drone'
+    ? t(locale, 'category.drone.description')
+    : pageKey === 'video'
+      ? t(locale, 'category.video.description')
+      : ''
+
+const currentFull = `${siteUrl}/${locale}${canonicalPath}`
+
+const collectionJsonLd =
+  portfolios && categorySlug
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        name: t(
+          locale,
+          pageKey === 'drone' ? 'category.drone.title' : 'category.video.title'
+        ),
+        description: defaultSeoDescription,
+        url: currentFull,
+        mainEntity: {
+          '@type': 'ItemList',
+          numberOfItems: portfolios.filter((p) => p.slug).length,
+          itemListElement: portfolios
+            .filter((p) => p.slug)
+            .map((p, i) => ({
+              '@type': 'ListItem',
+              position: i + 1,
+              url: `${siteUrl}/${locale}${portfolioCanonicalPath(locale, p.slug!)}`,
+              name: p.title ?? undefined,
+            })),
+        },
+      }
+    : undefined
+
+const categoryTitle =
+  pageKey === 'drone'
+    ? t(locale, 'category.drone.title')
+    : pageKey === 'video'
+      ? t(locale, 'category.video.title')
+      : ''
+---
+
+{
+  pageKey === 'gallery' && photos && headerBackgroundGallery && (
+    <BaseLayout
+      title={`${t(locale, 'nav.gallery')} - ${t(locale, 'meta.title')}`}
+      locale={locale}
+      canonicalPath={canonicalPath}
+      hreflangPaths={href}
+    >
+      <Page locale={locale}>
+        <Header
+          slot="header"
+          title={t(locale, 'nav.gallery')}
+          headerBackground={headerBackgroundGallery}
+          currentPath={`/${locale}${canonicalPath}`}
+          locale={locale}
+          pagePath={canonicalPath}
+          switchHref={switchHref}
+        />
+        <GalleryComponent photos={photos} />
+      </Page>
+    </BaseLayout>
+  )
+}
+
+{
+  pageKey === 'about' && headerBackgroundAbout && (
+    <BaseLayout
+      title={`${t(locale, 'nav.about')} - ${t(locale, 'meta.title')}`}
+      locale={locale}
+      canonicalPath={canonicalPath}
+      hreflangPaths={href}
+    >
+      <Page isAboutPage locale={locale}>
+        <Header
+          slot="header"
+          title={t(locale, 'nav.about')}
+          headerBackground={headerBackgroundAbout}
+          isAboutPage
+          currentPath={`/${locale}${canonicalPath}`}
+          locale={locale}
+          pagePath={canonicalPath}
+          switchHref={switchHref}
+        />
+        <Section title="Cool numbers">
+          <ul class="m-0 list-none p-0 md:flex md:justify-around">
+            <li class="flex-1">
+              <h3 class="font-teko text-[2rem] uppercase text-[#49494b] md:text-[3rem] lg:text-[4rem]">
+                <strong class="block text-[6rem] leading-none text-white sm:text-[7rem] sm:leading-tight md:text-[8rem] lg:text-[10rem] lg:leading-snug xl:text-[12rem]">
+                  135
+                </strong>
+                Projects
+              </h3>
+            </li>
+            <li class="flex-1">
+              <h3 class="font-teko text-[2rem] uppercase text-[#49494b] md:text-[3rem] lg:text-[4rem]">
+                <strong class="block text-[6rem] leading-none text-white sm:text-[7rem] sm:leading-tight md:text-[8rem] lg:text-[10rem] lg:leading-snug xl:text-[12rem]">
+                  22
+                </strong>
+                Different countries
+              </h3>
+            </li>
+            <li class="flex-1">
+              <h3 class="font-teko text-[2rem] uppercase text-[#49494b] md:text-[3rem] lg:text-[4rem]">
+                <strong class="block text-[6rem] leading-none text-white sm:text-[7rem] sm:leading-tight md:text-[8rem] lg:text-[10rem] lg:leading-snug xl:text-[12rem]">
+                  800+
+                </strong>
+                Flight hours
+              </h3>
+            </li>
+          </ul>
+        </Section>
+        <Section title="I can help with" gray>
+          <ul class="m-0 list-none p-0">
+            <li class="my-[10px] py-[10px] font-teko text-[3rem] font-semibold uppercase leading-none text-secondary transition-colors duration-200 hover:text-white md:text-[4rem]">
+              Documentary
+            </li>
+            <li class="my-[10px] py-[10px] font-teko text-[3rem] font-semibold uppercase leading-none text-secondary transition-colors duration-200 hover:text-white md:text-[4rem]">
+              Film
+            </li>
+            <li class="my-[10px] py-[10px] font-teko text-[3rem] font-semibold uppercase leading-none text-secondary transition-colors duration-200 hover:text-white md:text-[4rem]">
+              Commercial promo
+            </li>
+            <li class="my-[10px] py-[10px] font-teko text-[3rem] font-semibold uppercase leading-none text-secondary transition-colors duration-200 hover:text-white md:text-[4rem]">
+              Architecture
+            </li>
+            <li class="my-[10px] py-[10px] font-teko text-[3rem] font-semibold uppercase leading-none text-secondary transition-colors duration-200 hover:text-white md:text-[4rem]">
+              Music video
+            </li>
+          </ul>
+        </Section>
+        <Section title="Tech specs">
+          <ul class="m-0 list-none p-0 md:flex md:justify-around">
+            <li class="flex-1">
+              <h3 class="font-teko text-[2rem] uppercase text-[#49494b] md:text-[3rem] lg:text-[4rem]">
+                <strong class="block text-[6rem] leading-none text-white sm:text-[7rem] sm:leading-tight md:text-[8rem] lg:text-[10rem] lg:leading-snug xl:text-[12rem]">
+                  4K/60<span class="text-[5rem]">FPS</span>
+                </strong>
+                AERIAL VIDEO
+              </h3>
+            </li>
+            <li class="flex-1">
+              <h3 class="font-teko text-[2rem] uppercase text-[#49494b] md:text-[3rem] lg:text-[4rem]">
+                <strong class="block text-[6rem] leading-none text-white sm:text-[7rem] sm:leading-tight md:text-[8rem] lg:text-[10rem] lg:leading-snug xl:text-[12rem]">
+                  20<span class="text-[5rem]">MPX</span>
+                </strong>
+                AERIAL PHOTOGRAPHY
+              </h3>
+            </li>
+            <li class="flex-1">
+              <h3 class="font-teko text-[2rem] uppercase text-[#49494b] md:text-[3rem] lg:text-[4rem]">
+                <strong class="block text-[6rem] leading-none text-white sm:text-[7rem] sm:leading-tight md:text-[8rem] lg:text-[10rem] lg:leading-snug xl:text-[12rem]">
+                  162<span class="text-[5rem]">MPX</span>
+                </strong>
+                360° PHOTOGRAPHY
+              </h3>
+            </li>
+          </ul>
+        </Section>
+        <Section title="Credentials">
+          <div class="mx-auto max-w-[420px] text-secondary">
+            <h3 class="my-[2em] mt-[25px] font-teko text-[4rem] font-semibold uppercase text-white">
+              ONDŘEJ HÁJEK
+            </h3>
+            Tel.:{' '}
+            <a href="tel:+420773604400" class="text-secondary no-underline">
+              +420 773 604 400
+            </a>
+            <br />
+            <a href="mailto:info@ondrahajek.com" class="text-secondary no-underline">
+              info@ondrahajek.com
+            </a>
+            <br />
+            <br />
+            <h3 class="my-[2em] mt-[25px] font-teko text-[4rem] font-semibold uppercase text-white">
+              COPTER VISION S.R.O.
+            </h3>
+            držitel povolení k provozování leteckých prací od Úřadu pro civilní letectví
+            <br />
+            <br />
+            ICO: 03803452
+            <br />
+            DIC: CZ03803452
+          </div>
+        </Section>
+      </Page>
+    </BaseLayout>
+  )
+}
+
+{
+  (pageKey === 'drone' || pageKey === 'video') &&
+    portfolios &&
+    categorySlug &&
+    headerBackgroundCategory &&
+    collectionJsonLd && (
+      <BaseLayout
+        title={defaultSeoTitle}
+        description={defaultSeoDescription}
+        locale={locale}
+        compactHeader
+        canonicalPath={canonicalPath}
+        hreflangPaths={href}
+        jsonLd={collectionJsonLd}
+      >
+        <Page locale={locale} compactTopSpacing>
+          <Header
+            slot="header"
+            compact
+            title={categoryTitle}
+            headerBackground={headerBackgroundCategory}
+            currentPath={`/${locale}${canonicalPath}`}
+            locale={locale}
+            pagePath={canonicalPath}
+            switchHref={switchHref}
+          />
+          <CategoryPortfolioGrid
+            portfolios={portfolios}
+            locale={locale}
+            categorySlug={categorySlug}
+            defaultSeoTitle={defaultSeoTitle}
+            defaultSeoDescription={defaultSeoDescription}
+          />
+        </Page>
+      </BaseLayout>
+    )
+}
