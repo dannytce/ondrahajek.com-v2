@@ -1,0 +1,141 @@
+---
+import Player from '~/components/Player.astro'
+import PortfolioDescriptions from '~/components/PortfolioDescriptions.astro'
+import PortfolioDetailMeta from '~/components/PortfolioDetailMeta.astro'
+import type { PortfolioDetail } from '~/api'
+import type { PortfolioDetailModel } from '~/lib/portfolio-detail/buildPortfolioDetail'
+import { localePath, type Locale } from '~/i18n'
+import { localizedPagePath } from '~/i18n/routes'
+
+interface Props {
+  portfolio: PortfolioDetail
+  locale: Locale
+  detail: PortfolioDetailModel
+}
+
+const { portfolio, locale, detail } = Astro.props
+const {
+  tagLinkPairs,
+  pageKey,
+  backPath,
+  backLinkText,
+  moreForClientHref,
+  moreInLocationHref,
+  moreForClientLabel,
+  moreInLocationLabel,
+  subtitle,
+  mediaTransitionName,
+  year,
+  hasDetailMeta,
+  locationH2,
+} = detail
+---
+
+<section class="mx-auto w-full max-w-container px-[15px] pb-16 pt-[10.5rem] xl:px-0">
+  <a
+    href={localePath(locale, backPath)}
+    class="detail-reveal mb-8 inline-block font-teko text-[2rem] uppercase text-secondary no-underline transition-colors hover:text-white"
+  >
+    {backLinkText}
+  </a>
+
+  <div
+    class:list={[
+      'grid gap-10',
+      hasDetailMeta && 'xl:grid-cols-[minmax(0,1fr)_300px]',
+    ]}
+  >
+    <div>
+      <h1
+        class="detail-reveal m-0 font-teko text-[5.2rem] uppercase leading-[0.95] tracking-[0.01em] text-white md:text-[7.2rem]"
+      >
+        {portfolio.title}
+      </h1>
+      {
+        locationH2 && (
+          <h2 class="detail-reveal mt-4 max-w-[70ch] font-teko text-[2rem] font-normal uppercase leading-tight tracking-wide text-secondary md:text-[2.4rem]">
+            {locationH2}
+          </h2>
+        )
+      }
+      {
+        (subtitle || hasDetailMeta) && (
+          <div class="detail-reveal detail-reveal-delay-1 mt-4 max-w-[70ch] xl:hidden">
+            <PortfolioDetailMeta
+              variant="inline"
+              locale={locale}
+              year={year}
+              client={portfolio.client}
+              location={portfolio.location}
+              class={subtitle ? 'mt-4' : undefined}
+              moreForClientHref={moreForClientHref}
+              moreForClientLabel={moreForClientLabel}
+              moreInLocationHref={moreInLocationHref}
+              moreInLocationLabel={moreInLocationLabel}
+            />
+          </div>
+        )
+      }
+      {
+        portfolio.video && (
+          <div class="detail-reveal detail-reveal-delay-1 mt-8">
+            <Player
+              title={portfolio.title ?? 'Video'}
+              video={portfolio.video}
+              poster={portfolio.thumbnail?.responsiveImage}
+              transitionName={mediaTransitionName}
+            />
+          </div>
+        )
+      }
+      <div class="detail-reveal detail-reveal-delay-2">
+        <PortfolioDescriptions
+          descriptionCs={portfolio.descriptionCs}
+          descriptionEn={portfolio.descriptionEn}
+          locale={locale}
+        />
+      </div>
+      {
+        tagLinkPairs.length > 0 && (
+          <ul class="detail-reveal detail-reveal-delay-3 m-0 mt-8 flex max-w-[70ch] list-none flex-wrap gap-2 p-0">
+            {tagLinkPairs.map(({ key, label }) => (
+              <li>
+                {pageKey != null ? (
+                  <a
+                    href={localePath(
+                      locale,
+                      `${localizedPagePath(locale, pageKey)}?tag=${encodeURIComponent(key)}`
+                    )}
+                    class="inline-block rounded-sm border border-secondary/40 px-3 py-1 font-teko text-[1.5rem] uppercase tracking-wide text-secondary no-underline transition-colors hover:border-white hover:text-white"
+                  >
+                    {label}
+                  </a>
+                ) : (
+                  <span class="inline-block rounded-sm border border-secondary/40 px-3 py-1 font-teko text-[1.5rem] uppercase tracking-wide text-secondary">
+                    {label}
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+    {
+      hasDetailMeta && (
+        <aside class="detail-reveal detail-reveal-delay-1 hidden h-fit rounded border border-white/10 bg-[#111114] p-6 xl:sticky xl:top-28 xl:block">
+          <PortfolioDetailMeta
+            locale={locale}
+            year={year}
+            client={portfolio.client}
+            location={portfolio.location}
+            moreForClientHref={moreForClientHref}
+            moreForClientLabel={moreForClientLabel}
+            moreInLocationHref={moreInLocationHref}
+            moreInLocationLabel={moreInLocationLabel}
+          />
+        </aside>
+      )
+    }
+  </div>
+</section>

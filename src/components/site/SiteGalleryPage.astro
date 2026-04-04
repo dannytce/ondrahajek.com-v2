@@ -1,0 +1,47 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import Page from '~/components/Page.astro'
+import Header from '~/components/Header.astro'
+import GalleryComponent from '~/components/Gallery.astro'
+import type { FileField, ResponsiveImage } from '~/api/generated/types'
+import type { Locale } from '~/i18n'
+import { t } from '~/i18n'
+
+interface Props {
+  locale: Locale
+  canonicalPath: string
+  hreflangPaths: { en: string; cs: string }
+  switchHref: string
+  photos: FileField[]
+  headerBackground: ResponsiveImage
+}
+
+const {
+  locale,
+  canonicalPath,
+  hreflangPaths,
+  switchHref,
+  photos,
+  headerBackground,
+} = Astro.props
+---
+
+<BaseLayout
+  title={`${t(locale, 'nav.gallery')} - ${t(locale, 'meta.title')}`}
+  locale={locale}
+  canonicalPath={canonicalPath}
+  hreflangPaths={hreflangPaths}
+>
+  <Page locale={locale}>
+    <Header
+      slot="header"
+      title={t(locale, 'nav.gallery')}
+      headerBackground={headerBackground}
+      currentPath={`/${locale}${canonicalPath}`}
+      locale={locale}
+      pagePath={canonicalPath}
+      switchHref={switchHref}
+    />
+    <GalleryComponent photos={photos} />
+  </Page>
+</BaseLayout>

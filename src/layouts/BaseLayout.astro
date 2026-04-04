@@ -1,10 +1,9 @@
 ---
 import { ViewTransitions } from 'astro:transitions'
 import '../styles/global.css'
+import AnalyticsScripts from '~/components/seo/AnalyticsScripts.astro'
 import type { Locale } from '~/i18n'
 
-const FB_PIXEL_ID = '895557671255172'
-const GA_TRACKING_ID = 'UA-111398537-1'
 const fontsHref =
   'https://fonts.googleapis.com/css2?family=Teko:wght@400;600&family=Roboto:wght@400;700&display=swap'
 
@@ -124,71 +123,7 @@ const jsonLdBlocks = jsonLd
       <link rel="stylesheet" href={fontsHref} />
     </noscript>
 
-    <script
-      is:inline
-      async
-      src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
-    ></script>
-    <script is:inline define:vars={{ GA_TRACKING_ID }}>
-      window.dataLayer = window.dataLayer || []
-      function gtag() {
-        dataLayer.push(arguments)
-      }
-      gtag('js', new Date())
-      gtag('config', GA_TRACKING_ID, {
-        page_path: window.location.pathname,
-      })
-    </script>
-
-    <script is:inline>
-      ;(function (w, d, s, l, i) {
-        w[l] = w[l] || []
-        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' })
-        var f = d.getElementsByTagName(s)[0],
-          j = d.createElement(s),
-          dl = l != 'dataLayer' ? '&l=' + l : ''
-        j.async = true
-        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl
-        f.parentNode.insertBefore(j, f)
-      })(window, document, 'script', 'dataLayer', 'GTM-T58QC9G')
-    </script>
-
-    <script is:inline define:vars={{ FB_PIXEL_ID }}>
-      !(function (f, b, e, v, n, t, s) {
-        if (f.fbq) return
-        n = f.fbq = function () {
-          n.callMethod
-            ? n.callMethod.apply(n, arguments)
-            : n.queue.push(arguments)
-        }
-        if (!f._fbq) f._fbq = n
-        n.push = n
-        n.loaded = !0
-        n.version = '2.0'
-        n.queue = []
-        t = b.createElement(e)
-        t.async = !0
-        t.src = v
-        s = b.getElementsByTagName(e)[0]
-        s.parentNode.insertBefore(t, s)
-      })(
-        window,
-        document,
-        'script',
-        'https://connect.facebook.net/en_US/fbevents.js'
-      )
-      fbq('init', FB_PIXEL_ID)
-    </script>
-
-    <noscript>
-      <img
-        height="1"
-        width="1"
-        style="display:none"
-        src={`https://www.facebook.com/tr?id=${FB_PIXEL_ID}&ev=PageView&noscript=1`}
-        alt=""
-      />
-    </noscript>
+    <AnalyticsScripts />
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />

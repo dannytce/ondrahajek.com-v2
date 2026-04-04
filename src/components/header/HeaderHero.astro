@@ -1,0 +1,109 @@
+---
+import DatoImageCover from '~/components/DatoImageCover.astro'
+import PlayShowreel from '~/components/PlayShowreel.astro'
+import type { ResponsiveImage } from '~/api/generated/types'
+
+interface Props {
+  isHomepage: boolean
+  compact: boolean
+  title: string
+  subTitle?: string
+  headerBackground: ResponsiveImage
+}
+
+const {
+  isHomepage,
+  compact,
+  title,
+  subTitle,
+  headerBackground,
+} = Astro.props
+---
+
+<header
+  class:list={[
+    'fixed top-0 z-header flex w-full flex-col justify-center',
+    compact ? 'h-[min(320px,38vh)] max-h-[320px]' : 'h-header',
+  ]}
+>
+  <div
+    class="relative z-headerContainer mx-auto flex w-full max-w-container flex-1 flex-col justify-center px-[15px] md:flex-none md:flex-row md:justify-start xl:px-0"
+  >
+    {
+      subTitle ? (
+        <div class="flex flex-col justify-center">
+          <h1
+            class:list={[
+              'm-0 p-0 font-teko font-semibold uppercase',
+              compact
+                ? 'text-[3.4rem] md:text-[5rem]'
+                : 'text-[6rem] md:text-[10rem]',
+            ]}
+          >
+            {title}
+          </h1>
+          <h2 class="m-0 -mt-[0.75em] p-0 font-teko text-[1.8rem] uppercase md:text-[3rem]">
+            {subTitle}
+          </h2>
+        </div>
+      ) : (
+        <h1
+          class:list={[
+            'm-0 p-0 font-teko font-semibold uppercase',
+            compact
+              ? 'text-[3.4rem] md:text-[5rem]'
+              : 'text-[6rem] md:text-[10rem]',
+          ]}
+        >
+          {title}
+        </h1>
+      )
+    }
+    {isHomepage ? <PlayShowreel /> : null}
+  </div>
+
+  {
+    isHomepage && (
+      <div class="header-video-wrap fixed top-0 z-video h-full w-full overflow-hidden">
+        <video
+          data-header-video
+          autoplay
+          playsinline
+          loop
+          muted
+          class="header-video pointer-events-none absolute left-1/2 top-1/2 box-border h-[56.25vw] min-h-full w-[177.78vh] min-w-full -translate-x-1/2 -translate-y-1/2 object-cover"
+        >
+          <source
+            src="/bg-mobile.mp4"
+            type="video/mp4"
+            media="(max-width: 375px)"
+          />
+          <source
+            src="/bg-tablet.mp4"
+            type="video/mp4"
+            media="(max-width: 767px)"
+          />
+          <source src="/bg-desktop.mp4" type="video/mp4" />
+        </video>
+      </div>
+    )
+  }
+
+  <div
+    class="header-fallback absolute bottom-0 left-0 right-0 top-0 z-header transition-opacity duration-[400ms] ease-[ease]"
+  >
+    <div class:list={[compact ? 'h-full min-h-0' : 'min-h-header']}>
+      <DatoImageCover
+        data={{ ...headerBackground, alt: '' }}
+        class:list={[
+          'pointer-events-none absolute inset-0 z-[2]',
+          compact ? 'min-h-full' : 'min-h-header',
+        ]}
+        imgClass="h-full w-full object-cover"
+        priority
+        layout="fill"
+        objectFit="cover"
+      />
+    </div>
+  </div>
+</header>

@@ -1,0 +1,37 @@
+---
+import Page from '~/components/Page.astro'
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import PortfolioDetailNav from '~/components/portfolio/PortfolioDetailNav.astro'
+import { t, localePath, type Locale } from '~/i18n'
+import { portfolioDetailSwitchUrlWhenMissing } from '~/lib/portfolio-detail/buildPortfolioDetail'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const switchUrl = portfolioDetailSwitchUrlWhenMissing(locale)
+---
+
+<BaseLayout
+  title={`Not found - ${t(locale, 'meta.title')}`}
+  locale={locale}
+  compactHeader
+>
+  <Page locale={locale}>
+    <PortfolioDetailNav slot="header" locale={locale} switchUrl={switchUrl} minimal />
+    <section
+      class="mx-auto w-full max-w-container px-[15px] pb-16 pt-[10.5rem] text-center xl:px-0"
+    >
+      <p class="text-[2rem] text-secondary">
+        This portfolio item could not be found.
+      </p>
+      <a
+        href={localePath(locale, '/')}
+        class="mt-4 inline-block font-teko text-[2rem] uppercase text-white no-underline hover:opacity-80"
+      >
+        {t(locale, 'detail.back')}
+      </a>
+    </section>
+  </Page>
+</BaseLayout>

@@ -1,0 +1,66 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import Page from '~/components/Page.astro'
+import Header from '~/components/Header.astro'
+import CategoryPortfolioGrid from '~/components/CategoryPortfolioGrid.astro'
+import type { PortfolioListItem } from '~/api'
+import type { ResponsiveImage } from '~/api/generated/types'
+import type { Locale } from '~/i18n'
+interface Props {
+  locale: Locale
+  canonicalPath: string
+  hreflangPaths: { en: string; cs: string }
+  switchHref: string
+  categorySlug: 'video-production' | 'drone-cinematography'
+  portfolios: PortfolioListItem[]
+  headerBackground: ResponsiveImage
+  defaultSeoTitle: string
+  defaultSeoDescription: string
+  categoryTitle: string
+  collectionJsonLd: Record<string, unknown>
+}
+
+const {
+  locale,
+  canonicalPath,
+  hreflangPaths,
+  switchHref,
+  categorySlug,
+  portfolios,
+  headerBackground,
+  defaultSeoTitle,
+  defaultSeoDescription,
+  categoryTitle,
+  collectionJsonLd,
+} = Astro.props
+---
+
+<BaseLayout
+  title={defaultSeoTitle}
+  description={defaultSeoDescription}
+  locale={locale}
+  compactHeader
+  canonicalPath={canonicalPath}
+  hreflangPaths={hreflangPaths}
+  jsonLd={collectionJsonLd}
+>
+  <Page locale={locale} compactTopSpacing>
+    <Header
+      slot="header"
+      compact
+      title={categoryTitle}
+      headerBackground={headerBackground}
+      currentPath={`/${locale}${canonicalPath}`}
+      locale={locale}
+      pagePath={canonicalPath}
+      switchHref={switchHref}
+    />
+    <CategoryPortfolioGrid
+      portfolios={portfolios}
+      locale={locale}
+      categorySlug={categorySlug}
+      defaultSeoTitle={defaultSeoTitle}
+      defaultSeoDescription={defaultSeoDescription}
+    />
+  </Page>
+</BaseLayout>

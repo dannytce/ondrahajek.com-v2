@@ -1,0 +1,77 @@
+---
+import type { FilterOption } from '~/lib/portfolio-filters'
+import { t, type Locale } from '~/i18n'
+
+interface Props {
+  locale: Locale
+  years: FilterOption[]
+  locations: FilterOption[]
+  clients: FilterOption[]
+}
+
+const { locale, years, locations, clients } = Astro.props
+---
+
+<div
+  id="portfolio-filters-panel"
+  data-filter-panel
+  class="flex hidden flex-wrap items-center justify-end gap-3"
+>
+  {
+    years.length > 0 && (
+      <select
+        data-filter-year
+        class="filter-select w-full max-w-full shrink-0 md:w-[9rem] md:min-w-[9rem] md:max-w-[9rem]"
+      >
+        <option value="">{t(locale, 'filter.year')}</option>
+        {years.map((year) => (
+          <option value={year.value}>{year.label}</option>
+        ))}
+      </select>
+    )
+  }
+
+  {
+    locations.length > 0 && (
+      <select
+        data-filter-location
+        class="filter-select w-full max-w-full shrink-0 md:w-[14rem] md:min-w-[14rem] md:max-w-[14rem]"
+      >
+        <option value="">{t(locale, 'filter.location')}</option>
+        {locations.map((location) => (
+          <option value={location.value}>{location.label}</option>
+        ))}
+      </select>
+    )
+  }
+
+  {
+    clients.length > 0 && (
+      <select
+        data-filter-client
+        class="filter-select w-full max-w-full shrink-0 md:w-[16rem] md:min-w-[16rem] md:max-w-[16rem]"
+      >
+        <option value="">{t(locale, 'filter.client')}</option>
+        {clients.map((client) => (
+          <option value={client.value}>{client.label}</option>
+        ))}
+      </select>
+    )
+  }
+
+  <input
+    type="text"
+    data-filter-search
+    placeholder={t(locale, 'filter.search')}
+    class="filter-search-input w-full min-w-[200px] max-w-[22rem] sm:w-auto"
+  />
+
+  <button
+    type="button"
+    data-filter-clear
+    hidden
+    class="cursor-pointer border-none bg-transparent font-teko text-[1.4rem] uppercase text-secondary transition-colors hover:text-white"
+  >
+    {t(locale, 'filter.clear')}
+  </button>
+</div>

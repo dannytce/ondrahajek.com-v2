@@ -1,6 +1,6 @@
 ---
-import DatoImageCover from '~/components/DatoImageCover.astro'
-import PlayShowreel from '~/components/PlayShowreel.astro'
+import HeaderHero from '~/components/header/HeaderHero.astro'
+import HeaderNav from '~/components/header/HeaderNav.astro'
 import TrustedBy from '~/components/About/TrustedBy.astro'
 import type { ResponsiveImage } from '~/api/generated/types'
 import { t, localePath, getAlternateLocale, type Locale } from '~/i18n'
@@ -63,143 +63,22 @@ const switchUrl = switchHref ?? localePath(altLocale, pagePath)
   data-compact={compact ? 'true' : 'false'}
   data-video-ready={isHomepage ? 'false' : 'true'}
 >
-  <header
-    class:list={[
-      'fixed top-0 z-header flex w-full flex-col justify-center',
-      compact
-        ? 'h-[min(320px,38vh)] max-h-[320px]'
-        : 'h-header',
-    ]}
-  >
-    <div
-      class="relative z-headerContainer mx-auto flex w-full max-w-container flex-1 flex-col justify-center px-[15px] md:flex-none md:flex-row md:justify-start xl:px-0"
-    >
-      {
-        subTitle ? (
-          <div class="flex flex-col justify-center">
-            <h1
-              class:list={[
-                'm-0 p-0 font-teko font-semibold uppercase',
-                compact
-                  ? 'text-[3.4rem] md:text-[5rem]'
-                  : 'text-[6rem] md:text-[10rem]',
-              ]}
-            >
-              {title}
-            </h1>
-            <h2 class="m-0 -mt-[0.75em] p-0 font-teko text-[1.8rem] uppercase md:text-[3rem]">
-              {subTitle}
-            </h2>
-          </div>
-        ) : (
-          <h1
-            class:list={[
-              'm-0 p-0 font-teko font-semibold uppercase',
-              compact
-                ? 'text-[3.4rem] md:text-[5rem]'
-                : 'text-[6rem] md:text-[10rem]',
-            ]}
-          >
-            {title}
-          </h1>
-        )
-      }
-      {isHomepage ? <PlayShowreel /> : null}
-    </div>
-
-    {
-      isHomepage && (
-        <div class="header-video-wrap fixed top-0 z-video h-full w-full overflow-hidden">
-          <video
-            data-header-video
-            autoplay
-            playsinline
-            loop
-            muted
-            class="header-video pointer-events-none absolute left-1/2 top-1/2 box-border h-[56.25vw] min-h-full w-[177.78vh] min-w-full -translate-x-1/2 -translate-y-1/2 object-cover"
-          >
-            <source
-              src="/bg-mobile.mp4"
-              type="video/mp4"
-              media="(max-width: 375px)"
-            />
-            <source
-              src="/bg-tablet.mp4"
-              type="video/mp4"
-              media="(max-width: 767px)"
-            />
-            <source src="/bg-desktop.mp4" type="video/mp4" />
-          </video>
-        </div>
-      )
-    }
-
-    <div
-      class="header-fallback absolute bottom-0 left-0 right-0 top-0 z-header transition-opacity duration-[400ms] ease-[ease]"
-    >
-      <div class:list={[compact ? 'h-full min-h-0' : 'min-h-header']}>
-        <DatoImageCover
-          data={{ ...headerBackground, alt: '' }}
-          class:list={[
-            'pointer-events-none absolute inset-0 z-[2]',
-            compact ? 'min-h-full' : 'min-h-header',
-          ]}
-          imgClass="h-full w-full object-cover"
-          priority
-          layout="fill"
-          objectFit="cover"
-        />
-      </div>
-    </div>
-  </header>
+  <HeaderHero
+    isHomepage={isHomepage}
+    compact={compact}
+    title={title}
+    subTitle={subTitle}
+    headerBackground={headerBackground}
+  />
 
   {isAboutPage ? <TrustedBy /> : null}
 
-  <div
-    data-site-nav
-    data-visible="true"
-    data-past-hero="false"
-    class="site-nav pointer-events-none fixed left-0 right-0 top-0 z-nav"
-  >
-    <div
-      class="site-nav-gradient pointer-events-none absolute inset-x-0 -z-10 h-48"
-    >
-    </div>
-    <nav class="relative top-[30px] w-full md:top-[63px]">
-      <div
-        class="mx-auto flex w-full max-w-container justify-between px-[15px] xl:px-0"
-      >
-        <a href={localePath(locale, '/')} class="pointer-events-auto">
-          <img src="/logo-ondrahajek.svg" alt="ONDRAHAJEK.COM" />
-        </a>
-        <div class="flex flex-col items-end gap-1">
-          <ul class="m-0 list-none p-0">
-            {
-              navLinks.map((item) => (
-                <li class="first:[&_a]:pt-0">
-                  <a
-                    href={item.link}
-                    class:list={[
-                      'link-animation pointer-events-auto block py-[clamp(5px,1.2vh,10px)] text-right font-teko text-[2rem] uppercase text-white no-underline',
-                      currentPath === item.link && 'active',
-                    ]}
-                  >
-                    {item.text}
-                  </a>
-                </li>
-              ))
-            }
-          </ul>
-          <a
-            href={switchUrl}
-            class="pointer-events-auto font-teko text-[1.4rem] uppercase text-secondary no-underline transition-colors hover:text-white"
-          >
-            {t(locale, 'lang.switch')}
-          </a>
-        </div>
-      </div>
-    </nav>
-  </div>
+  <HeaderNav
+    locale={locale}
+    currentPath={currentPath}
+    switchUrl={switchUrl}
+    navLinks={navLinks}
+  />
 </div>
 
 <script>

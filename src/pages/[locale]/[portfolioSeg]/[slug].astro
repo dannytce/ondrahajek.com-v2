@@ -2,33 +2,20 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro'
 import Page from '~/components/Page.astro'
-import Player from '~/components/Player.astro'
-import PortfolioDescriptions from '~/components/PortfolioDescriptions.astro'
-import PortfolioDetailMeta from '~/components/PortfolioDetailMeta.astro'
-import { getAllPortfoliosWithSlug, getPortfolioBySlug, getPortfoliosByCategory } from '~/api'
+import PortfolioDetailNav from '~/components/portfolio/PortfolioDetailNav.astro'
+import PortfolioDetailView from '~/components/portfolio/PortfolioDetailView.astro'
+import PortfolioNotFound from '~/components/portfolio/PortfolioNotFound.astro'
 import {
-  LOCALES,
-  getLocaleFromParam,
-  t,
-  localePath,
-  getCategorySlug,
-  getAlternateLocale,
-  fillTemplate,
-  CATEGORY_IDS,
-} from '~/i18n'
+  getAllPortfoliosWithSlug,
+  getPortfolioBySlug,
+  getPortfoliosByCategory,
+} from '~/api'
+import { LOCALES, getLocaleFromParam } from '~/i18n'
+import { portfolioSegment } from '~/i18n/routes'
 import {
-  portfolioSegment,
-  portfolioCanonicalPath,
-  hreflangPairForPortfolio,
-  languageSwitchHrefForPortfolio,
-  localizedPagePath,
-  type SitePageKey,
-} from '~/i18n/routes'
-import { buildSlugMapsFromPortfolios } from '~/lib/portfolio-filter-slugs'
-import {
-  resolveTagDisplayForLocale,
-  splitPortfolioTags,
-} from '~/lib/portfolio-tags'
+  buildPortfolioDetailModel,
+  portfolioDetailCanonicalPath,
+} from '~/lib/portfolio-detail/buildPortfolioDetail'
 
 export async function getStaticPaths() {
   const portfolios = await getAllPortfoliosWithSlug()
@@ -47,348 +34,37 @@ const locale = getLocaleFromParam(Astro.params.locale)
 const { slug } = Astro.params
 
 const portfolio = await getPortfolioBySlug(slug as string, locale)
-
-const tagKeys = portfolio ? splitPortfolioTags(portfolio.tags) : []
-const tagLabels = resolveTagDisplayForLocale(tagKeys, locale)
-const tagLinkPairs = tagKeys.map((key, i) => ({
-  key,
-  label: tagLabels[i] ?? key,
-}))
-
-const primaryCategoryId = portfolio?.category?.[0]?.id
-const categorySlug = primaryCategoryId
-  ? getCategorySlug(primaryCategoryId)
+const detail = portfolio
+  ? await buildPortfolioDetailModel(
+      portfolio,
+      locale,
+      slug as string,
+      getPortfoliosByCategory
+    )
   : null
-
-function categoryToPageKey(
-  cs: typeof categorySlug
-): SitePageKey | null {
-  if (cs === 'drone-cinematography') return 'drone'
-  if (cs === 'video-production') return 'video'
-  return null
-}
-
-const pageKey = categorySlug ? categoryToPageKey(categorySlug) : null
-const backPath =
-  pageKey != null
-    ? localizedPagePath(locale, pageKey)
-    : '/'
-const backLabel =
-  categorySlug === 'drone-cinematography'
-    ? t(locale, 'nav.drone')
-    : categorySlug === 'video-production'
-      ? t(locale, 'nav.video')
-      : 'Portfolio'
-const backLinkText = `${t(locale, 'detail.backTo')} ${backLabel}`
-
-const categoryForLink =
-  categorySlug && categorySlug !== 'selected-work' ? categorySlug : null
-
-let moreForClientHref: string | undefined
-let moreInLocationHref: string | undefined
-
-if (
-  portfolio &&
-  categoryForLink &&
-  pageKey != null &&
-  (categoryForLink === 'video-production' ||
-    categoryForLink === 'drone-cinematography')
-) {
-  const categoryPortfolios = await getPortfoliosByCategory(
-    CATEGORY_IDS[categoryForLink],
-    locale
-  )
-  const { locationSlugByValue, clientSlugByValue } =
-    buildSlugMapsFromPortfolios(categoryPortfolios)
-
-  const clientTrim = portfolio.client?.trim()
-  if (clientTrim) {
-    const cl = clientSlugByValue.get(clientTrim)
-    if (cl) {
-      moreForClientHref = localePath(
-        locale,
-        `${localizedPagePath(locale, pageKey)}?cl=${encodeURIComponent(cl)}`
-      )
-    }
-  }
-
-  const locTrim = portfolio.location?.trim()
-  if (locTrim) {
-    const loc = locationSlugByValue.get(locTrim)
-    if (loc) {
-      moreInLocationHref = localePath(
-        locale,
-        `${localizedPagePath(locale, pageKey)}?loc=${encodeURIComponent(loc)}`
-      )
-    }
-  }
-}
-
-const moreForClientLabel =
-  portfolio?.client?.trim()
-    ? fillTemplate(t(locale, 'detail.moreForClient'), {
-        client: portfolio.client.trim(),
-      })
-    : undefined
-
-const moreInLocationLabel = portfolio?.location?.trim()
-  ? fillTemplate(t(locale, 'detail.moreInLocation'), {
-      location: portfolio.location.trim(),
-    })
-  : undefined
-
-const subtitle =
-  locale === 'cs'
-    ? portfolio?.subtitleCs || portfolio?.subtitleEn
-    : portfolio?.subtitleEn || portfolio?.subtitleCs
-
-const mediaTransitionName = portfolio?.slug
-  ? `portfolio-media-${portfolio.slug}`
-  : undefined
-
-const switchUrl = portfolio
-  ? languageSwitchHrefForPortfolio(locale, portfolio.slug!)
-  : localePath(getAlternateLocale(locale), '/')
-
-const year = portfolio?.date ? new Date(portfolio.date).getFullYear() : null
-
-const hasDetailMeta =
-  year != null ||
-  Boolean(portfolio?.client?.trim()) ||
-  Boolean(portfolio?.location?.trim())
-
-const siteUrl = 'https://ondrahajek.com'
-const locationLabel = portfolio?.location?.trim() ?? ''
-const titleSeo = locationLabel
-  ? `${portfolio?.title ?? ''} | Aerial Cinematography in ${locationLabel} | Ondra Hajek`
-  : `${portfolio?.title ?? ''} | ${t(locale, 'meta.title')}`
-const descSeo = locationLabel
-  ? `Watch ${portfolio?.title ?? ''}, a premier commercial production shot in ${locationLabel}. Featuring 4K FPV drone cinematography by Ondra Hajek.`
-  : subtitle ?? portfolio?.title ?? ''
-
-const thumbSrc = portfolio?.thumbnail?.responsiveImage?.src
-const thumbnailUrl =
-  thumbSrc && thumbSrc.startsWith('http')
-    ? thumbSrc
-    : thumbSrc
-      ? `${siteUrl}${thumbSrc.startsWith('/') ? '' : '/'}${thumbSrc}`
-      : undefined
-
-const uploadIso =
-  portfolio?.date != null
-    ? new Date(portfolio.date).toISOString()
-    : undefined
-
-const jsonLd = portfolio
-  ? {
-      '@context': 'https://schema.org',
-      '@type': 'VideoObject',
-      name: portfolio.title,
-      description: descSeo,
-      thumbnailUrl,
-      uploadDate: uploadIso,
-      embedUrl: portfolio.video ?? undefined,
-      publisher: {
-        '@type': 'Organization',
-        name: 'Ondra Hajek Cinematography',
-        logo: {
-          '@type': 'ImageObject',
-          url: `${siteUrl}/logo-ondrahajek.svg`,
-        },
-      },
-      contentLocation: locationLabel
-        ? {
-            '@type': 'Place',
-            name: locationLabel,
-          }
-        : undefined,
-    }
-  : undefined
-
-const hrefPair = slug ? hreflangPairForPortfolio(slug as string) : undefined
 ---
 
 {
-  portfolio ? (
+  portfolio && detail ? (
     <BaseLayout
-      title={titleSeo}
-      description={descSeo}
+      title={detail.titleSeo}
+      description={detail.descSeo}
       locale={locale}
       compactHeader
-      canonicalPath={portfolioCanonicalPath(locale, slug as string)}
-      hreflangPaths={hrefPair}
-      jsonLd={jsonLd}
+      canonicalPath={portfolioDetailCanonicalPath(locale, slug as string)}
+      hreflangPaths={detail.hrefPair}
+      jsonLd={detail.jsonLd}
     >
       <Page locale={locale}>
-        <header
+        <PortfolioDetailNav
           slot="header"
-          class="fixed left-0 right-0 top-0 z-nav border-b border-white/10 bg-background/95 backdrop-blur"
-        >
-          <div class="mx-auto flex h-20 w-full max-w-container items-center justify-between px-[15px] xl:px-0">
-            <a
-              href={localePath(locale, '/')}
-              class="font-teko text-[1.8rem] uppercase tracking-wide text-white no-underline"
-            >
-              ONDRAHAJEK.COM
-            </a>
-            <nav aria-label="Primary" class="flex items-center gap-6">
-              <a
-                href={localePath(locale, localizedPagePath(locale, 'drone'))}
-                class="font-teko text-[1.6rem] uppercase text-secondary no-underline transition-colors hover:text-white"
-              >
-                {t(locale, 'nav.drone')}
-              </a>
-              <a
-                href={localePath(locale, localizedPagePath(locale, 'video'))}
-                class="font-teko text-[1.6rem] uppercase text-secondary no-underline transition-colors hover:text-white"
-              >
-                {t(locale, 'nav.video')}
-              </a>
-              <a
-                href={localePath(locale, localizedPagePath(locale, 'about'))}
-                class="font-teko text-[1.6rem] uppercase text-secondary no-underline transition-colors hover:text-white"
-              >
-                {t(locale, 'nav.about')}
-              </a>
-              <a
-                href={switchUrl}
-                class="font-teko text-[1.4rem] uppercase text-secondary no-underline transition-colors hover:text-white"
-              >
-                {t(locale, 'lang.switch')}
-              </a>
-            </nav>
-          </div>
-        </header>
-        <section class="mx-auto w-full max-w-container px-[15px] pb-16 pt-[10.5rem] xl:px-0">
-          <a
-            href={localePath(locale, backPath)}
-            class="detail-reveal mb-8 inline-block font-teko text-[2rem] uppercase text-secondary no-underline transition-colors hover:text-white"
-          >
-            {backLinkText}
-          </a>
-
-          <div
-            class:list={[
-              'grid gap-10',
-              hasDetailMeta && 'xl:grid-cols-[minmax(0,1fr)_300px]',
-            ]}
-          >
-            <div>
-              <h1 class="detail-reveal m-0 font-teko text-[5.2rem] uppercase leading-[0.95] tracking-[0.01em] text-white md:text-[7.2rem]">
-                {portfolio.title}
-              </h1>
-              {locationLabel && (
-                <h2 class="detail-reveal mt-4 max-w-[70ch] font-teko text-[2rem] font-normal uppercase leading-tight tracking-wide text-secondary md:text-[2.4rem]">
-                  {`Commercial Drone Filming in ${locationLabel}`}
-                </h2>
-              )}
-              {(subtitle || hasDetailMeta) && (
-                <div class="detail-reveal detail-reveal-delay-1 mt-4 max-w-[70ch] xl:hidden">
-                  <PortfolioDetailMeta
-                    variant="inline"
-                    locale={locale}
-                    year={year}
-                    client={portfolio.client}
-                    location={portfolio.location}
-                    class={subtitle ? 'mt-4' : undefined}
-                    moreForClientHref={moreForClientHref}
-                    moreForClientLabel={moreForClientLabel}
-                    moreInLocationHref={moreInLocationHref}
-                    moreInLocationLabel={moreInLocationLabel}
-                  />
-                </div>
-              )}
-              {portfolio.video && (
-                <div class="detail-reveal detail-reveal-delay-1 mt-8">
-                  <Player
-                    title={portfolio.title ?? 'Video'}
-                    video={portfolio.video}
-                    poster={portfolio.thumbnail?.responsiveImage}
-                    transitionName={mediaTransitionName}
-                  />
-                </div>
-              )}
-              <div class="detail-reveal detail-reveal-delay-2">
-                <PortfolioDescriptions
-                  descriptionCs={portfolio.descriptionCs}
-                  descriptionEn={portfolio.descriptionEn}
-                  locale={locale}
-                />
-              </div>
-              {tagLinkPairs.length > 0 && (
-                <ul class="detail-reveal detail-reveal-delay-3 m-0 mt-8 flex max-w-[70ch] list-none flex-wrap gap-2 p-0">
-                  {tagLinkPairs.map(({ key, label }) => (
-                    <li>
-                      {pageKey != null ? (
-                        <a
-                          href={localePath(
-                            locale,
-                            `${localizedPagePath(locale, pageKey)}?tag=${encodeURIComponent(key)}`
-                          )}
-                          class="inline-block rounded-sm border border-secondary/40 px-3 py-1 font-teko text-[1.5rem] uppercase tracking-wide text-secondary no-underline transition-colors hover:border-white hover:text-white"
-                        >
-                          {label}
-                        </a>
-                      ) : (
-                        <span class="inline-block rounded-sm border border-secondary/40 px-3 py-1 font-teko text-[1.5rem] uppercase tracking-wide text-secondary">
-                          {label}
-                        </span>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-            {hasDetailMeta && (
-              <aside class="detail-reveal detail-reveal-delay-1 hidden h-fit rounded border border-white/10 bg-[#111114] p-6 xl:sticky xl:top-28 xl:block">
-                <PortfolioDetailMeta
-                  locale={locale}
-                  year={year}
-                  client={portfolio.client}
-                  location={portfolio.location}
-                  moreForClientHref={moreForClientHref}
-                  moreForClientLabel={moreForClientLabel}
-                  moreInLocationHref={moreInLocationHref}
-                  moreInLocationLabel={moreInLocationLabel}
-                />
-              </aside>
-            )}
-          </div>
-        </section>
+          locale={locale}
+          switchUrl={detail.switchUrl}
+        />
+        <PortfolioDetailView portfolio={portfolio} locale={locale} detail={detail} />
       </Page>
     </BaseLayout>
   ) : (
-    <BaseLayout
-      title={`Not found - ${t(locale, 'meta.title')}`}
-      locale={locale}
-      compactHeader
-    >
-      <Page locale={locale}>
-        <header
-          slot="header"
-          class="fixed left-0 right-0 top-0 z-nav border-b border-white/10 bg-background/95 backdrop-blur"
-        >
-          <div class="mx-auto flex h-20 w-full max-w-container items-center px-[15px] xl:px-0">
-            <a
-              href={localePath(locale, '/')}
-              class="font-teko text-[1.8rem] uppercase tracking-wide text-white no-underline"
-            >
-              ONDRAHAJEK.COM
-            </a>
-          </div>
-        </header>
-        <section class="mx-auto w-full max-w-container px-[15px] pb-16 pt-[10.5rem] text-center xl:px-0">
-          <p class="text-[2rem] text-secondary">
-            This portfolio item could not be found.
-          </p>
-          <a
-            href={localePath(locale, '/')}
-            class="mt-4 inline-block font-teko text-[2rem] uppercase text-white no-underline hover:opacity-80"
-          >
-            {t(locale, 'detail.back')}
-          </a>
-        </section>
-      </Page>
-    </BaseLayout>
+    <PortfolioNotFound locale={locale} />
   )
 }
