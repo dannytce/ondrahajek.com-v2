@@ -15,7 +15,8 @@
     "codegen": "graphql-codegen -r dotenv/config --config graphql-codegen.cjs",
     "import:portfolio": "tsx scripts/import-portfolio.ts",
     "update:portfolio": "tsx scripts/import-portfolio.ts --update-only",
-    "export:portfolio": "tsx scripts/export-portfolio-csv.ts"
+    "export:portfolio": "tsx scripts/export-portfolio-csv.ts",
+    "import:references": "tsx scripts/import-clients-locations-tags.ts"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.2",

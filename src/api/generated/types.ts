@@ -58,6 +58,80 @@ export type BooleanFilter = {
   eq?: InputMaybe<Scalars['BooleanType']['input']>;
 };
 
+export type ClientModelFilter = {
+  AND?: InputMaybe<Array<InputMaybe<ClientModelFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<ClientModelFilter>>>;
+  _createdAt?: InputMaybe<CreatedAtFilter>;
+  _firstPublishedAt?: InputMaybe<PublishedAtFilter>;
+  _isValid?: InputMaybe<BooleanFilter>;
+  _publicationScheduledAt?: InputMaybe<PublishedAtFilter>;
+  _publishedAt?: InputMaybe<PublishedAtFilter>;
+  _status?: InputMaybe<StatusFilter>;
+  _unpublishingScheduledAt?: InputMaybe<PublishedAtFilter>;
+  _updatedAt?: InputMaybe<UpdatedAtFilter>;
+  createdAt?: InputMaybe<CreatedAtFilter>;
+  id?: InputMaybe<ItemIdFilter>;
+  name?: InputMaybe<StringFilter>;
+  slug?: InputMaybe<SlugFilter>;
+  updatedAt?: InputMaybe<UpdatedAtFilter>;
+};
+
+export enum ClientModelOrderBy {
+  _createdAt_ASC = '_createdAt_ASC',
+  _createdAt_DESC = '_createdAt_DESC',
+  _firstPublishedAt_ASC = '_firstPublishedAt_ASC',
+  _firstPublishedAt_DESC = '_firstPublishedAt_DESC',
+  _isValid_ASC = '_isValid_ASC',
+  _isValid_DESC = '_isValid_DESC',
+  _publicationScheduledAt_ASC = '_publicationScheduledAt_ASC',
+  _publicationScheduledAt_DESC = '_publicationScheduledAt_DESC',
+  _publishedAt_ASC = '_publishedAt_ASC',
+  _publishedAt_DESC = '_publishedAt_DESC',
+  _status_ASC = '_status_ASC',
+  _status_DESC = '_status_DESC',
+  _unpublishingScheduledAt_ASC = '_unpublishingScheduledAt_ASC',
+  _unpublishingScheduledAt_DESC = '_unpublishingScheduledAt_DESC',
+  _updatedAt_ASC = '_updatedAt_ASC',
+  _updatedAt_DESC = '_updatedAt_DESC',
+  createdAt_ASC = 'createdAt_ASC',
+  createdAt_DESC = 'createdAt_DESC',
+  id_ASC = 'id_ASC',
+  id_DESC = 'id_DESC',
+  name_ASC = 'name_ASC',
+  name_DESC = 'name_DESC',
+  updatedAt_ASC = 'updatedAt_ASC',
+  updatedAt_DESC = 'updatedAt_DESC'
+}
+
+/** Record of type Client (client) */
+export type ClientRecord = RecordInterface & {
+  __typename?: 'ClientRecord';
+  _createdAt: Scalars['DateTime']['output'];
+  /** Editing URL */
+  _editingUrl?: Maybe<Scalars['String']['output']>;
+  _firstPublishedAt: Scalars['DateTime']['output'];
+  _isValid: Scalars['BooleanType']['output'];
+  _modelApiKey: Scalars['String']['output'];
+  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _publishedAt: Scalars['DateTime']['output'];
+  /** Generates SEO and Social card meta tags to be used in your frontend */
+  _seoMetaTags: Array<Tag>;
+  _status: ItemStatus;
+  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _updatedAt: Scalars['DateTime']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ItemId']['output'];
+  name?: Maybe<Scalars['String']['output']>;
+  slug?: Maybe<Scalars['String']['output']>;
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+
+/** Record of type Client (client) */
+export type ClientRecord_seoMetaTagsArgs = {
+  locale?: InputMaybe<SiteLocale>;
+};
+
 export type CollectionMetadata = {
   __typename?: 'CollectionMetadata';
   count: Scalars['IntType']['output'];
@@ -2212,6 +2286,24 @@ export type InUseFilter = {
   eq?: InputMaybe<Scalars['BooleanType']['input']>;
 };
 
+/** Specifies how to filter Integer fields */
+export type IntegerFilter = {
+  /** Search for records with an exact match */
+  eq?: InputMaybe<Scalars['IntType']['input']>;
+  /** Filter records with the specified field defined (i.e. with any value) or not */
+  exists?: InputMaybe<Scalars['BooleanType']['input']>;
+  /** Filter records with a value that's strictly greater than the one specified */
+  gt?: InputMaybe<Scalars['IntType']['input']>;
+  /** Filter records with a value that's greater than or equal to the one specified */
+  gte?: InputMaybe<Scalars['IntType']['input']>;
+  /** Filter records with a value that's less than the one specified */
+  lt?: InputMaybe<Scalars['IntType']['input']>;
+  /** Filter records with a value that's less or equal than the one specified */
+  lte?: InputMaybe<Scalars['IntType']['input']>;
+  /** Exclude records with an exact match */
+  neq?: InputMaybe<Scalars['IntType']['input']>;
+};
+
 /** Specifies how to filter by ID */
 export type ItemIdFilter = {
   /** Search the record with the specified ID */
@@ -2230,6 +2322,20 @@ export enum ItemStatus {
   updated = 'updated'
 }
 
+/** Specifies how to filter Single-link fields */
+export type LinkFilter = {
+  /** Search for records with an exact match. The specified value must be a Record ID */
+  eq?: InputMaybe<Scalars['ItemId']['input']>;
+  /** Filter records with the specified field defined (i.e. with any value) or not */
+  exists?: InputMaybe<Scalars['BooleanType']['input']>;
+  /** Filter records linked to one of the specified records */
+  in?: InputMaybe<Array<InputMaybe<Scalars['ItemId']['input']>>>;
+  /** Exclude records with an exact match. The specified value must be a Record ID */
+  neq?: InputMaybe<Scalars['ItemId']['input']>;
+  /** Filter records not linked to one of the specified records */
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['ItemId']['input']>>>;
+};
+
 /** Specifies how to filter Multiple-links fields */
 export type LinksFilter = {
   /** Filter records linked to all of the specified records. The specified values must be Record IDs */
@@ -2242,6 +2348,122 @@ export type LinksFilter = {
   exists?: InputMaybe<Scalars['BooleanType']['input']>;
   /** Filter records not linked to any of the specified records. The specified values must be Record IDs */
   notIn?: InputMaybe<Array<InputMaybe<Scalars['ItemId']['input']>>>;
+};
+
+/** Specifies how to filter by locale */
+export type LocalesFilter = {
+  /** Filter records that are localized in all the specified locales */
+  allIn?: InputMaybe<Array<SiteLocale>>;
+  /** Filter records that are localized in at least one of the specified locales */
+  anyIn?: InputMaybe<Array<SiteLocale>>;
+  /** Filter records that are not localized in any of the specified locales */
+  notIn?: InputMaybe<Array<SiteLocale>>;
+};
+
+export type LocationModelFilter = {
+  AND?: InputMaybe<Array<InputMaybe<LocationModelFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<LocationModelFilter>>>;
+  _createdAt?: InputMaybe<CreatedAtFilter>;
+  _firstPublishedAt?: InputMaybe<PublishedAtFilter>;
+  _isValid?: InputMaybe<BooleanFilter>;
+  _locales?: InputMaybe<LocalesFilter>;
+  _publicationScheduledAt?: InputMaybe<PublishedAtFilter>;
+  _publishedAt?: InputMaybe<PublishedAtFilter>;
+  _status?: InputMaybe<StatusFilter>;
+  _unpublishingScheduledAt?: InputMaybe<PublishedAtFilter>;
+  _updatedAt?: InputMaybe<UpdatedAtFilter>;
+  createdAt?: InputMaybe<CreatedAtFilter>;
+  id?: InputMaybe<ItemIdFilter>;
+  name?: InputMaybe<StringFilter>;
+  slug?: InputMaybe<SlugFilter>;
+  updatedAt?: InputMaybe<UpdatedAtFilter>;
+};
+
+export enum LocationModelOrderBy {
+  _createdAt_ASC = '_createdAt_ASC',
+  _createdAt_DESC = '_createdAt_DESC',
+  _firstPublishedAt_ASC = '_firstPublishedAt_ASC',
+  _firstPublishedAt_DESC = '_firstPublishedAt_DESC',
+  _isValid_ASC = '_isValid_ASC',
+  _isValid_DESC = '_isValid_DESC',
+  _publicationScheduledAt_ASC = '_publicationScheduledAt_ASC',
+  _publicationScheduledAt_DESC = '_publicationScheduledAt_DESC',
+  _publishedAt_ASC = '_publishedAt_ASC',
+  _publishedAt_DESC = '_publishedAt_DESC',
+  _status_ASC = '_status_ASC',
+  _status_DESC = '_status_DESC',
+  _unpublishingScheduledAt_ASC = '_unpublishingScheduledAt_ASC',
+  _unpublishingScheduledAt_DESC = '_unpublishingScheduledAt_DESC',
+  _updatedAt_ASC = '_updatedAt_ASC',
+  _updatedAt_DESC = '_updatedAt_DESC',
+  createdAt_ASC = 'createdAt_ASC',
+  createdAt_DESC = 'createdAt_DESC',
+  id_ASC = 'id_ASC',
+  id_DESC = 'id_DESC',
+  name_ASC = 'name_ASC',
+  name_DESC = 'name_DESC',
+  updatedAt_ASC = 'updatedAt_ASC',
+  updatedAt_DESC = 'updatedAt_DESC'
+}
+
+/** Record of type Location (location) */
+export type LocationRecord = RecordInterface & {
+  __typename?: 'LocationRecord';
+  _allNameLocales?: Maybe<Array<StringMultiLocaleField>>;
+  _allSlugLocales?: Maybe<Array<StringMultiLocaleField>>;
+  _createdAt: Scalars['DateTime']['output'];
+  /** Editing URL */
+  _editingUrl?: Maybe<Scalars['String']['output']>;
+  _firstPublishedAt: Scalars['DateTime']['output'];
+  _isValid: Scalars['BooleanType']['output'];
+  _locales: Array<SiteLocale>;
+  _modelApiKey: Scalars['String']['output'];
+  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _publishedAt: Scalars['DateTime']['output'];
+  /** Generates SEO and Social card meta tags to be used in your frontend */
+  _seoMetaTags: Array<Tag>;
+  _status: ItemStatus;
+  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _updatedAt: Scalars['DateTime']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ItemId']['output'];
+  name?: Maybe<Scalars['String']['output']>;
+  slug?: Maybe<Scalars['String']['output']>;
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+
+/** Record of type Location (location) */
+export type LocationRecord_allNameLocalesArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  locale?: InputMaybe<SiteLocale>;
+};
+
+
+/** Record of type Location (location) */
+export type LocationRecord_allSlugLocalesArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  locale?: InputMaybe<SiteLocale>;
+};
+
+
+/** Record of type Location (location) */
+export type LocationRecord_seoMetaTagsArgs = {
+  locale?: InputMaybe<SiteLocale>;
+};
+
+
+/** Record of type Location (location) */
+export type LocationRecordnameArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  locale?: InputMaybe<SiteLocale>;
+};
+
+
+/** Record of type Location (location) */
+export type LocationRecordslugArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  locale?: InputMaybe<SiteLocale>;
 };
 
 export enum MuxThumbnailFormatType {
@@ -2356,17 +2578,21 @@ export type PortfolioModelFilter = {
   _unpublishingScheduledAt?: InputMaybe<PublishedAtFilter>;
   _updatedAt?: InputMaybe<UpdatedAtFilter>;
   category?: InputMaybe<LinksFilter>;
-  client?: InputMaybe<StringFilter>;
+  client?: InputMaybe<LinkFilter>;
+  clientLegacy?: InputMaybe<StringFilter>;
   createdAt?: InputMaybe<CreatedAtFilter>;
   date?: InputMaybe<DateFilter>;
   description?: InputMaybe<StructuredTextFilter>;
   id?: InputMaybe<ItemIdFilter>;
-  location?: InputMaybe<StringFilter>;
+  location?: InputMaybe<LinkFilter>;
+  locationLegacy?: InputMaybe<StringFilter>;
   position?: InputMaybe<PositionFilter>;
+  priority?: InputMaybe<IntegerFilter>;
   slug?: InputMaybe<SlugFilter>;
   subcategory?: InputMaybe<LinksFilter>;
   subtitle?: InputMaybe<StringFilter>;
-  tags?: InputMaybe<StringFilter>;
+  tags?: InputMaybe<LinksFilter>;
+  tagsLegacy?: InputMaybe<StringFilter>;
   thumbnail?: InputMaybe<FileFilter>;
   title?: InputMaybe<StringFilter>;
   updatedAt?: InputMaybe<UpdatedAtFilter>;
@@ -2391,22 +2617,24 @@ export enum PortfolioModelOrderBy {
   _unpublishingScheduledAt_DESC = '_unpublishingScheduledAt_DESC',
   _updatedAt_ASC = '_updatedAt_ASC',
   _updatedAt_DESC = '_updatedAt_DESC',
-  client_ASC = 'client_ASC',
-  client_DESC = 'client_DESC',
+  clientLegacy_ASC = 'clientLegacy_ASC',
+  clientLegacy_DESC = 'clientLegacy_DESC',
   createdAt_ASC = 'createdAt_ASC',
   createdAt_DESC = 'createdAt_DESC',
   date_ASC = 'date_ASC',
   date_DESC = 'date_DESC',
   id_ASC = 'id_ASC',
   id_DESC = 'id_DESC',
-  location_ASC = 'location_ASC',
-  location_DESC = 'location_DESC',
+  locationLegacy_ASC = 'locationLegacy_ASC',
+  locationLegacy_DESC = 'locationLegacy_DESC',
   position_ASC = 'position_ASC',
   position_DESC = 'position_DESC',
+  priority_ASC = 'priority_ASC',
+  priority_DESC = 'priority_DESC',
   subtitle_ASC = 'subtitle_ASC',
   subtitle_DESC = 'subtitle_DESC',
-  tags_ASC = 'tags_ASC',
-  tags_DESC = 'tags_DESC',
+  tagsLegacy_ASC = 'tagsLegacy_ASC',
+  tagsLegacy_DESC = 'tagsLegacy_DESC',
   title_ASC = 'title_ASC',
   title_DESC = 'title_DESC',
   updatedAt_ASC = 'updatedAt_ASC',
@@ -2419,7 +2647,9 @@ export enum PortfolioModelOrderBy {
 export type PortfolioRecord = RecordInterface & {
   __typename?: 'PortfolioRecord';
   _allDescriptionLocales?: Maybe<Array<PortfolioModelDescriptionFieldMultiLocaleField>>;
+  _allSlugLocales?: Maybe<Array<StringMultiLocaleField>>;
   _allSubtitleLocales?: Maybe<Array<StringMultiLocaleField>>;
+  _allTitleLocales?: Maybe<Array<StringMultiLocaleField>>;
   _createdAt: Scalars['DateTime']['output'];
   /** Editing URL */
   _editingUrl?: Maybe<Scalars['String']['output']>;
@@ -2434,17 +2664,21 @@ export type PortfolioRecord = RecordInterface & {
   _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
   _updatedAt: Scalars['DateTime']['output'];
   category: Array<PortfolioCategoryRecord>;
-  client?: Maybe<Scalars['String']['output']>;
+  client?: Maybe<ClientRecord>;
+  clientLegacy?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
   date?: Maybe<Scalars['Date']['output']>;
   description?: Maybe<PortfolioModelDescriptionField>;
   id: Scalars['ItemId']['output'];
-  location?: Maybe<Scalars['String']['output']>;
+  location?: Maybe<LocationRecord>;
+  locationLegacy?: Maybe<Scalars['String']['output']>;
   position?: Maybe<Scalars['IntType']['output']>;
+  priority?: Maybe<Scalars['IntType']['output']>;
   slug?: Maybe<Scalars['String']['output']>;
   subcategory: Array<PortfolioSubcategoryRecord>;
   subtitle?: Maybe<Scalars['String']['output']>;
-  tags?: Maybe<Scalars['String']['output']>;
+  tags: Array<TagRecord>;
+  tagsLegacy?: Maybe<Scalars['String']['output']>;
   thumbnail?: Maybe<FileField>;
   title?: Maybe<Scalars['String']['output']>;
   updatedAt: Scalars['DateTime']['output'];
@@ -2461,7 +2695,21 @@ export type PortfolioRecord_allDescriptionLocalesArgs = {
 
 
 /** Record of type Portfolio (portfolio) */
+export type PortfolioRecord_allSlugLocalesArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  locale?: InputMaybe<SiteLocale>;
+};
+
+
+/** Record of type Portfolio (portfolio) */
 export type PortfolioRecord_allSubtitleLocalesArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  locale?: InputMaybe<SiteLocale>;
+};
+
+
+/** Record of type Portfolio (portfolio) */
+export type PortfolioRecord_allTitleLocalesArgs = {
   fallbackLocales?: InputMaybe<Array<SiteLocale>>;
   locale?: InputMaybe<SiteLocale>;
 };
@@ -2481,7 +2729,21 @@ export type PortfolioRecorddescriptionArgs = {
 
 
 /** Record of type Portfolio (portfolio) */
+export type PortfolioRecordslugArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  locale?: InputMaybe<SiteLocale>;
+};
+
+
+/** Record of type Portfolio (portfolio) */
 export type PortfolioRecordsubtitleArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  locale?: InputMaybe<SiteLocale>;
+};
+
+
+/** Record of type Portfolio (portfolio) */
+export type PortfolioRecordtitleArgs = {
   fallbackLocales?: InputMaybe<Array<SiteLocale>>;
   locale?: InputMaybe<SiteLocale>;
 };
@@ -2596,13 +2858,19 @@ export type PublishedAtFilter = {
 export type Query = {
   __typename?: 'Query';
   /** Returns meta information regarding a record collection */
+  _allClientsMeta: CollectionMetadata;
+  /** Returns meta information regarding a record collection */
   _allHeaderBackgroundsMeta: CollectionMetadata;
+  /** Returns meta information regarding a record collection */
+  _allLocationsMeta: CollectionMetadata;
   /** Returns meta information regarding a record collection */
   _allPortfolioCategoriesMeta: CollectionMetadata;
   /** Returns meta information regarding a record collection */
   _allPortfolioSubcategoriesMeta: CollectionMetadata;
   /** Returns meta information regarding a record collection */
   _allPortfoliosMeta: CollectionMetadata;
+  /** Returns meta information regarding a record collection */
+  _allTagsMeta: CollectionMetadata;
   /** Returns meta information regarding an assets collection */
   _allUploadsMeta: CollectionMetadata;
   /** Returns the single instance record */
@@ -2610,19 +2878,29 @@ export type Query = {
   /** Returns the single instance record */
   about?: Maybe<AboutRecord>;
   /** Returns a collection of records */
+  allClients: Array<ClientRecord>;
+  /** Returns a collection of records */
   allHeaderBackgrounds: Array<HeaderBackgroundRecord>;
+  /** Returns a collection of records */
+  allLocations: Array<LocationRecord>;
   /** Returns a collection of records */
   allPortfolioCategories: Array<PortfolioCategoryRecord>;
   /** Returns a collection of records */
   allPortfolioSubcategories: Array<PortfolioSubcategoryRecord>;
   /** Returns a collection of records */
   allPortfolios: Array<PortfolioRecord>;
+  /** Returns a collection of records */
+  allTags: Array<TagRecord>;
   /** Returns a collection of assets */
   allUploads: Array<FileField>;
+  /** Returns a specific record */
+  client?: Maybe<ClientRecord>;
   /** Returns the single instance record */
   gallery?: Maybe<GalleryRecord>;
   /** Returns a specific record */
   headerBackground?: Maybe<HeaderBackgroundRecord>;
+  /** Returns a specific record */
+  location?: Maybe<LocationRecord>;
   /** Returns a specific record */
   portfolio?: Maybe<PortfolioRecord>;
   /** Returns a specific record */
@@ -2631,8 +2909,18 @@ export type Query = {
   portfolioSubcategory?: Maybe<PortfolioSubcategoryRecord>;
   /** Returns the single instance record */
   showreel?: Maybe<ShowreelRecord>;
+  /** Returns a specific record */
+  tag?: Maybe<TagRecord>;
   /** Returns a specific asset */
   upload?: Maybe<FileField>;
+};
+
+
+/** The query root for this schema */
+export type Query_allClientsMetaArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  filter?: InputMaybe<ClientModelFilter>;
+  locale?: InputMaybe<SiteLocale>;
 };
 
 
@@ -2640,6 +2928,14 @@ export type Query = {
 export type Query_allHeaderBackgroundsMetaArgs = {
   fallbackLocales?: InputMaybe<Array<SiteLocale>>;
   filter?: InputMaybe<HeaderBackgroundModelFilter>;
+  locale?: InputMaybe<SiteLocale>;
+};
+
+
+/** The query root for this schema */
+export type Query_allLocationsMetaArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  filter?: InputMaybe<LocationModelFilter>;
   locale?: InputMaybe<SiteLocale>;
 };
 
@@ -2669,6 +2965,14 @@ export type Query_allPortfoliosMetaArgs = {
 
 
 /** The query root for this schema */
+export type Query_allTagsMetaArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  filter?: InputMaybe<TagModelFilter>;
+  locale?: InputMaybe<SiteLocale>;
+};
+
+
+/** The query root for this schema */
 export type Query_allUploadsMetaArgs = {
   filter?: InputMaybe<UploadFilter>;
   locale?: InputMaybe<SiteLocale>;
@@ -2690,12 +2994,34 @@ export type QueryaboutArgs = {
 
 
 /** The query root for this schema */
+export type QueryallClientsArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  filter?: InputMaybe<ClientModelFilter>;
+  first?: InputMaybe<Scalars['IntType']['input']>;
+  locale?: InputMaybe<SiteLocale>;
+  orderBy?: InputMaybe<Array<InputMaybe<ClientModelOrderBy>>>;
+  skip?: InputMaybe<Scalars['IntType']['input']>;
+};
+
+
+/** The query root for this schema */
 export type QueryallHeaderBackgroundsArgs = {
   fallbackLocales?: InputMaybe<Array<SiteLocale>>;
   filter?: InputMaybe<HeaderBackgroundModelFilter>;
   first?: InputMaybe<Scalars['IntType']['input']>;
   locale?: InputMaybe<SiteLocale>;
   orderBy?: InputMaybe<Array<InputMaybe<HeaderBackgroundModelOrderBy>>>;
+  skip?: InputMaybe<Scalars['IntType']['input']>;
+};
+
+
+/** The query root for this schema */
+export type QueryallLocationsArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  filter?: InputMaybe<LocationModelFilter>;
+  first?: InputMaybe<Scalars['IntType']['input']>;
+  locale?: InputMaybe<SiteLocale>;
+  orderBy?: InputMaybe<Array<InputMaybe<LocationModelOrderBy>>>;
   skip?: InputMaybe<Scalars['IntType']['input']>;
 };
 
@@ -2734,6 +3060,17 @@ export type QueryallPortfoliosArgs = {
 
 
 /** The query root for this schema */
+export type QueryallTagsArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  filter?: InputMaybe<TagModelFilter>;
+  first?: InputMaybe<Scalars['IntType']['input']>;
+  locale?: InputMaybe<SiteLocale>;
+  orderBy?: InputMaybe<Array<InputMaybe<TagModelOrderBy>>>;
+  skip?: InputMaybe<Scalars['IntType']['input']>;
+};
+
+
+/** The query root for this schema */
 export type QueryallUploadsArgs = {
   fallbackLocales?: InputMaybe<Array<SiteLocale>>;
   filter?: InputMaybe<UploadFilter>;
@@ -2741,6 +3078,15 @@ export type QueryallUploadsArgs = {
   locale?: InputMaybe<SiteLocale>;
   orderBy?: InputMaybe<Array<InputMaybe<UploadOrderBy>>>;
   skip?: InputMaybe<Scalars['IntType']['input']>;
+};
+
+
+/** The query root for this schema */
+export type QueryclientArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  filter?: InputMaybe<ClientModelFilter>;
+  locale?: InputMaybe<SiteLocale>;
+  orderBy?: InputMaybe<Array<InputMaybe<ClientModelOrderBy>>>;
 };
 
 
@@ -2757,6 +3103,15 @@ export type QueryheaderBackgroundArgs = {
   filter?: InputMaybe<HeaderBackgroundModelFilter>;
   locale?: InputMaybe<SiteLocale>;
   orderBy?: InputMaybe<Array<InputMaybe<HeaderBackgroundModelOrderBy>>>;
+};
+
+
+/** The query root for this schema */
+export type QuerylocationArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  filter?: InputMaybe<LocationModelFilter>;
+  locale?: InputMaybe<SiteLocale>;
+  orderBy?: InputMaybe<Array<InputMaybe<LocationModelOrderBy>>>;
 };
 
 
@@ -2791,6 +3146,15 @@ export type QueryportfolioSubcategoryArgs = {
 export type QueryshowreelArgs = {
   fallbackLocales?: InputMaybe<Array<SiteLocale>>;
   locale?: InputMaybe<SiteLocale>;
+};
+
+
+/** The query root for this schema */
+export type QuerytagArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  filter?: InputMaybe<TagModelFilter>;
+  locale?: InputMaybe<SiteLocale>;
+  orderBy?: InputMaybe<Array<InputMaybe<TagModelOrderBy>>>;
 };
 
 
@@ -2997,6 +3361,112 @@ export type Tag = {
   attributes?: Maybe<Scalars['MetaTagAttributes']['output']>;
   content?: Maybe<Scalars['String']['output']>;
   tag: Scalars['String']['output'];
+};
+
+export type TagModelFilter = {
+  AND?: InputMaybe<Array<InputMaybe<TagModelFilter>>>;
+  OR?: InputMaybe<Array<InputMaybe<TagModelFilter>>>;
+  _createdAt?: InputMaybe<CreatedAtFilter>;
+  _firstPublishedAt?: InputMaybe<PublishedAtFilter>;
+  _isValid?: InputMaybe<BooleanFilter>;
+  _locales?: InputMaybe<LocalesFilter>;
+  _publicationScheduledAt?: InputMaybe<PublishedAtFilter>;
+  _publishedAt?: InputMaybe<PublishedAtFilter>;
+  _status?: InputMaybe<StatusFilter>;
+  _unpublishingScheduledAt?: InputMaybe<PublishedAtFilter>;
+  _updatedAt?: InputMaybe<UpdatedAtFilter>;
+  createdAt?: InputMaybe<CreatedAtFilter>;
+  id?: InputMaybe<ItemIdFilter>;
+  name?: InputMaybe<StringFilter>;
+  slug?: InputMaybe<SlugFilter>;
+  updatedAt?: InputMaybe<UpdatedAtFilter>;
+};
+
+export enum TagModelOrderBy {
+  _createdAt_ASC = '_createdAt_ASC',
+  _createdAt_DESC = '_createdAt_DESC',
+  _firstPublishedAt_ASC = '_firstPublishedAt_ASC',
+  _firstPublishedAt_DESC = '_firstPublishedAt_DESC',
+  _isValid_ASC = '_isValid_ASC',
+  _isValid_DESC = '_isValid_DESC',
+  _publicationScheduledAt_ASC = '_publicationScheduledAt_ASC',
+  _publicationScheduledAt_DESC = '_publicationScheduledAt_DESC',
+  _publishedAt_ASC = '_publishedAt_ASC',
+  _publishedAt_DESC = '_publishedAt_DESC',
+  _status_ASC = '_status_ASC',
+  _status_DESC = '_status_DESC',
+  _unpublishingScheduledAt_ASC = '_unpublishingScheduledAt_ASC',
+  _unpublishingScheduledAt_DESC = '_unpublishingScheduledAt_DESC',
+  _updatedAt_ASC = '_updatedAt_ASC',
+  _updatedAt_DESC = '_updatedAt_DESC',
+  createdAt_ASC = 'createdAt_ASC',
+  createdAt_DESC = 'createdAt_DESC',
+  id_ASC = 'id_ASC',
+  id_DESC = 'id_DESC',
+  name_ASC = 'name_ASC',
+  name_DESC = 'name_DESC',
+  updatedAt_ASC = 'updatedAt_ASC',
+  updatedAt_DESC = 'updatedAt_DESC'
+}
+
+/** Record of type Tag (tag) */
+export type TagRecord = RecordInterface & {
+  __typename?: 'TagRecord';
+  _allNameLocales?: Maybe<Array<StringMultiLocaleField>>;
+  _allSlugLocales?: Maybe<Array<StringMultiLocaleField>>;
+  _createdAt: Scalars['DateTime']['output'];
+  /** Editing URL */
+  _editingUrl?: Maybe<Scalars['String']['output']>;
+  _firstPublishedAt: Scalars['DateTime']['output'];
+  _isValid: Scalars['BooleanType']['output'];
+  _locales: Array<SiteLocale>;
+  _modelApiKey: Scalars['String']['output'];
+  _publicationScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _publishedAt: Scalars['DateTime']['output'];
+  /** Generates SEO and Social card meta tags to be used in your frontend */
+  _seoMetaTags: Array<Tag>;
+  _status: ItemStatus;
+  _unpublishingScheduledAt?: Maybe<Scalars['DateTime']['output']>;
+  _updatedAt: Scalars['DateTime']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ItemId']['output'];
+  name?: Maybe<Scalars['String']['output']>;
+  slug?: Maybe<Scalars['String']['output']>;
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+
+/** Record of type Tag (tag) */
+export type TagRecord_allNameLocalesArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  locale?: InputMaybe<SiteLocale>;
+};
+
+
+/** Record of type Tag (tag) */
+export type TagRecord_allSlugLocalesArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  locale?: InputMaybe<SiteLocale>;
+};
+
+
+/** Record of type Tag (tag) */
+export type TagRecord_seoMetaTagsArgs = {
+  locale?: InputMaybe<SiteLocale>;
+};
+
+
+/** Record of type Tag (tag) */
+export type TagRecordnameArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  locale?: InputMaybe<SiteLocale>;
+};
+
+
+/** Record of type Tag (tag) */
+export type TagRecordslugArgs = {
+  fallbackLocales?: InputMaybe<Array<SiteLocale>>;
+  locale?: InputMaybe<SiteLocale>;
 };
 
 /** Specifies how to filter by upload type */

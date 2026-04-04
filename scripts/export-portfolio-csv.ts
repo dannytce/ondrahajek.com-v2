@@ -191,9 +191,16 @@ async function main() {
     list = list.filter((item) => getMetaStatus(item) === 'published')
   }
 
+  /** Prefer `priority` (CSV priorita); fall back to `position` for older records. */
+  function sortOrderKey(item: Record<string, unknown>): number | null {
+    return (
+      getAttrNumber(item, 'priority') ?? getAttrNumber(item, 'position')
+    )
+  }
+
   list.sort((a, b) => {
-    const pa = getAttrNumber(a, 'position')
-    const pb = getAttrNumber(b, 'position')
+    const pa = sortOrderKey(a)
+    const pb = sortOrderKey(b)
     if (pa != null && pb != null && pa !== pb) {
       return pa - pb
     }

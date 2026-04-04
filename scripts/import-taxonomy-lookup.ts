@@ -14,9 +14,17 @@ export type TaxonomyAliases = {
   portfolio_subcategory?: Record<string, string>
 }
 
-/** Trim, collapse inner spaces, lowercase (ASCII + common Czech chars via toLowerCase). */
+/**
+ * Canonical key for taxonomy matching: trim, lowercase, collapse spaces,
+ * and treat hyphens/underscores like spaces so "Real Estate" matches Dato "real-estate".
+ */
 export function normalizeTaxonomyLabel(s: string): string {
-  return s.trim().replace(/\s+/g, ' ').toLowerCase()
+  return s
+    .trim()
+    .toLowerCase()
+    .replace(/[-_]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
 }
 
 function extractLocalizedName(raw: unknown): string {
