@@ -103,6 +103,8 @@ export const translations = {
     'filter.results': 'results',
     'filter.noResults': 'No projects match your filters.',
     'filter.toggleFilters': 'Show or hide filters',
+    'filter.refine': 'Refine',
+
 
     // Detail
     'detail.back': '← Back to portfolio',
@@ -125,7 +127,7 @@ export const translations = {
       'Web portfolio of drone pilot Ondra Hajek, who will make your projects more interesting. He specialises in documentaries, film, music video, commercials and architecture.',
   },
   cs: {
-    'nav.drone': 'Letecká Kinematografie',
+    'nav.drone': 'Letecké záběry dronem',
     'nav.video': 'Video Produkce',
     'nav.gallery': 'Galerie',
     'nav.about': 'O mně',
@@ -135,7 +137,7 @@ export const translations = {
     'home.featured': 'Vybrané Práce',
     'home.viewAll': 'Zobrazit vše',
 
-    'category.drone.title': 'Letecká Kinematografie',
+    'category.drone.title': 'Letecké záběry dronem',
     'category.drone.description':
       'Portfolio letecké kinematografie od Ondry Hajka',
     'category.video.title': 'Video Produkce',
@@ -179,6 +181,7 @@ export const translations = {
     'filter.results': 'výsledků',
     'filter.noResults': 'Žádné projekty neodpovídají filtrům.',
     'filter.toggleFilters': 'Zobrazit nebo skrýt filtry',
+    'filter.refine': 'Upřesnit',
 
     'detail.back': '← Zpět na portfolio',
     'detail.backTo': '← Zpět na',
