@@ -4,6 +4,7 @@ function initHeader() {
   cleanupHeader?.()
 
   const header = document.querySelector<HTMLElement>('[data-site-header]')
+  const hero = header?.querySelector<HTMLElement>('header')
   const nav = document.querySelector<HTMLElement>('[data-site-nav]')
   const video = header?.querySelector<HTMLVideoElement>('[data-header-video]')
 
@@ -41,8 +42,12 @@ function initHeader() {
       }
     }
 
+    const pastHeroY =
+      hero && hero.offsetHeight > 0
+        ? hero.offsetHeight
+        : window.innerHeight * 0.9
     nav.dataset.pastHero =
-      currentScrollY >= window.innerHeight * 0.9 ? 'true' : 'false'
+      currentScrollY >= pastHeroY ? 'true' : 'false'
   }
 
   const onScroll = () => {

@@ -45,12 +45,14 @@ const collectionJsonLd = {
   title={defaultSeoTitle}
   description={defaultSeoDescription}
   locale={locale}
+  compactHeader
   canonicalPath="/video-production"
   jsonLd={collectionJsonLd}
 >
-  <Page locale={locale}>
+  <Page locale={locale} compactTopSpacing>
     <Header
       slot="header"
+      compact
       title={t(locale, 'category.video.title')}
       headerBackground={headerBackground}
       currentPath={`/${locale}/video-production`}

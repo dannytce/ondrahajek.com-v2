@@ -8,6 +8,8 @@ import { t, localePath, getAlternateLocale, type Locale } from '~/i18n'
 interface Props {
   isAboutPage?: boolean
   isHomepage?: boolean
+  /** Shorter hero (category pages with compact body layout). */
+  compact?: boolean
   title: string
   subTitle?: string
   headerBackground: ResponsiveImage
@@ -21,6 +23,7 @@ const {
   subTitle,
   isAboutPage = false,
   isHomepage = false,
+  compact = false,
   headerBackground,
   currentPath = '/',
   locale = 'en',
@@ -47,10 +50,16 @@ const switchUrl = localePath(altLocale, pagePath)
 <div
   data-site-header
   data-homepage={isHomepage ? 'true' : 'false'}
+  data-compact={compact ? 'true' : 'false'}
   data-video-ready={isHomepage ? 'false' : 'true'}
 >
   <header
-    class="fixed top-0 z-header flex h-header w-full flex-col justify-center"
+    class:list={[
+      'fixed top-0 z-header flex w-full flex-col justify-center',
+      compact
+        ? 'h-[min(320px,38vh)] max-h-[320px]'
+        : 'h-header',
+    ]}
   >
     <div
       class="relative z-headerContainer mx-auto flex w-full max-w-container flex-1 flex-col justify-center px-[15px] md:flex-none md:flex-row md:justify-start xl:px-0"
@@ -58,7 +67,14 @@ const switchUrl = localePath(altLocale, pagePath)
       {
         subTitle ? (
           <div class="flex flex-col justify-center">
-            <h1 class="m-0 p-0 font-teko text-[6rem] font-semibold uppercase md:text-[10rem]">
+            <h1
+              class:list={[
+                'm-0 p-0 font-teko font-semibold uppercase',
+                compact
+                  ? 'text-[3.4rem] md:text-[5rem]'
+                  : 'text-[6rem] md:text-[10rem]',
+              ]}
+            >
               {title}
             </h1>
             <h2 class="m-0 -mt-[0.75em] p-0 font-teko text-[1.8rem] uppercase md:text-[3rem]">
@@ -66,7 +82,14 @@ const switchUrl = localePath(altLocale, pagePath)
             </h2>
           </div>
         ) : (
-          <h1 class="m-0 p-0 font-teko text-[6rem] font-semibold uppercase md:text-[10rem]">
+          <h1
+            class:list={[
+              'm-0 p-0 font-teko font-semibold uppercase',
+              compact
+                ? 'text-[3.4rem] md:text-[5rem]'
+                : 'text-[6rem] md:text-[10rem]',
+            ]}
+          >
             {title}
           </h1>
         )
@@ -104,10 +127,13 @@ const switchUrl = localePath(altLocale, pagePath)
     <div
       class="header-fallback absolute bottom-0 left-0 right-0 top-0 z-header transition-opacity duration-[400ms] ease-[ease]"
     >
-      <div class="min-h-header">
+      <div class:list={[compact ? 'h-full min-h-0' : 'min-h-header']}>
         <DatoImageCover
           data={{ ...headerBackground, alt: '' }}
-          class="pointer-events-none absolute inset-0 z-[2] min-h-header"
+          class:list={[
+            'pointer-events-none absolute inset-0 z-[2]',
+            compact ? 'min-h-full' : 'min-h-header',
+          ]}
           imgClass="h-full w-full object-cover"
           priority
           layout="fill"
