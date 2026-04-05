@@ -14,8 +14,11 @@ import {
 import { uniqueSlugsForValues } from '~/lib/portfolio-filter-slugs'
 
 export async function getStaticPaths() {
-  const portfolios = await getAllPortfolios('en')
-  const locs = portfolios
+  const merged = [
+    ...(await getAllPortfolios('en')),
+    ...(await getAllPortfolios('cs')),
+  ]
+  const locs = merged
     .map((p) => p.location?.trim())
     .filter((v): v is string => Boolean(v))
   const slugByValue = uniqueSlugsForValues(locs)

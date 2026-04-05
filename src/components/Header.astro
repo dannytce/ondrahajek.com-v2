@@ -13,6 +13,12 @@ interface Props {
   compact?: boolean
   title: string
   subTitle?: string
+  /** Homepage: SEO-friendly multi-line H1 (overrides title/subTitle in hero). */
+  homepageHero?: {
+    brand: string
+    line: string
+    descriptor: string
+  }
   headerBackground: ResponsiveImage
   currentPath?: string
   locale?: Locale
@@ -24,6 +30,7 @@ interface Props {
 const {
   title,
   subTitle,
+  homepageHero,
   isAboutPage = false,
   isHomepage = false,
   compact = false,
@@ -68,6 +75,7 @@ const switchUrl = switchHref ?? localePath(altLocale, pagePath)
     compact={compact}
     title={title}
     subTitle={subTitle}
+    homepageHero={homepageHero}
     headerBackground={headerBackground}
   />
 

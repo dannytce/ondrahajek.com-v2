@@ -29,6 +29,11 @@ const headerBackground = await getHeaderBackgroundByPage('/')
       slot="header"
       title={t(locale, 'home.title')}
       subTitle={t(locale, 'home.subtitle')}
+      homepageHero={{
+        brand: t(locale, 'home.heroBrand'),
+        line: t(locale, 'home.heroLine'),
+        descriptor: t(locale, 'home.heroDescriptor'),
+      }}
       headerBackground={headerBackground}
       isHomepage
       currentPath={`/${locale}`}

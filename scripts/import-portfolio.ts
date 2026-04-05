@@ -19,6 +19,10 @@
  *   pnpm import:portfolio -- path/to/PORTFOLIO-list.csv --update-only --verify-skipped
  *   pnpm import:portfolio -- path/to/PORTFOLIO-list.csv --update-only --skipped-report skipped.csv
  *
+ * Missing Client records (CSV `client` column → slug via slugifyAscii) are created automatically
+ * before portfolio rows run (same payload as `pnpm import:references`). Use `--no-ensure-clients`
+ * to skip that step.
+ *
  * Tag keys (canonical EN slugs, `;`-separated) are written to the Portfolio string field `tags`
  * (override with `DATOCMS_PORTFOLIO_TAGS_FIELD` if your API identifier differs).
  *
@@ -76,6 +80,7 @@ function parseArgs(argv: string[]) {
   const dryRun = args.includes('--dry-run')
   const updateOnly = args.includes('--update-only')
   const noFuzzy = args.includes('--no-fuzzy')
+  const noEnsureClients = args.includes('--no-ensure-clients')
   const verifySkipped = args.includes('--verify-skipped')
   let skippedReportPath: string | undefined
   const rest: string[] = []
@@ -94,6 +99,7 @@ function parseArgs(argv: string[]) {
         '--dry-run',
         '--update-only',
         '--no-fuzzy',
+        '--no-ensure-clients',
         '--verify-skipped',
       ].includes(a)
     ) {
@@ -107,6 +113,7 @@ function parseArgs(argv: string[]) {
     dryRun,
     updateOnly,
     noFuzzy,
+    noEnsureClients,
     verifySkipped,
     skippedReportPath,
   }
@@ -398,17 +405,90 @@ function buildShortSubtitle(row: Row): string {
   return parts.join(' · ')
 }
 
+async function findItemTypeIdByApiKey(
+  cma: ReturnType<typeof buildClient>,
+  apiKey: string
+): Promise<string> {
+  const types = await cma.itemTypes.list()
+  const t = types.find((x) => x.api_key === apiKey)
+  if (!t) {
+    throw new Error(
+      `No item type with api_key "${apiKey}" found in this DatoCMS environment.`
+    )
+  }
+  return t.id
+}
+
 async function findPortfolioItemTypeId(
   client: ReturnType<typeof buildClient>
 ): Promise<string> {
-  const types = await client.itemTypes.list()
-  const portfolio = types.find((t) => t.api_key === 'portfolio')
-  if (!portfolio) {
-    throw new Error(
-      'No item type with api_key "portfolio" found in this DatoCMS environment.'
-    )
+  return findItemTypeIdByApiKey(client, 'portfolio')
+}
+
+/** Unique client slug → display name (first row wins), same rules as `import-clients-locations-tags.ts`. */
+function collectClientsFromRows(rows: Row[]): Map<string, string> {
+  const clients = new Map<string, string>()
+  for (const row of rows) {
+    const c = row.client?.trim()
+    if (c) {
+      const slug = slugifyAscii(c)
+      if (!clients.has(slug)) {
+        clients.set(slug, c)
+      }
+    }
   }
-  return portfolio.id
+  return clients
+}
+
+const DRY_RUN_CLIENT_ID = '__dry_run_client__'
+
+/**
+ * Create missing Client records so CSV client slugs resolve to Dato ids (required Portfolio link field).
+ * In `--dry-run`, registers placeholder ids so per-row logs show client as resolved.
+ */
+async function ensureMissingClientsFromCsv(
+  cma: ReturnType<typeof buildClient>,
+  rows: Row[],
+  clientBySlug: Map<string, string>,
+  dryRun: boolean
+): Promise<{ created: number; dryRunWouldCreate: number }> {
+  const collected = collectClientsFromRows(rows)
+  const missing = [...collected.entries()].filter(
+    ([slug]) => !clientBySlug.has(slug)
+  )
+  if (missing.length === 0) {
+    return { created: 0, dryRunWouldCreate: 0 }
+  }
+  if (dryRun) {
+    for (const [slug] of missing) {
+      clientBySlug.set(slug, DRY_RUN_CLIENT_ID)
+    }
+    console.log(
+      `[dry-run] Would create ${missing.length} Client record(s): ${missing
+        .map(([s, n]) => `${s} ← "${n}"`)
+        .join('; ')}`
+    )
+    return { created: 0, dryRunWouldCreate: missing.length }
+  }
+  const clientTypeId = await findItemTypeIdByApiKey(cma, 'client')
+  let created = 0
+  for (const [slug, displayName] of missing) {
+    const rec = await cma.items.create({
+      item_type: { type: 'item_type' as const, id: clientTypeId },
+      name: displayName,
+      slug,
+      meta: { status: 'published' as const },
+    })
+    const id = itemId(rec as Record<string, unknown>)
+    clientBySlug.set(slug, id)
+    created++
+    console.log(`Created Client: ${slug} ← ${displayName}`)
+    await sleep(120)
+  }
+  if (created > 0) {
+    console.log('')
+  }
+  return { created, dryRunWouldCreate: 0 }
 }
 
 function warnMissingTaxonomy(
@@ -619,12 +699,13 @@ async function main() {
     dryRun,
     updateOnly,
     noFuzzy,
+    noEnsureClients,
     verifySkipped,
     skippedReportPath,
   } = parseArgs(process.argv)
   if (!csvPath) {
     console.error(
-      'Usage: pnpm import:portfolio -- <path-to.csv> [--dry-run] [--update-only] [--no-fuzzy] [--verify-skipped] [--skipped-report <file.csv>]'
+      'Usage: pnpm import:portfolio -- <path-to.csv> [--dry-run] [--update-only] [--no-fuzzy] [--no-ensure-clients] [--verify-skipped] [--skipped-report <file.csv>]'
     )
     process.exit(1)
   }
@@ -713,6 +794,19 @@ async function main() {
       }
       videoKeyToId.set(p.videoKey, p.id)
     }
+  }
+
+  let clientsEnsured = 0
+  let clientsDryRunWouldCreate = 0
+  if (!noEnsureClients) {
+    const r = await ensureMissingClientsFromCsv(
+      client,
+      rows,
+      clientBySlug,
+      dryRun
+    )
+    clientsEnsured = r.created
+    clientsDryRunWouldCreate = r.dryRunWouldCreate
   }
 
   const portfolioById = new Map<string, PortfolioEnriched>(
@@ -981,16 +1075,23 @@ async function main() {
   if (dryRun) {
     const mode = updateOnly ? ' [update-only]' : ''
     const fz = noFuzzy ? ' [no-fuzzy]' : ''
+    const nec = noEnsureClients ? ' [no-ensure-clients]' : ''
+    const cli =
+      clientsDryRunWouldCreate > 0
+        ? `, ${clientsDryRunWouldCreate} would create clients`
+        : ''
     console.log(
-      `Dry run${mode}${fz}: ${dryOk} rows OK, ${errors} skipped/errors`
+      `Dry run${mode}${fz}${nec}: ${dryOk} rows OK, ${errors} skipped/errors${cli}`
     )
   } else {
     const skipPart =
       updateOnly && skippedUpdateOnly > 0
         ? `, ${skippedUpdateOnly} skipped (no match)`
         : ''
+    const cli =
+      clientsEnsured > 0 ? `, ${clientsEnsured} clients created` : ''
     console.log(
-      `Done: ${created} created, ${updated} updated${skipPart}, ${errors} errors`
+      `Done: ${created} created, ${updated} updated${skipPart}, ${errors} errors${cli}`
     )
   }
 }
