@@ -1,4 +1,3 @@
-
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro'
 import Page from '~/components/Page.astro'
@@ -16,17 +15,24 @@ import {
   buildPortfolioDetailModel,
   portfolioDetailCanonicalPath,
 } from '~/lib/portfolio-detail/buildPortfolioDetail'
+import { portfolioSlugForLocale } from '~/lib/portfolio-slug-locale'
 
 export async function getStaticPaths() {
   const portfolios = await getAllPortfoliosWithSlug()
   return LOCALES.flatMap((locale) =>
-    portfolios.map((p) => ({
-      params: {
-        locale,
-        portfolioSeg: portfolioSegment(locale),
-        slug: p.slug,
-      },
-    }))
+    portfolios.flatMap((p) => {
+      const slug = portfolioSlugForLocale(p, locale)
+      if (!slug) return []
+      return [
+        {
+          params: {
+            locale,
+            portfolioSeg: portfolioSegment(locale),
+            slug,
+          },
+        },
+      ]
+    })
   )
 }
 
@@ -35,12 +41,7 @@ const { slug } = Astro.params
 
 const portfolio = await getPortfolioBySlug(slug as string, locale)
 const detail = portfolio
-  ? await buildPortfolioDetailModel(
-      portfolio,
-      locale,
-      slug as string,
-      getPortfoliosByCategory
-    )
+  ? await buildPortfolioDetailModel(portfolio, locale, getPortfoliosByCategory)
   : null
 ---
 

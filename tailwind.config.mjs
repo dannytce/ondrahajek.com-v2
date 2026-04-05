@@ -32,7 +32,6 @@ export default {
         trustedBy: '3',
         headerContainer: '2',
         header: '1',
-        main: '1',
         video: '-1',
       },
       keyframes: {

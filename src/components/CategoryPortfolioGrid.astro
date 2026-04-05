@@ -25,6 +25,9 @@ const {
   defaultSeoDescription,
 } = Astro.props
 
+/** PortfolioCard renders nothing without a thumbnail — exclude from grid and filter model. */
+const gridPortfolios = portfolios.filter((p) => p.thumbnail?.responsiveImage)
+
 const {
   subcategories,
   years,
@@ -32,7 +35,7 @@ const {
   clients,
   locationSlugByValue,
   clientSlugByValue,
-} = buildFilterOptions(portfolios)
+} = buildFilterOptions(gridPortfolios)
 ---
 
 <div
@@ -47,7 +50,7 @@ const {
     <PortfolioFilterToolbar
       locale={locale}
       subcategories={subcategories}
-      totalCount={portfolios.length}
+      totalCount={gridPortfolios.length}
     />
     <PortfolioFiltersPanel
       locale={locale}
@@ -69,7 +72,7 @@ const {
     class="m-0 grid w-full list-none grid-cols-1 gap-12 p-0 sm:grid-cols-2 lg:grid-cols-3"
   >
     {
-      portfolios.map((portfolio, index) => {
+      gridPortfolios.map((portfolio, index) => {
         const year = portfolio.date
           ? new Date(portfolio.date).getFullYear().toString()
           : ''

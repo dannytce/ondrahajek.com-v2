@@ -10,16 +10,19 @@ interface Props {
 }
 
 const { portfolios, locale } = Astro.props
+
+/** PortfolioCard renders nothing without a responsive thumbnail — skip those so the grid has no empty cells. */
+const withThumbnails = portfolios.filter((p) => p.thumbnail?.responsiveImage)
 ---
 
 {
-  portfolios.length > 0 && (
+  withThumbnails.length > 0 && (
     <div class="mx-auto w-full max-w-container px-[15px] xl:px-0">
       <h2 class="portfolio-toolbar-enter mb-8 font-teko text-[4rem] font-semibold uppercase text-white md:text-[6rem]">
         {t(locale, 'home.featured')}
       </h2>
       <ul class="m-0 grid w-full list-none grid-cols-1 gap-12 p-0 sm:grid-cols-2 lg:grid-cols-3">
-        {portfolios.map((portfolio, index) => (
+        {withThumbnails.map((portfolio, index) => (
           <li
             class="portfolio-grid-item-enter"
             style={{ '--stagger': String(Math.min(index, 20)) }}

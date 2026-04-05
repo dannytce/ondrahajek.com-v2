@@ -16,10 +16,12 @@ const responsiveImage = thumb?.responsiveImage
 const subtitle =
   locale === 'cs'
     ? portfolio.subtitleCs || portfolio.subtitleEn
-    : portfolio.subtitleEn || portfolio.subtitleCs
-const transitionName = portfolio.slug
-  ? `portfolio-media-${portfolio.slug}`
-  : undefined
+    : portfolio.subtitleEn || null
+const transitionName = portfolio.id
+  ? `portfolio-media-${portfolio.id}`
+  : portfolio.slug
+    ? `portfolio-media-${portfolio.slug}`
+    : undefined
 ---
 
 {

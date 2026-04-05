@@ -21,6 +21,9 @@ export type PortfolioDetail = Omit<PortfolioRecord, 'client' | 'location'> & {
   subtitleEn?: string | null
   descriptionCs?: CdaStructuredTextValue | null
   descriptionEn?: CdaStructuredTextValue | null
+  /** Localized slug values (DatoCMS) — used for URLs and hreflang. */
+  slugCs?: string | null
+  slugEn?: string | null
   /** Resolved display name from linked Client. */
   client: string | null
   /** Resolved display name from linked Location (locale-aware). */
@@ -33,7 +36,12 @@ export interface PortfolioListItem {
   subtitle: string | null
   subtitleCs: string | null
   subtitleEn: string | null
+  /** URL slug for the active build locale (see `slugEn` / `slugCs`). */
   slug: string | null
+  /** DatoCMS localized slug — English. */
+  slugEn: string | null
+  /** DatoCMS localized slug — Czech. */
+  slugCs: string | null
   /** Semicolon-separated canonical tag keys (see `portfolio-tag-labels.json`). */
   tags: string | null
   /** Keys + localized labels for client-side search. */
@@ -45,6 +53,8 @@ export interface PortfolioListItem {
   position: number | null
   /** CSV `priorita` / Dato `priority` (1 = top). Falls back to `position` when sorting. */
   priority: number | null
+  /** Dato record id — stable across locales (view transitions). */
+  id: string
   category: Array<{ id: string; name: string | null }>
   subcategory: Array<{
     id: string
@@ -58,11 +68,16 @@ export interface PortfolioListItem {
 }
 
 type RawPortfolioListRow = {
+  id: string
   title: string | null
+  titleCs: string | null
+  titleEn: string | null
   subtitle: string | null
   subtitleCs: string | null
   subtitleEn: string | null
   slug: string | null
+  slugCs: string | null
+  slugEn: string | null
   video: string | null
   date: string | null
   client?: { name?: string | null } | null
@@ -85,17 +100,35 @@ function mapPortfolioListItem(
   const clientStr = raw.client?.name?.trim() ? raw.client.name.trim() : null
   const nameCs = raw.location?.nameCs?.trim() ?? ''
   const nameEn = raw.location?.nameEn?.trim() ?? ''
+  /** Never show Czech copy on English pages (avoids hreflang / language confusion). */
   const locationStr =
     locale === 'cs'
       ? nameCs || nameEn || null
-      : nameEn || nameCs || null
+      : nameEn || null
+
+  const titleCs = raw.titleCs?.trim() ?? ''
+  const titleEn = raw.titleEn?.trim() ?? ''
+  const title =
+    locale === 'cs'
+      ? titleCs || titleEn || raw.title?.trim() || null
+      : titleEn || titleCs || raw.title?.trim() || null
+
+  const slugCs = raw.slugCs?.trim() ?? ''
+  const slugEn = raw.slugEn?.trim() ?? ''
+  const slug =
+    locale === 'cs'
+      ? slugCs || slugEn || raw.slug?.trim() || null
+      : slugEn || slugCs || raw.slug?.trim() || null
 
   return {
-    title: raw.title,
+    id: raw.id,
+    title,
     subtitle: raw.subtitle,
     subtitleCs: raw.subtitleCs,
     subtitleEn: raw.subtitleEn,
-    slug: raw.slug,
+    slug,
+    slugEn: slugEn || null,
+    slugCs: slugCs || null,
     tags,
     tagsSearchText: buildTagsSearchBlob(tags).toLowerCase(),
     video: raw.video,
@@ -163,11 +196,16 @@ const responsiveImageFragment = `
 function portfolioListFields(locale: Locale): string {
   const loc = locale === 'cs' ? 'cs' : 'en'
   return `
+  id
   title
+  titleCs: title(locale: cs)
+  titleEn: title(locale: en)
   subtitleCs: subtitle(locale: cs)
   subtitleEn: subtitle(locale: en)
   subtitle
   slug
+  slugCs: slug(locale: cs)
+  slugEn: slug(locale: en)
   ${PORTFOLIO_TAGS_FIELD}
   video
   date
@@ -234,22 +272,28 @@ const fetchAPI = async (
  * so detail pages exist for every item that can appear in category grids
  * (those queries are also capped per batch; see `getPortfoliosByCategory`).
  */
-export async function getAllPortfoliosWithSlug(): Promise<Array<{ slug: string }>> {
-  const all: Array<{ slug: string }> = []
+export async function getAllPortfoliosWithSlug(): Promise<
+  Array<{ slugEn: string | null; slugCs: string | null }>
+> {
+  const all: Array<{ slugEn: string | null; slugCs: string | null }> = []
   let skip = 0
   const batch = PORTFOLIO_LIST_FIRST
   while (true) {
     const data = await fetchAPI(`
       {
         allPortfolios(first: ${batch}, skip: ${skip}, orderBy: priority_ASC) {
-          slug
+          slugCs: slug(locale: cs)
+          slugEn: slug(locale: en)
         }
       }
     `)
-    const rows = (data?.allPortfolios ?? []) as Array<{ slug: string | null }>
+    const rows = (data?.allPortfolios ?? []) as Array<{
+      slugCs: string | null
+      slugEn: string | null
+    }>
     if (rows.length === 0) break
     for (const r of rows) {
-      if (r.slug) all.push({ slug: r.slug })
+      all.push({ slugEn: r.slugEn, slugCs: r.slugCs })
     }
     if (rows.length < batch) break
     skip += batch
@@ -330,11 +374,16 @@ export async function getPortfolioBySlug(
   const data = await fetchAPI(`
     {
       portfolio(filter: { slug: { eq: "${slug}" } }) {
+        id
         title
+        titleCs: title(locale: cs)
+        titleEn: title(locale: en)
         subtitleCs: subtitle(locale: cs)
         subtitleEn: subtitle(locale: en)
         subtitle
         slug
+        slugCs: slug(locale: cs)
+        slugEn: slug(locale: en)
         video
         ${PORTFOLIO_TAGS_FIELD}
         date
@@ -390,11 +439,29 @@ export async function getPortfolioBySlug(
   const locationStr =
     locale === 'cs'
       ? nameCs || nameEn || null
-      : nameEn || nameCs || null
+      : nameEn || null
+
+  const titleCs = (p as { titleCs?: string | null }).titleCs?.trim() ?? ''
+  const titleEn = (p as { titleEn?: string | null }).titleEn?.trim() ?? ''
+  const resolvedTitle =
+    locale === 'cs'
+      ? titleCs || titleEn || p.title?.trim() || null
+      : titleEn || titleCs || p.title?.trim() || null
+
+  const slugCs = (p as { slugCs?: string | null }).slugCs?.trim() ?? ''
+  const slugEn = (p as { slugEn?: string | null }).slugEn?.trim() ?? ''
+  const resolvedSlug =
+    locale === 'cs'
+      ? slugCs || slugEn || p.slug?.trim() || null
+      : slugEn || slugCs || p.slug?.trim() || null
 
   const asRecord = p as Record<string, unknown>
   return {
     ...p,
+    title: resolvedTitle,
+    slug: resolvedSlug,
+    slugCs: slugCs || null,
+    slugEn: slugEn || null,
     tags: readTagsStringFromRecord(asRecord),
     client: clientStr,
     location: locationStr,

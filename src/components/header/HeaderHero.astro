@@ -8,16 +8,16 @@ interface Props {
   compact: boolean
   title: string
   subTitle?: string
+  homepageHero?: {
+    brand: string
+    line: string
+    descriptor: string
+  }
   headerBackground: ResponsiveImage
 }
 
-const {
-  isHomepage,
-  compact,
-  title,
-  subTitle,
-  headerBackground,
-} = Astro.props
+const { isHomepage, compact, title, subTitle, homepageHero, headerBackground } =
+  Astro.props
 ---
 
 <header
@@ -30,7 +30,25 @@ const {
     class="relative z-headerContainer mx-auto flex w-full max-w-container flex-1 flex-col justify-center px-[15px] md:flex-none md:flex-row md:justify-start xl:px-0"
   >
     {
-      subTitle ? (
+      isHomepage && homepageHero ? (
+        <div class="flex flex-col justify-center">
+          <h1 class="m-0 flex flex-col gap-1 p-0 md:gap-2">
+            <span
+              class:list={[
+                'block font-teko font-semibold uppercase leading-[0.95]',
+                compact
+                  ? 'text-[3.4rem] md:text-[5rem]'
+                  : 'text-[6rem] md:text-[10rem]',
+              ]}
+            >
+              {homepageHero.line}
+            </span>
+            <span class="block max-w-[22ch] font-teko text-[1.65rem] font-semibold uppercase leading-tight text-white/85 md:max-w-none md:text-[2.6rem] lg:text-[3rem]">
+              {homepageHero.descriptor}
+            </span>
+          </h1>
+        </div>
+      ) : subTitle ? (
         <div class="flex flex-col justify-center">
           <h1
             class:list={[
