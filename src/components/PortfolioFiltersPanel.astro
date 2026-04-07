@@ -4,24 +4,39 @@ import { t, type Locale } from '~/i18n'
 
 interface Props {
   locale: Locale
+  subcategories: FilterOption[]
   years: FilterOption[]
   locations: FilterOption[]
   clients: FilterOption[]
 }
 
-const { locale, years, locations, clients } = Astro.props
+const { locale, subcategories, years, locations, clients } = Astro.props
 ---
 
 <div
   id="portfolio-filters-panel"
   data-filter-panel
-  class="flex hidden flex-wrap items-center justify-end gap-3"
+  class="flex w-full flex-wrap items-center gap-2"
 >
+  {
+    subcategories.length > 0 && (
+      <select
+        data-filter-category
+        class="w-full max-w-full shrink-0 cursor-pointer rounded-full border border-[#222222] bg-transparent px-4 py-2 font-inter text-[1.2rem] text-[#888888] transition-colors hover:border-white/30 hover:text-white focus:outline-none md:w-[14rem] md:min-w-[14rem] md:max-w-[14rem]"
+      >
+        <option value="">{locale === 'cs' ? 'Kategorie' : 'Category'}</option>
+        {subcategories.map((subcategory) => (
+          <option value={subcategory.value}>{subcategory.label}</option>
+        ))}
+      </select>
+    )
+  }
+
   {
     years.length > 0 && (
       <select
         data-filter-year
-        class="filter-select w-full max-w-full shrink-0 md:w-[9rem] md:min-w-[9rem] md:max-w-[9rem]"
+        class="w-full max-w-full shrink-0 cursor-pointer rounded-full border border-[#222222] bg-transparent px-4 py-2 font-inter text-[1.2rem] text-[#888888] transition-colors hover:border-white/30 hover:text-white focus:outline-none md:w-[9rem] md:min-w-[9rem] md:max-w-[9rem]"
       >
         <option value="">{t(locale, 'filter.year')}</option>
         {years.map((year) => (
@@ -35,7 +50,7 @@ const { locale, years, locations, clients } = Astro.props
     locations.length > 0 && (
       <select
         data-filter-location
-        class="filter-select w-full max-w-full shrink-0 md:w-[14rem] md:min-w-[14rem] md:max-w-[14rem]"
+        class="w-full max-w-full shrink-0 cursor-pointer rounded-full border border-[#222222] bg-transparent px-4 py-2 font-inter text-[1.2rem] text-[#888888] transition-colors hover:border-white/30 hover:text-white focus:outline-none md:w-[14rem] md:min-w-[14rem] md:max-w-[14rem]"
       >
         <option value="">{t(locale, 'filter.location')}</option>
         {locations.map((location) => (
@@ -49,7 +64,7 @@ const { locale, years, locations, clients } = Astro.props
     clients.length > 0 && (
       <select
         data-filter-client
-        class="filter-select w-full max-w-full shrink-0 md:w-[16rem] md:min-w-[16rem] md:max-w-[16rem]"
+        class="w-full max-w-full shrink-0 cursor-pointer rounded-full border border-[#222222] bg-transparent px-4 py-2 font-inter text-[1.2rem] text-[#888888] transition-colors hover:border-white/30 hover:text-white focus:outline-none md:w-[16rem] md:min-w-[16rem] md:max-w-[16rem]"
       >
         <option value="">{t(locale, 'filter.client')}</option>
         {clients.map((client) => (
@@ -59,19 +74,17 @@ const { locale, years, locations, clients } = Astro.props
     )
   }
 
-  <input
-    type="text"
-    data-filter-search
-    placeholder={t(locale, 'filter.search')}
-    class="filter-search-input w-full min-w-[200px] max-w-[22rem] sm:w-auto"
-  />
+  <div class="hidden flex-1 md:block"></div>
 
   <button
     type="button"
     data-filter-clear
     hidden
-    class="cursor-pointer border-none bg-transparent font-anton text-[1.4rem] uppercase text-secondary transition-colors hover:text-white"
+    class="cursor-pointer rounded-full border border-[#222222] bg-transparent px-4 py-2 font-inter text-[1.2rem] text-[#555555] transition-colors hover:border-white/30 hover:text-white md:ml-auto"
   >
-    {t(locale, 'filter.clear')}
+    <span class="inline-flex items-center gap-1.5">
+      <span aria-hidden="true">×</span>
+      <span>{t(locale, 'filter.clear')}</span>
+    </span>
   </button>
 </div>
