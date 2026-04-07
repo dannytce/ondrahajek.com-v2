@@ -22,7 +22,7 @@ const { locale, subcategories, years, locations, clients } = Astro.props
     subcategories.length > 0 && (
       <select
         data-filter-category
-        class="w-full max-w-full shrink-0 cursor-pointer rounded-full border border-[#222222] bg-transparent px-4 py-2 font-inter text-[1.2rem] text-[#888888] transition-colors hover:border-white/30 hover:text-white focus:outline-none md:w-[14rem] md:min-w-[14rem] md:max-w-[14rem]"
+        class="w-full max-w-full shrink-0 cursor-pointer rounded-full border border-[#222222] bg-transparent px-4 py-2 font-inter text-[1.2rem] text-[#888888] transition-colors hover:border-white/30 focus:outline-none md:w-[14rem] md:min-w-[14rem] md:max-w-[14rem]"
       >
         <option value="">{locale === 'cs' ? 'Kategorie' : 'Category'}</option>
         {subcategories.map((subcategory) => (
@@ -36,7 +36,7 @@ const { locale, subcategories, years, locations, clients } = Astro.props
     years.length > 0 && (
       <select
         data-filter-year
-        class="w-full max-w-full shrink-0 cursor-pointer rounded-full border border-[#222222] bg-transparent px-4 py-2 font-inter text-[1.2rem] text-[#888888] transition-colors hover:border-white/30 hover:text-white focus:outline-none md:w-[9rem] md:min-w-[9rem] md:max-w-[9rem]"
+        class="w-full max-w-full shrink-0 cursor-pointer rounded-full border border-[#222222] bg-transparent px-4 py-2 font-inter text-[1.2rem] text-[#888888] transition-colors hover:border-white/30 focus:outline-none md:w-[9rem] md:min-w-[9rem] md:max-w-[9rem]"
       >
         <option value="">{t(locale, 'filter.year')}</option>
         {years.map((year) => (
@@ -50,7 +50,7 @@ const { locale, subcategories, years, locations, clients } = Astro.props
     locations.length > 0 && (
       <select
         data-filter-location
-        class="w-full max-w-full shrink-0 cursor-pointer rounded-full border border-[#222222] bg-transparent px-4 py-2 font-inter text-[1.2rem] text-[#888888] transition-colors hover:border-white/30 hover:text-white focus:outline-none md:w-[14rem] md:min-w-[14rem] md:max-w-[14rem]"
+        class="w-full max-w-full shrink-0 cursor-pointer rounded-full border border-[#222222] bg-transparent px-4 py-2 font-inter text-[1.2rem] text-[#888888] transition-colors hover:border-white/30 focus:outline-none md:w-[14rem] md:min-w-[14rem] md:max-w-[14rem]"
       >
         <option value="">{t(locale, 'filter.location')}</option>
         {locations.map((location) => (
@@ -64,7 +64,7 @@ const { locale, subcategories, years, locations, clients } = Astro.props
     clients.length > 0 && (
       <select
         data-filter-client
-        class="w-full max-w-full shrink-0 cursor-pointer rounded-full border border-[#222222] bg-transparent px-4 py-2 font-inter text-[1.2rem] text-[#888888] transition-colors hover:border-white/30 hover:text-white focus:outline-none md:w-[16rem] md:min-w-[16rem] md:max-w-[16rem]"
+        class="w-full max-w-full shrink-0 cursor-pointer rounded-full border border-[#222222] bg-transparent px-4 py-2 font-inter text-[1.2rem] text-[#888888] transition-colors hover:border-white/30 focus:outline-none md:w-[16rem] md:min-w-[16rem] md:max-w-[16rem]"
       >
         <option value="">{t(locale, 'filter.client')}</option>
         {clients.map((client) => (
