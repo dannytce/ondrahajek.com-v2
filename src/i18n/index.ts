@@ -58,8 +58,6 @@ export const translations = {
     'home.heroLine': 'Aerial',
     'home.heroDescriptor': 'High-End Cinematography & Video Production',
     'home.featured': 'Selected Work',
-    'home.viewAll': 'View all',
-    'home.viewAllProjects': 'View All Projects',
     'home.projectsLabel': 'projects',
 
     // Hire CTA
@@ -155,8 +153,6 @@ export const translations = {
     'home.heroLine': 'Aerial',
     'home.heroDescriptor': 'Špičková kinematografie a video produkce',
     'home.featured': 'Vybrané práce',
-    'home.viewAll': 'Zobrazit vše',
-    'home.viewAllProjects': 'Zobrazit všechny projekty',
     'home.projectsLabel': 'projektů',
 
     'hire.open': 'Zakázka / kontakt',
