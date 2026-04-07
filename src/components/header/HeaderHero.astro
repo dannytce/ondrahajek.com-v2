@@ -22,106 +22,65 @@ const { isHomepage, compact, title, subTitle, homepageHero, headerBackground } =
 
 <header
   class:list={[
-    'fixed top-0 z-header flex w-full flex-col justify-center',
-    compact ? 'h-[min(320px,38vh)] max-h-[320px]' : 'h-header',
+    'relative flex w-full flex-col justify-end overflow-hidden',
+    compact ? 'min-h-[240px] md:min-h-[280px]' : 'min-h-[420px] md:min-h-[520px]',
   ]}
 >
+  {/* Background image */}
+  <div class="absolute inset-0">
+    <DatoImageCover
+      data={{ ...headerBackground, alt: '' }}
+      class="pointer-events-none absolute inset-0 z-[1]"
+      imgClass="h-full w-full object-cover"
+      priority
+      layout="fill"
+      objectFit="cover"
+    />
+  </div>
+
+  {/* Gradient overlay */}
   <div
-    class="relative z-headerContainer mx-auto flex w-full max-w-container flex-1 flex-col justify-center px-[15px] md:flex-none md:flex-row md:justify-start xl:px-0"
+    class="pointer-events-none absolute inset-0 z-[2]"
+    style="background: linear-gradient(to bottom, rgba(10,10,10,0.8) 0%, rgba(10,10,10,0) 40%, rgba(10,10,10,0.6) 100%);"
+  >
+  </div>
+
+  {/* Content */}
+  <div
+    class="relative z-[3] mx-auto flex w-full max-w-container flex-col gap-5 px-[15px] pb-10 pt-28 md:pb-12 xl:px-0"
   >
     {
       isHomepage && homepageHero ? (
-        <div class="flex flex-col justify-center">
-          <h1 class="m-0 flex flex-col gap-1 p-0 md:gap-2">
-            <span
-              class:list={[
-                'block font-teko font-semibold uppercase leading-[0.95]',
-                compact
-                  ? 'text-[3.4rem] md:text-[5rem]'
-                  : 'text-[6rem] md:text-[10rem]',
-              ]}
-            >
-              {homepageHero.line}
+        <>
+          <div class="flex items-center gap-2">
+            <span class="font-geist text-[1.1rem] font-medium uppercase tracking-widest text-accent-primary">
+              {homepageHero.brand}
             </span>
-            <span class="block max-w-[22ch] font-teko text-[1.65rem] font-semibold uppercase leading-tight text-white/85 md:max-w-none md:text-[2.6rem] lg:text-[3rem]">
-              {homepageHero.descriptor}
+            <span class="font-geist text-[1.1rem] text-foreground-dim">&middot;</span>
+            <span class="font-geist text-[1.1rem] uppercase tracking-widest text-foreground-muted">
+              VIDEO & PHOTOGRAPHY
             </span>
+          </div>
+          <h1 class="m-0 p-0 font-anton text-[6rem] uppercase leading-[0.9] tracking-[0.02em] md:text-[9.6rem]">
+            {homepageHero.line}
           </h1>
-        </div>
-      ) : subTitle ? (
-        <div class="flex flex-col justify-center">
-          <h1
-            class:list={[
-              'm-0 p-0 font-teko font-semibold uppercase',
-              compact
-                ? 'text-[3.4rem] md:text-[5rem]'
-                : 'text-[6rem] md:text-[10rem]',
-            ]}
-          >
+          <p class="m-0 max-w-[48ch] font-inter text-[1.4rem] leading-relaxed text-foreground-muted md:text-[1.6rem]">
+            {homepageHero.descriptor}
+          </p>
+          <PlayShowreel />
+        </>
+      ) : (
+        <>
+          {subTitle && (
+            <span class="font-geist text-[1.1rem] uppercase tracking-widest text-foreground-muted">
+              {subTitle}
+            </span>
+          )}
+          <h1 class="m-0 p-0 font-anton text-[3.4rem] uppercase leading-[0.95] md:text-[5rem]">
             {title}
           </h1>
-          <h2 class="m-0 -mt-[0.75em] p-0 font-teko text-[1.8rem] uppercase md:text-[3rem]">
-            {subTitle}
-          </h2>
-        </div>
-      ) : (
-        <h1
-          class:list={[
-            'm-0 p-0 font-teko font-semibold uppercase',
-            compact
-              ? 'text-[3.4rem] md:text-[5rem]'
-              : 'text-[6rem] md:text-[10rem]',
-          ]}
-        >
-          {title}
-        </h1>
+        </>
       )
     }
-    {isHomepage ? <PlayShowreel /> : null}
-  </div>
-
-  {
-    isHomepage && (
-      <div class="header-video-wrap fixed top-0 z-video h-full w-full overflow-hidden">
-        <video
-          data-header-video
-          autoplay
-          playsinline
-          loop
-          muted
-          class="header-video pointer-events-none absolute left-1/2 top-1/2 box-border h-[56.25vw] min-h-full w-[177.78vh] min-w-full -translate-x-1/2 -translate-y-1/2 object-cover"
-        >
-          <source
-            src="/bg-mobile.mp4"
-            type="video/mp4"
-            media="(max-width: 375px)"
-          />
-          <source
-            src="/bg-tablet.mp4"
-            type="video/mp4"
-            media="(max-width: 767px)"
-          />
-          <source src="/bg-desktop.mp4" type="video/mp4" />
-        </video>
-      </div>
-    )
-  }
-
-  <div
-    class="header-fallback absolute bottom-0 left-0 right-0 top-0 z-header transition-opacity duration-[400ms] ease-[ease]"
-  >
-    <div class:list={[compact ? 'h-full min-h-0' : 'min-h-header']}>
-      <DatoImageCover
-        data={{ ...headerBackground, alt: '' }}
-        class:list={[
-          'pointer-events-none absolute inset-0 z-[2]',
-          compact ? 'min-h-full' : 'min-h-header',
-        ]}
-        imgClass="h-full w-full object-cover"
-        priority
-        layout="fill"
-        objectFit="cover"
-      />
-    </div>
   </div>
 </header>

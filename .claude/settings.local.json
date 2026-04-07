@@ -8,7 +8,13 @@
       "Read(//Users/dannytce/.nvm/versions/**)",
       "Read(//opt/homebrew/bin/**)",
       "Bash(/usr/local/bin/pnpm build:*)",
-      "Bash(export PATH=\"/Users/dannytce/.local/share/nvm/v24.14.0/bin:$PATH\")"
+      "Bash(export PATH=\"/Users/dannytce/.local/share/nvm/v24.14.0/bin:$PATH\")",
+      "Bash(grep -r lang.switch /Users/dannytce/Projects/ondrahajek.com-v2/src/ --include=*.ts)",
+      "Bash(grep -c \"font-teko\\\\|font-roboto\" /Users/dannytce/Projects/ondrahajek.com-v2/src/components/*.astro /Users/dannytce/Projects/ondrahajek.com-v2/src/components/**/*.astro)",
+      "Bash(npm run:*)",
+      "Bash(export PATH=\"/opt/homebrew/bin:/usr/local/bin:$HOME/.nvm/versions/node/*/bin:$PATH\")",
+      "Read(//Users/dannytce/Projects/ondrahajek.com-v2/$HOME/.local/bin/**)",
+      "Bash(export PATH=\"/usr/local/bin:$PATH\")"
     ]
   }
 }

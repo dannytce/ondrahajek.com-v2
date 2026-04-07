@@ -13,15 +13,15 @@ const { portfolio, locale } = Astro.props
 
 const thumb = portfolio.thumbnail
 const responsiveImage = thumb?.responsiveImage
-const subtitle =
-  locale === 'cs'
-    ? portfolio.subtitleCs || portfolio.subtitleEn
-    : portfolio.subtitleEn || null
 const transitionName = portfolio.id
   ? `portfolio-media-${portfolio.id}`
   : portfolio.slug
     ? `portfolio-media-${portfolio.slug}`
     : undefined
+
+const firstSubcategory = portfolio.subcategory?.[0]?.name || null
+const location = portfolio.location || null
+const chips = [firstSubcategory, location].filter(Boolean) as string[]
 ---
 
 {
@@ -30,7 +30,7 @@ const transitionName = portfolio.id
       href={localePath(locale, portfolioCanonicalPath(locale, portfolio.slug!))}
       class="portfolio-card group relative block w-full no-underline"
     >
-      <div class="portfolio-card-frame relative overflow-hidden bg-black">
+      <div class="portfolio-card-frame relative overflow-hidden rounded-sm bg-black">
         <div
           class="portfolio-card-media"
           style={
@@ -49,13 +49,26 @@ const transitionName = portfolio.id
           />
         </div>
         <div class="portfolio-card-overlay pointer-events-none absolute inset-0" />
+
+        {/* Title + chips overlaid on image */}
+        <div class="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col gap-2 p-4 md:p-5">
+          <h3
+            class="portfolio-card-title m-0 font-anton text-[2.2rem] uppercase leading-none text-white md:text-[2.8rem] lg:text-[3.4rem]"
+            style="text-shadow: 0 2px 12px rgba(0,0,0,0.7), 0 1px 3px rgba(0,0,0,0.5);"
+          >
+            {portfolio.title}
+          </h3>
+          {chips.length > 0 && (
+            <div class="flex flex-wrap gap-1.5">
+              {chips.map((chip) => (
+                <span class="rounded-full bg-white/10 px-2.5 py-0.5 font-geist text-[1rem] text-white/80 backdrop-blur-md md:text-[1.1rem]">
+                  {chip}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-      <h3 class="portfolio-card-title relative z-10 -mt-[0.5em] ml-5 font-teko text-[2.4rem] font-semibold uppercase leading-none text-white md:text-[3rem] lg:text-[4rem] xs:text-[2.6rem]">
-        {portfolio.title}
-      </h3>
-      <h4 class="portfolio-card-subtitle relative z-10 ml-5 text-[1.5rem] font-normal text-secondary">
-        {subtitle}
-      </h4>
     </a>
   )
 }
