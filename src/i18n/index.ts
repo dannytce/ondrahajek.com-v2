@@ -57,7 +57,7 @@ export const translations = {
     'home.heroBrand': 'Ondra Hajek',
     'home.heroLine': 'Aerial',
     'home.heroDescriptor': 'High-End Cinematography & Video Production',
-    'home.featured': 'Featured Global Projects & Commercial Campaigns',
+    'home.featured': 'Selected Work',
     'home.viewAll': 'View all',
 
     // Hire CTA
@@ -149,7 +149,7 @@ export const translations = {
     'home.heroBrand': 'Ondra Hajek',
     'home.heroLine': 'Aerial',
     'home.heroDescriptor': 'Špičková kinematografie a video produkce',
-    'home.featured': 'Vybrané globální projekty a komerční kampaně',
+    'home.featured': 'Vybrané práce',
     'home.viewAll': 'Zobrazit vše',
 
     'hire.open': 'Zakázka / kontakt',

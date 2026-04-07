@@ -31,10 +31,10 @@ const {
 } = detail
 ---
 
-<section class="mx-auto w-full max-w-container px-[15px] pb-16 pt-[10.5rem] xl:px-0">
+<section class="mx-auto w-full max-w-container px-5 pb-14 pt-[7.8rem] md:pb-16 xl:px-0">
   <a
     href={localePath(locale, backPath)}
-    class="detail-reveal mb-8 inline-block font-anton text-[2rem] uppercase text-secondary no-underline transition-colors hover:text-white"
+    class="detail-reveal mb-5 inline-block font-geist text-[1rem] uppercase tracking-[0.2em] text-[#888888] no-underline transition-colors hover:text-white"
   >
     {backLinkText}
   </a>
@@ -47,13 +47,13 @@ const {
   >
     <div>
       <h1
-        class="detail-reveal m-0 font-anton text-[5.2rem] uppercase leading-[0.95] tracking-[0.01em] text-white md:text-[7.2rem]"
+        class="detail-reveal m-0 font-anton text-[3.8rem] uppercase leading-[0.92] tracking-[0.01em] text-white md:text-[7.2rem]"
       >
         {portfolio.title}
       </h1>
       {
         locationH2 && (
-          <h2 class="detail-reveal mt-4 max-w-[70ch] font-anton text-[2rem] font-normal uppercase leading-tight tracking-wide text-secondary md:text-[2.4rem]">
+          <h2 class="detail-reveal mt-3 max-w-[70ch] font-geist text-[1rem] font-normal uppercase leading-tight tracking-[0.2em] text-[#4A9FD8] md:text-[1.1rem]">
             {locationH2}
           </h2>
         )
@@ -78,7 +78,7 @@ const {
       }
       {
         portfolio.video && (
-          <div class="detail-reveal detail-reveal-delay-1 mt-8">
+          <div class="detail-reveal detail-reveal-delay-1 mt-6 overflow-hidden rounded-lg">
             <Player
               title={portfolio.title ?? 'Video'}
               video={portfolio.video}
@@ -106,12 +106,12 @@ const {
                       locale,
                       `${localizedPagePath(locale, pageKey)}?tag=${encodeURIComponent(key)}`
                     )}
-                    class="inline-block rounded-full border border-border-subtle bg-white/5 px-3 py-1 font-geist text-[1.2rem] text-foreground-muted no-underline transition-colors hover:border-white/30 hover:text-white"
+                    class="inline-block rounded-full border border-white/20 bg-white/5 px-3 py-1 font-geist text-[1rem] uppercase tracking-[0.12em] text-[#B7B7B7] no-underline transition-colors hover:border-white/30 hover:text-white"
                   >
                     {label}
                   </a>
                 ) : (
-                  <span class="inline-block rounded-full border border-border-subtle bg-white/5 px-3 py-1 font-geist text-[1.2rem] text-foreground-muted">
+                  <span class="inline-block rounded-full border border-white/20 bg-white/5 px-3 py-1 font-geist text-[1rem] uppercase tracking-[0.12em] text-[#B7B7B7]">
                     {label}
                   </span>
                 )}
@@ -123,7 +123,7 @@ const {
     </div>
     {
       hasDetailMeta && (
-        <aside class="detail-reveal detail-reveal-delay-1 hidden h-fit rounded border border-border-subtle bg-surface-card p-6 xl:sticky xl:top-28 xl:block">
+        <aside class="detail-reveal detail-reveal-delay-1 hidden h-fit rounded-xl border border-white/10 bg-[#141414] p-6 xl:sticky xl:top-24 xl:block">
           <PortfolioDetailMeta
             locale={locale}
             year={year}

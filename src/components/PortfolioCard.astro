@@ -30,7 +30,7 @@ const chips = [firstSubcategory, location].filter(Boolean) as string[]
       href={localePath(locale, portfolioCanonicalPath(locale, portfolio.slug!))}
       class="portfolio-card group relative block w-full no-underline"
     >
-      <div class="portfolio-card-frame relative overflow-hidden rounded-sm bg-black">
+      <div class="portfolio-card-frame relative overflow-hidden rounded-lg bg-black">
         <div
           class="portfolio-card-media"
           style={
@@ -53,7 +53,7 @@ const chips = [firstSubcategory, location].filter(Boolean) as string[]
         {/* Title + chips overlaid on image */}
         <div class="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col gap-2 p-4 md:p-5">
           <h3
-            class="portfolio-card-title m-0 font-anton text-[2.2rem] uppercase leading-none text-white md:text-[2.8rem] lg:text-[3.4rem]"
+            class="portfolio-card-title m-0 font-anton text-[2.4rem] uppercase leading-[0.95] text-white md:text-[2.8rem]"
             style="text-shadow: 0 2px 12px rgba(0,0,0,0.7), 0 1px 3px rgba(0,0,0,0.5);"
           >
             {portfolio.title}
@@ -61,7 +61,7 @@ const chips = [firstSubcategory, location].filter(Boolean) as string[]
           {chips.length > 0 && (
             <div class="flex flex-wrap gap-1.5">
               {chips.map((chip) => (
-                <span class="rounded-full bg-white/10 px-2.5 py-0.5 font-geist text-[1rem] text-white/80 backdrop-blur-md md:text-[1.1rem]">
+                <span class="rounded-full border border-white/15 bg-black/25 px-2.5 py-0.5 font-geist text-[0.95rem] uppercase tracking-[0.12em] text-white/85 backdrop-blur-md md:text-[1rem]">
                   {chip}
                 </span>
               ))}
