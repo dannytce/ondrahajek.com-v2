@@ -21,37 +21,105 @@ export async function getStaticPaths() {
   const portfolios = await getAllPortfoliosWithSlug()
   return LOCALES.flatMap((locale) =>
     portfolios.flatMap((p) => {
-      const slug = portfolioSlugForLocale(p, locale)
-      if (!slug) return []
-      return [
+      const localizedSlug = portfolioSlugForLocale(p, locale)?.trim()
+      if (!localizedSlug) return []
+
+      const aliasSlug =
+        locale === 'cs' ? p.slugEn?.trim() : p.slugCs?.trim()
+
+      const canonicalPath = `/${locale}${portfolioDetailCanonicalPath(
+        locale,
+        localizedSlug
+      )}`
+
+      const paths: Array<{
+        params: { locale: string; portfolioSeg: string; slug: string }
+        props?: { redirectTo?: string; canonicalSlug?: string }
+      }> = [
         {
           params: {
             locale,
             portfolioSeg: portfolioSegment(locale),
-            slug,
+            slug: localizedSlug,
+          },
+          props: {
+            canonicalSlug: localizedSlug,
           },
         },
       ]
+
+      if (aliasSlug && aliasSlug !== localizedSlug) {
+        paths.push({
+          params: {
+            locale,
+            portfolioSeg: portfolioSegment(locale),
+            slug: aliasSlug,
+          },
+          props: {
+            redirectTo: canonicalPath,
+            canonicalSlug: localizedSlug,
+          },
+        })
+      }
+
+      return paths
     })
   )
 }
 
 const locale = getLocaleFromParam(Astro.params.locale)
 const { slug } = Astro.params
+const { redirectTo, canonicalSlug } = Astro.props as {
+  redirectTo?: string
+  canonicalSlug?: string
+}
 
-const portfolio = await getPortfolioBySlug(slug as string, locale)
+const requestedSlug = (slug ?? '').trim()
+const resolvedSlug = canonicalSlug ?? requestedSlug
+let portfolio =
+  !redirectTo && resolvedSlug
+    ? await getPortfolioBySlug(resolvedSlug, locale)
+    : null
+
+if (!redirectTo && !portfolio && requestedSlug) {
+  const slugPairs = await getAllPortfoliosWithSlug()
+  const matched = slugPairs.find(
+    (p) => p.slugEn?.trim() === requestedSlug || p.slugCs?.trim() === requestedSlug
+  )
+  const alternateSlug =
+    locale === 'cs' ? matched?.slugEn?.trim() : matched?.slugCs?.trim()
+  if (alternateSlug) {
+    portfolio = await getPortfolioBySlug(alternateSlug, locale)
+  }
+}
+
 const detail = portfolio
   ? await buildPortfolioDetailModel(portfolio, locale, getPortfoliosByCategory)
   : null
 ---
 
 {
-  portfolio && detail ? (
+  redirectTo ? (
+    <html lang={locale}>
+      <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="refresh" content={`0;url=${redirectTo}`} />
+        <link rel="canonical" href={`https://ondrahajek.com${redirectTo}`} />
+        <title>Redirecting...</title>
+      </head>
+      <body>
+        <script is:inline define:vars={{ redirectTo }}>
+          window.location.replace(redirectTo)
+        </script>
+        <noscript><a href={redirectTo}>Click here</a></noscript>
+      </body>
+    </html>
+  ) : portfolio && detail ? (
     <BaseLayout
       title={detail.titleSeo}
       description={detail.descSeo}
       locale={locale}
-      canonicalPath={portfolioDetailCanonicalPath(locale, slug as string)}
+      canonicalPath={portfolioDetailCanonicalPath(locale, resolvedSlug)}
       hreflangPaths={detail.hrefPair}
       jsonLd={detail.jsonLd}
     >
