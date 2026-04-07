@@ -7,6 +7,8 @@ interface Props {
 }
 
 const { locale = 'en' } = Astro.props
+const pathname = Astro.url.pathname
+const homePath = localePath(locale, '/')
 
 const workLinks = [
   {
@@ -30,6 +32,32 @@ const infoLinks = [
   },
 ]
 
+const dronePath = localePath(locale, localizedPagePath(locale, 'drone'))
+const videoPath = localePath(locale, localizedPagePath(locale, 'video'))
+const isCategoryHubPage = pathname === dronePath || pathname === videoPath
+const isHomePage = pathname === homePath
+
+const mobileCategoryLinks = [
+  {
+    text: locale === 'cs' ? 'Dron' : 'Drone',
+    href: dronePath,
+  },
+  {
+    text: locale === 'cs' ? 'Video' : 'Video',
+    href: videoPath,
+  },
+  {
+    text: locale === 'cs' ? 'Galerie' : 'Gallery',
+    href: localePath(locale, localizedPagePath(locale, 'gallery')),
+  },
+  {
+    text: locale === 'cs' ? 'O mně' : 'About',
+    href: localePath(locale, localizedPagePath(locale, 'about')),
+  },
+]
+
+const mobileLinks = isCategoryHubPage || isHomePage ? mobileCategoryLinks : workLinks
+
 const contactHref = localePath(locale, localizedPagePath(locale, 'about'))
 ---
 
@@ -44,7 +72,7 @@ const contactHref = localePath(locale, localizedPagePath(locale, 'about'))
       </div>
 
       <div class="flex gap-6">
-        {workLinks.map((link) => (
+        {mobileLinks.map((link) => (
           <a href={link.href} class="font-inter text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">
             {link.text}
           </a>
