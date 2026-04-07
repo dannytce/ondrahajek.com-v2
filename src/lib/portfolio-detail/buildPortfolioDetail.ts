@@ -57,6 +57,7 @@ export interface PortfolioDetailModel {
   hrefPair: { en: string; cs: string } | undefined
   locationLabel: string
   heroSubtitle: string | undefined
+  relatedProjects: PortfolioListItem[]
 }
 
 export async function buildPortfolioDetailModel(
@@ -95,6 +96,7 @@ export async function buildPortfolioDetailModel(
 
   let moreForClientHref: string | undefined
   let moreInLocationHref: string | undefined
+  let relatedProjects: PortfolioListItem[] = []
 
   if (
     categoryForLink &&
@@ -106,6 +108,14 @@ export async function buildPortfolioDetailModel(
       CATEGORY_IDS[categoryForLink],
       locale
     )
+    relatedProjects = categoryPortfolios
+      .filter(
+        (item) =>
+          item.id !== portfolio.id &&
+          item.thumbnail?.responsiveImage &&
+          item.slug
+      )
+      .slice(0, 3)
     const { locationSlugByValue, clientSlugByValue } =
       buildSlugMapsFromPortfolios(categoryPortfolios)
 
@@ -237,6 +247,7 @@ export async function buildPortfolioDetailModel(
     hrefPair,
     locationLabel,
     heroSubtitle,
+    relatedProjects,
   }
 }
 
