@@ -31,7 +31,7 @@ const navLinks = [
 ]
 const desktopLabels =
   locale === 'cs'
-    ? ['Dron', 'Video', 'Galerie', 'O mne']
+    ? ['Dron', 'Video', 'Galerie', 'O mně']
     : ['Drone', 'Video', 'Gallery', 'About']
 ---
 
@@ -52,18 +52,20 @@ const desktopLabels =
       >
         ONDRAHAJEK.COM
       </a>
-      {!minimal && (
-        <div class="flex items-center gap-8">
-          {navLinks.map((item, index) => (
-            <a
-              href={item.link}
-              class="font-inter text-[1.3rem] text-[#888888] no-underline transition-colors hover:text-white"
-            >
-              {desktopLabels[index] ?? item.text}
-            </a>
-          ))}
-        </div>
-      )}
+      {
+        !minimal && (
+          <div class="flex items-center gap-8">
+            {navLinks.map((item, index) => (
+              <a
+                href={item.link}
+                class="font-inter text-[1.3rem] text-[#888888] no-underline transition-colors hover:text-white"
+              >
+                {desktopLabels[index] ?? item.text}
+              </a>
+            ))}
+          </div>
+        )
+      }
     </div>
     <a
       href={localePath(locale, '/')}
