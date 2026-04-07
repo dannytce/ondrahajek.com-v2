@@ -27,7 +27,7 @@ const {
   mediaTransitionName,
   year,
   hasDetailMeta,
-  locationH2,
+  heroSubtitle,
 } = detail
 ---
 
@@ -39,28 +39,23 @@ const {
     {backLinkText}
   </a>
 
-  <div
-    class:list={[
-      'grid gap-10',
-      hasDetailMeta && 'xl:grid-cols-[minmax(0,1fr)_300px]',
-    ]}
-  >
-    <div>
+  <div class:list={['grid gap-10 lg:gap-16', hasDetailMeta && 'lg:grid-cols-[minmax(0,1fr)_320px]']}>
+    <div class="min-w-0">
       <h1
-        class="detail-reveal m-0 font-anton text-[3.8rem] uppercase leading-[0.92] tracking-[0.01em] text-white md:text-[7.2rem]"
+        class="detail-reveal m-0 font-anton text-[3.8rem] uppercase leading-[0.92] tracking-[0.01em] text-white md:text-[7.2rem] lg:text-[4.2rem] xl:text-[4.8rem]"
       >
         {portfolio.title}
       </h1>
       {
-        locationH2 && (
-          <h2 class="detail-reveal mt-3 max-w-[70ch] font-geist text-[1rem] font-normal uppercase leading-tight tracking-[0.2em] text-[#4A9FD8] md:text-[1.1rem]">
-            {locationH2}
+        heroSubtitle && (
+          <h2 class="detail-reveal mt-3 max-w-[70ch] font-geist text-[1rem] font-normal uppercase leading-tight tracking-[0.2em] text-[#4A9FD8] md:text-[1.1rem] lg:mt-4 lg:text-[1rem]">
+            {heroSubtitle}
           </h2>
         )
       }
       {
         (subtitle || hasDetailMeta) && (
-          <div class="detail-reveal detail-reveal-delay-1 mt-4 max-w-[70ch] xl:hidden">
+          <div class="detail-reveal detail-reveal-delay-1 mt-4 max-w-[70ch] lg:hidden">
             <PortfolioDetailMeta
               variant="inline"
               locale={locale}
@@ -78,7 +73,7 @@ const {
       }
       {
         portfolio.video && (
-          <div class="detail-reveal detail-reveal-delay-1 mt-6 overflow-hidden rounded-lg">
+          <div class="detail-reveal detail-reveal-delay-1 mt-6 overflow-hidden rounded-lg lg:mt-8 lg:rounded-xl">
             <Player
               title={portfolio.title ?? 'Video'}
               video={portfolio.video}
@@ -88,7 +83,7 @@ const {
           </div>
         )
       }
-      <div class="detail-reveal detail-reveal-delay-2">
+      <div class="detail-reveal detail-reveal-delay-2 mt-6 max-w-[72ch]">
         <PortfolioDescriptions
           descriptionCs={portfolio.descriptionCs}
           descriptionEn={portfolio.descriptionEn}
@@ -121,21 +116,19 @@ const {
         )
       }
     </div>
-    {
-      hasDetailMeta && (
-        <aside class="detail-reveal detail-reveal-delay-1 hidden h-fit rounded-xl border border-white/10 bg-[#141414] p-6 xl:sticky xl:top-24 xl:block">
-          <PortfolioDetailMeta
-            locale={locale}
-            year={year}
-            client={portfolio.client}
-            location={portfolio.location}
-            moreForClientHref={moreForClientHref}
-            moreForClientLabel={moreForClientLabel}
-            moreInLocationHref={moreInLocationHref}
-            moreInLocationLabel={moreInLocationLabel}
-          />
-        </aside>
-      )
-    }
+    {hasDetailMeta && (
+      <aside class="detail-reveal detail-reveal-delay-1 hidden h-fit rounded-xl border border-white/10 bg-[#141414] p-6 lg:sticky lg:top-24 lg:block">
+        <PortfolioDetailMeta
+          locale={locale}
+          year={year}
+          client={portfolio.client}
+          location={portfolio.location}
+          moreForClientHref={moreForClientHref}
+          moreForClientLabel={moreForClientLabel}
+          moreInLocationHref={moreInLocationHref}
+          moreInLocationLabel={moreInLocationLabel}
+        />
+      </aside>
+    )}
   </div>
 </section>
