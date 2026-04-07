@@ -11,6 +11,28 @@ interface Props {
 }
 
 const { locale, switchUrl, minimal = false } = Astro.props
+const navLinks = [
+  {
+    text: t(locale, 'nav.drone'),
+    link: localePath(locale, localizedPagePath(locale, 'drone')),
+  },
+  {
+    text: t(locale, 'nav.video'),
+    link: localePath(locale, localizedPagePath(locale, 'video')),
+  },
+  {
+    text: t(locale, 'nav.gallery'),
+    link: localePath(locale, localizedPagePath(locale, 'gallery')),
+  },
+  {
+    text: t(locale, 'nav.about'),
+    link: localePath(locale, localizedPagePath(locale, 'about')),
+  },
+]
+const desktopLabels =
+  locale === 'cs'
+    ? ['Dron', 'Video', 'Galerie', 'O mne']
+    : ['Drone', 'Video', 'Gallery', 'About']
 ---
 
 <header
@@ -23,33 +45,35 @@ const { locale, switchUrl, minimal = false } = Astro.props
       !minimal && 'justify-between',
     ]}
   >
+    <div class="hidden items-center gap-12 md:flex">
+      <a
+        href={localePath(locale, '/')}
+        class="flex items-center font-anton text-[1.3rem] tracking-[0.08em] text-white no-underline"
+      >
+        ONDRAHAJEK.COM
+      </a>
+      {!minimal && (
+        <div class="flex items-center gap-8">
+          {navLinks.map((item, index) => (
+            <a
+              href={item.link}
+              class="font-inter text-[1.3rem] text-[#888888] no-underline transition-colors hover:text-white"
+            >
+              {desktopLabels[index] ?? item.text}
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
     <a
       href={localePath(locale, '/')}
-      class="font-anton text-[1.3rem] tracking-[0.08em] text-white no-underline"
+      class="flex items-center font-anton text-[1.3rem] tracking-[0.08em] text-white no-underline md:hidden"
     >
       ONDRAHAJEK.COM
     </a>
     {
       !minimal && (
         <nav aria-label="Primary" class="flex items-center gap-6">
-          <a
-            href={localePath(locale, localizedPagePath(locale, 'drone'))}
-            class="hidden font-geist text-[1.1rem] uppercase tracking-[0.2em] text-[#BBBBBB] no-underline transition-colors hover:text-white md:block"
-          >
-            {t(locale, 'nav.drone')}
-          </a>
-          <a
-            href={localePath(locale, localizedPagePath(locale, 'video'))}
-            class="hidden font-geist text-[1.1rem] uppercase tracking-[0.2em] text-[#BBBBBB] no-underline transition-colors hover:text-white md:block"
-          >
-            {t(locale, 'nav.video')}
-          </a>
-          <a
-            href={localePath(locale, localizedPagePath(locale, 'about'))}
-            class="hidden font-geist text-[1.1rem] uppercase tracking-[0.2em] text-[#BBBBBB] no-underline transition-colors hover:text-white md:block"
-          >
-            {t(locale, 'nav.about')}
-          </a>
           <LanguageToggle locale={locale} switchUrl={switchUrl} />
         </nav>
       )
