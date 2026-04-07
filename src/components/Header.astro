@@ -4,7 +4,7 @@ import HeaderNav from '~/components/header/HeaderNav.astro'
 import TrustedBy from '~/components/About/TrustedBy.astro'
 import type { ResponsiveImage } from '~/api/generated/types'
 import { t, localePath, getAlternateLocale, type Locale } from '~/i18n'
-import { localizedPagePath } from '~/i18n/routes'
+import { getNavLinks } from '~/lib/navigation'
 
 interface Props {
   isAboutPage?: boolean
@@ -43,24 +43,7 @@ const {
   switchHref,
 } = Astro.props
 
-const navLinks = [
-  {
-    text: t(locale, 'nav.drone'),
-    link: localePath(locale, localizedPagePath(locale, 'drone')),
-  },
-  {
-    text: t(locale, 'nav.video'),
-    link: localePath(locale, localizedPagePath(locale, 'video')),
-  },
-  {
-    text: t(locale, 'nav.gallery'),
-    link: localePath(locale, localizedPagePath(locale, 'gallery')),
-  },
-  {
-    text: t(locale, 'nav.about'),
-    link: localePath(locale, localizedPagePath(locale, 'about')),
-  },
-]
+const navLinks = getNavLinks(locale)
 
 const altLocale = getAlternateLocale(locale)
 const switchUrl = switchHref ?? localePath(altLocale, pagePath)
