@@ -36,7 +36,7 @@ const {
 <section class="mx-auto w-full max-w-container px-5 pb-14 pt-[7.8rem] md:pb-16 xl:px-0">
   <a
     href={localePath(locale, backPath)}
-    class="detail-reveal mb-5 inline-block font-geist text-[1rem] tracking-[0.12em] text-[#888888] no-underline transition-colors hover:text-white"
+    class="detail-reveal mb-2 inline-block font-geist text-[1rem] tracking-[0.12em] text-[#888888] no-underline transition-colors hover:text-white"
   >
     {backLinkText}
   </a>
@@ -156,39 +156,9 @@ const {
 
   <div class="lg:hidden">
     <div>
-      <h1
-        class="detail-reveal m-0 font-anton text-[3.8rem] uppercase leading-[0.92] tracking-[0.01em] text-white md:text-[7.2rem]"
-      >
-        {portfolio.title}
-      </h1>
-      {
-        locationH2 && (
-          <h2 class="detail-reveal mt-3 max-w-[70ch] font-geist text-[1rem] font-normal uppercase leading-tight tracking-[0.2em] text-[#4A9FD8] md:text-[1.1rem]">
-            {locationH2}
-          </h2>
-        )
-      }
-      {
-        (subtitle || hasDetailMeta) && (
-          <div class="detail-reveal detail-reveal-delay-1 mt-4 max-w-[70ch]">
-            <PortfolioDetailMeta
-              variant="inline"
-              locale={locale}
-              year={year}
-              client={portfolio.client}
-              location={portfolio.location}
-              class={subtitle ? 'mt-4' : undefined}
-              moreForClientHref={moreForClientHref}
-              moreForClientLabel={moreForClientLabel}
-              moreInLocationHref={moreInLocationHref}
-              moreInLocationLabel={moreInLocationLabel}
-            />
-          </div>
-        )
-      }
       {
         portfolio.video && (
-          <div class="detail-reveal detail-reveal-delay-1 mt-6 overflow-hidden rounded-lg">
+          <div class="detail-reveal detail-reveal-delay-1 mt-2 overflow-hidden rounded-lg">
             <Player
               title={portfolio.title ?? 'Video'}
               video={portfolio.video}
@@ -198,7 +168,12 @@ const {
           </div>
         )
       }
-      <div class="detail-reveal detail-reveal-delay-2">
+      <h1
+        class="detail-reveal m-0 mt-6 font-anton text-[3rem] leading-[1.04] tracking-[0.01em] text-white"
+      >
+        {portfolio.title}
+      </h1>
+      <div class="detail-reveal detail-reveal-delay-2 mt-4">
         <PortfolioDescriptions
           descriptionCs={portfolio.descriptionCs}
           descriptionEn={portfolio.descriptionEn}
@@ -207,7 +182,7 @@ const {
       </div>
       {
         tagLinkPairs.length > 0 && (
-          <ul class="detail-reveal detail-reveal-delay-3 m-0 mt-8 flex max-w-[70ch] list-none flex-wrap gap-2 p-0">
+          <ul class="detail-reveal detail-reveal-delay-3 m-0 mt-6 flex max-w-[70ch] list-none flex-wrap gap-1.5 p-0">
             {tagLinkPairs.map(({ key, label }) => (
               <li>
                 {pageKey != null ? (
@@ -216,18 +191,96 @@ const {
                       locale,
                       `${localizedPagePath(locale, pageKey)}?tag=${encodeURIComponent(key)}`
                     )}
-                    class="inline-block rounded-full border border-white/20 bg-white/5 px-3 py-1 font-geist text-[1rem] uppercase tracking-[0.12em] text-[#B7B7B7] no-underline transition-colors hover:border-white/30 hover:text-white"
+                    class="inline-block rounded-full border border-[#222222] px-3 py-1 font-geist text-[1rem] uppercase tracking-[0.12em] text-[#888888] no-underline transition-colors hover:border-white/30 hover:text-white"
                   >
                     {label}
                   </a>
                 ) : (
-                  <span class="inline-block rounded-full border border-white/20 bg-white/5 px-3 py-1 font-geist text-[1rem] uppercase tracking-[0.12em] text-[#B7B7B7]">
+                  <span class="inline-block rounded-full border border-[#222222] px-3 py-1 font-geist text-[1rem] uppercase tracking-[0.12em] text-[#888888]">
                     {label}
                   </span>
                 )}
               </li>
             ))}
           </ul>
+        )
+      }
+      {
+        hasDetailMeta && (
+          <div class="detail-reveal detail-reveal-delay-3 mt-6">
+            <div class="rounded-xl border border-[#222222] bg-[#141414] p-5">
+              <div class="grid grid-cols-2 gap-x-6 gap-y-5">
+                {portfolio.client?.trim() && (
+                  <div>
+                    <p class="m-0 font-geist text-[0.9rem] uppercase tracking-[0.2em] text-[#555555]">
+                      {t(locale, 'detail.client')}
+                    </p>
+                    <p class="m-0 mt-1 font-inter text-[1.3rem] text-white">
+                      {portfolio.client}
+                    </p>
+                  </div>
+                )}
+                {year != null && (
+                  <div>
+                    <p class="m-0 font-geist text-[0.9rem] uppercase tracking-[0.2em] text-[#555555]">
+                      {t(locale, 'detail.year')}
+                    </p>
+                    <p class="m-0 mt-1 font-inter text-[1.3rem] text-white">{year}</p>
+                  </div>
+                )}
+                {portfolio.location?.trim() && (
+                  <div>
+                    <p class="m-0 font-geist text-[0.9rem] uppercase tracking-[0.2em] text-[#555555]">
+                      {t(locale, 'detail.location')}
+                    </p>
+                    <p class="m-0 mt-1 font-inter text-[1.3rem] text-white">
+                      {portfolio.location}
+                    </p>
+                  </div>
+                )}
+                {pageKey && (
+                  <div>
+                    <p class="m-0 font-geist text-[0.9rem] uppercase tracking-[0.2em] text-[#555555]">
+                      CATEGORY
+                    </p>
+                    <p class="m-0 mt-1 font-inter text-[1.3rem] text-white">
+                      {pageKey === 'drone' ? t(locale, 'nav.drone') : t(locale, 'nav.video')}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div class="mt-2.5 grid grid-cols-2 gap-2.5">
+              <button
+                type="button"
+                class="inline-flex items-center justify-center gap-2 rounded-lg border border-[#222222] px-3 py-2.5 font-inter text-[1.1rem] text-[#888888] transition-colors hover:border-white/30 hover:text-white"
+              >
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  class="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="18" cy="5" r="2.5"></circle>
+                  <circle cx="6" cy="12" r="2.5"></circle>
+                  <circle cx="18" cy="19" r="2.5"></circle>
+                  <path d="M8.2 10.9l7.6-4.3"></path>
+                  <path d="M8.2 13.1l7.6 4.3"></path>
+                </svg>
+                <span>Share</span>
+              </button>
+              <a
+                href="mailto:info@ondrahajek.com"
+                class="inline-flex items-center justify-center rounded-lg bg-[#4A9FD8] px-3 py-2.5 font-inter text-[1.1rem] font-semibold text-white no-underline transition-opacity hover:opacity-90"
+              >
+                Get in Touch
+              </a>
+            </div>
+          </div>
         )
       }
     </div>
@@ -269,6 +322,54 @@ const {
                   />
                   <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,10,0)_35%,rgba(10,10,10,0.6)_100%)]" />
                   <div class="pointer-events-none absolute inset-x-0 bottom-0 p-4">
+                    <h3 class="m-0 font-anton text-[1.5rem] uppercase leading-none text-white [text-shadow:0_1px_8px_rgba(0,0,0,0.8)]">
+                      {item.title}
+                    </h3>
+                  </div>
+                </a>
+              </li>
+            )
+          })}
+        </ul>
+      </section>
+    )
+  }
+  {
+    relatedProjects.length > 0 && (
+      <section class="detail-reveal detail-reveal-delay-3 mt-10 lg:hidden">
+        <div class="mb-4 flex items-center justify-between">
+          <h2 class="m-0 font-anton text-[2.2rem] leading-none text-white">
+            {locale === 'cs' ? 'Další projekty' : 'More Projects'}
+          </h2>
+          {pageKey && (
+            <a
+              href={localePath(locale, localizedPagePath(locale, pageKey))}
+              class="font-inter text-[1.1rem] text-[#4A9FD8] no-underline transition-colors hover:text-white"
+            >
+              {locale === 'cs' ? 'Zobrazit vše' : 'View all'} &rarr;
+            </a>
+          )}
+        </div>
+        <ul class="m-0 flex list-none flex-col gap-3 p-0">
+          {relatedProjects.slice(0, 2).map((item) => {
+            const responsiveImage = item.thumbnail?.responsiveImage
+            if (!responsiveImage || !item.slug) return null
+            return (
+              <li>
+                <a
+                  href={localePath(
+                    locale,
+                    portfolioCanonicalPath(locale, item.slug)
+                  )}
+                  class="group relative block overflow-hidden rounded-lg no-underline"
+                >
+                  <Image
+                    data={{ ...responsiveImage, alt: '' }}
+                    pictureClass="w-full"
+                    imgClass="block h-[170px] w-full object-cover"
+                  />
+                  <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,10,0)_35%,rgba(10,10,10,0.6)_100%)]" />
+                  <div class="pointer-events-none absolute inset-x-0 bottom-0 p-3.5">
                     <h3 class="m-0 font-anton text-[1.5rem] uppercase leading-none text-white [text-shadow:0_1px_8px_rgba(0,0,0,0.8)]">
                       {item.title}
                     </h3>
