@@ -10,11 +10,11 @@ const { locale = 'en' } = Astro.props
 
 const workLinks = [
   {
-    text: locale === 'cs' ? 'Letecké záběry' : 'Drone',
+    text: locale === 'cs' ? 'Letecké záběry dronem' : 'Drone Cinematography',
     href: localePath(locale, localizedPagePath(locale, 'drone')),
   },
   {
-    text: locale === 'cs' ? 'Video' : 'Video',
+    text: locale === 'cs' ? 'Video Produkce' : 'Video Production',
     href: localePath(locale, localizedPagePath(locale, 'video')),
   },
   {
@@ -46,7 +46,7 @@ const contactHref = localePath(locale, localizedPagePath(locale, 'about'))
       <div class="flex gap-6">
         {workLinks.map((link) => (
           <a href={link.href} class="font-inter text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">
-            {link.text.split(' ')[0]}
+            {link.text}
           </a>
         ))}
       </div>
