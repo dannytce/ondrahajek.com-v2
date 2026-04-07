@@ -39,7 +39,7 @@ const {
 ---
 
 <section
-  class="mx-auto w-full max-w-container px-5 pb-12 pt-8 xl:px-0"
+  class="mx-auto w-full max-w-container px-5 pb-12 pt-28 xl:px-0"
   data-portfolio-grid
   data-category-slug={categorySlug}
   data-locale={locale}
@@ -51,6 +51,15 @@ const {
       locale={locale}
       subcategories={subcategories}
       totalCount={gridPortfolios.length}
+      categoryTitle={
+        categorySlug === 'drone-cinematography'
+          ? locale === 'cs'
+            ? 'Letecké záběry dronem'
+            : 'Drone Cinematography'
+          : locale === 'cs'
+            ? 'Video Produkce'
+            : 'Video Production'
+      }
     />
     <PortfolioFiltersPanel
       locale={locale}
@@ -68,7 +77,9 @@ const {
     {t(locale, 'filter.noResults')}
   </p>
 
-  <ul class="m-0 grid w-full list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3">
+  <ul
+    class="m-0 grid w-full list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3"
+  >
     {
       gridPortfolios.map((portfolio, index) => {
         const year = portfolio.date

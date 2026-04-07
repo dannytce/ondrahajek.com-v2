@@ -30,12 +30,12 @@ function hasUrlAdvancedFilterParams(): boolean {
   const p = new URLSearchParams(window.location.search)
   return Boolean(
     p.get('year') ||
-      p.get('loc') ||
-      p.get('location') ||
-      p.get('cl') ||
-      p.get('client') ||
-      p.get('q') ||
-      p.get('tag')
+    p.get('loc') ||
+    p.get('location') ||
+    p.get('cl') ||
+    p.get('client') ||
+    p.get('q') ||
+    p.get('tag')
   )
 }
 
@@ -142,7 +142,10 @@ function shouldShowSubcategoryButton(
   return false
 }
 
-function collectAvailableYears(items: HTMLElement[], st: FilterState): string[] {
+function collectAvailableYears(
+  items: HTMLElement[],
+  st: FilterState
+): string[] {
   const s = new Set<string>()
   for (const item of items) {
     if (!itemMatchesExcept(item, st, 'year')) continue
@@ -287,13 +290,13 @@ function readUrlIntoGrid(grid: HTMLElement) {
   const subcategoryButtons = Array.from(
     grid.querySelectorAll<HTMLButtonElement>('[data-filter-subcategory]')
   )
-  const yearSelect =
-    grid.querySelector<HTMLSelectElement>('[data-filter-year]')
+  const yearSelect = grid.querySelector<HTMLSelectElement>('[data-filter-year]')
   const locationSelect = grid.querySelector<HTMLSelectElement>(
     '[data-filter-location]'
   )
-  const clientSelect =
-    grid.querySelector<HTMLSelectElement>('[data-filter-client]')
+  const clientSelect = grid.querySelector<HTMLSelectElement>(
+    '[data-filter-client]'
+  )
   const searchInput = grid.querySelector<HTMLInputElement>(
     '[data-filter-search]'
   )
@@ -335,13 +338,13 @@ function bindGrid(grid: HTMLElement) {
   const subcategoryButtons = Array.from(
     grid.querySelectorAll<HTMLButtonElement>('[data-filter-subcategory]')
   )
-  const yearSelect =
-    grid.querySelector<HTMLSelectElement>('[data-filter-year]')
+  const yearSelect = grid.querySelector<HTMLSelectElement>('[data-filter-year]')
   const locationSelect = grid.querySelector<HTMLSelectElement>(
     '[data-filter-location]'
   )
-  const clientSelect =
-    grid.querySelector<HTMLSelectElement>('[data-filter-client]')
+  const clientSelect = grid.querySelector<HTMLSelectElement>(
+    '[data-filter-client]'
+  )
   const searchInput = grid.querySelector<HTMLInputElement>(
     '[data-filter-search]'
   )
@@ -416,7 +419,9 @@ function bindGrid(grid: HTMLElement) {
       button.hidden = !shouldShowSubcategoryButton(items, st, subSlug)
     }
 
-    const activeBtn = subcategoryButtons.find((b) => b.dataset.active === 'true')
+    const activeBtn = subcategoryButtons.find(
+      (b) => b.dataset.active === 'true'
+    )
     if (activeBtn?.hidden) {
       const resetBtn = subcategoryButtons.find(
         (b) => (b.dataset.filterSubcategory ?? '') === ''
@@ -566,14 +571,14 @@ function initPortfolioFilters() {
 }
 
 function onPopState() {
-  document.querySelectorAll<HTMLElement>('[data-portfolio-grid]').forEach(
-    (grid) => {
+  document
+    .querySelectorAll<HTMLElement>('[data-portfolio-grid]')
+    .forEach((grid) => {
       const actions = gridFilterActions.get(grid)
       if (!actions) return
       actions.readUrl()
       actions.apply()
-    }
-  )
+    })
 }
 
 window.addEventListener('popstate', onPopState)

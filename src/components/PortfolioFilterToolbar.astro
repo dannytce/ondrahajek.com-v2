@@ -6,12 +6,30 @@ interface Props {
   locale: Locale
   subcategories: FilterOption[]
   totalCount: number
+  categoryTitle: string
 }
 
-const { locale, subcategories, totalCount } = Astro.props
+const { locale, subcategories, totalCount, categoryTitle } = Astro.props
 ---
 
-<div class="flex flex-wrap items-center justify-between gap-4">
+<div class="flex flex-wrap items-end justify-between gap-4">
+  <div class="flex min-w-0 flex-col gap-1">
+    <span class="font-geist text-[1rem] font-medium tracking-[0.05em] text-[#4A9FD8]">
+      {categoryTitle}
+    </span>
+    <h2 class="m-0 font-anton text-[3.2rem] leading-[0.95] text-white md:text-[3.6rem]">
+      {categoryTitle}
+    </h2>
+  </div>
+
+  <div class="flex w-full shrink-0 items-center justify-end gap-2 sm:w-auto">
+    <span class="font-geist text-[1.2rem] text-[#888888]">
+      <span data-filter-result-count>{totalCount}</span> {locale === 'cs' ? 'projektů' : 'projects'}
+    </span>
+  </div>
+</div>
+
+<div class="mt-4 flex flex-wrap items-center justify-between gap-4">
   <div class="flex min-w-0 flex-1 flex-wrap gap-2">
     {
       subcategories.length > 0 && (
@@ -40,10 +58,6 @@ const { locale, subcategories, totalCount } = Astro.props
   </div>
 
   <div class="flex w-full shrink-0 items-center justify-end gap-2 sm:w-auto">
-    <span class="font-inter text-[1.3rem] text-secondary/60">
-      <span data-filter-result-count>{totalCount}</span> / {totalCount}{' '}
-      {t(locale, 'filter.results')}
-    </span>
     <button
       type="button"
       data-filter-toggle
