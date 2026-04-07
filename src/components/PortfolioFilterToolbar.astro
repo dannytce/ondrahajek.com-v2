@@ -1,15 +1,13 @@
 ---
-import type { FilterOption } from '~/lib/portfolio-filters'
-import { t, type Locale } from '~/i18n'
+import type { Locale } from '~/i18n'
 
 interface Props {
   locale: Locale
-  subcategories: FilterOption[]
   totalCount: number
   categoryTitle: string
 }
 
-const { locale, subcategories, totalCount, categoryTitle } = Astro.props
+const { locale, totalCount, categoryTitle } = Astro.props
 ---
 
 <div class="flex flex-wrap items-end justify-between gap-4">
@@ -29,63 +27,4 @@ const { locale, subcategories, totalCount, categoryTitle } = Astro.props
   </div>
 </div>
 
-<div class="mt-4 flex flex-wrap items-center justify-between gap-4">
-  <div class="flex min-w-0 flex-1 flex-wrap gap-2">
-    {
-      subcategories.length > 0 && (
-        <div class="flex flex-wrap gap-2">
-          <button
-            type="button"
-            data-filter-subcategory=""
-            data-active="true"
-            class="filter-subcategory-chip cursor-pointer border border-white bg-white px-4 py-1 font-anton text-[1.6rem] uppercase text-background transition-colors data-[active=false]:border-secondary/40 data-[active=false]:bg-transparent data-[active=false]:text-secondary data-[active=false]:hover:border-white data-[active=false]:hover:text-white"
-          >
-            {t(locale, 'filter.all')}
-          </button>
-          {subcategories.map((subcategory) => (
-            <button
-              type="button"
-              data-filter-subcategory={subcategory.value}
-              data-active="false"
-              class="filter-subcategory-chip cursor-pointer border border-white bg-white px-4 py-1 font-anton text-[1.6rem] uppercase text-background transition-colors data-[active=false]:border-secondary/40 data-[active=false]:bg-transparent data-[active=false]:text-secondary data-[active=false]:hover:border-white data-[active=false]:hover:text-white"
-            >
-              {subcategory.label}
-            </button>
-          ))}
-        </div>
-      )
-    }
-  </div>
-
-  <div class="flex w-full shrink-0 items-center justify-end gap-2 sm:w-auto">
-    <button
-      type="button"
-      data-filter-toggle
-      class="filter-toggle-btn"
-      aria-expanded="false"
-      aria-controls="portfolio-filters-panel"
-      aria-label={t(locale, 'filter.toggleFilters')}
-    >
-      <svg
-        class="h-6 w-6"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
-      >
-        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-      </svg>
-      <span
-        data-filter-active-badge
-        hidden
-        class="pointer-events-none absolute -right-4 -top-4 flex min-h-[1.8rem] min-w-[1.8rem] items-center justify-center rounded-full bg-secondary px-0.5 font-anton text-[1.1rem] font-semibold tabular-nums leading-none text-background ring-2 ring-background"
-        aria-hidden="true"
-      >
-        0
-      </span>
-    </button>
-  </div>
-</div>
+<div class="mt-2"></div>
