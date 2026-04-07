@@ -36,7 +36,7 @@ const {
 <section class="mx-auto w-full max-w-container px-5 pb-14 pt-[7.8rem] md:pb-16 xl:px-0">
   <a
     href={localePath(locale, backPath)}
-    class="detail-reveal mb-5 inline-block font-geist text-[1rem] uppercase tracking-[0.2em] text-[#888888] no-underline transition-colors hover:text-white"
+    class="detail-reveal mb-5 inline-block font-geist text-[1rem] tracking-[0.12em] text-[#888888] no-underline transition-colors hover:text-white"
   >
     {backLinkText}
   </a>
@@ -237,7 +237,7 @@ const {
     relatedProjects.length > 0 && (
       <section class="detail-reveal detail-reveal-delay-3 mt-12 hidden lg:block">
         <div class="mb-6 flex items-center justify-between">
-          <h2 class="m-0 font-anton text-[2.4rem] uppercase leading-none text-white">
+          <h2 class="m-0 font-anton text-[2.4rem] leading-none text-white">
             {locale === 'cs' ? 'Další projekty' : 'More Projects'}
           </h2>
           {pageKey && (
