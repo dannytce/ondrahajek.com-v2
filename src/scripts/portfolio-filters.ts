@@ -487,11 +487,14 @@ function bindGrid(grid: HTMLElement) {
       })
     }
 
+    const matchingItems: HTMLElement[] = []
     items.forEach((item) => {
       const visible = itemMatchesAll(item, st)
+      if (visible) matchingItems.push(item)
       item.hidden = !visible
-      if (visible) visibleCount += 1
     })
+
+    visibleCount = matchingItems.length
 
     resultCount.textContent = String(visibleCount)
     const activeCount = countActiveFilters(st)

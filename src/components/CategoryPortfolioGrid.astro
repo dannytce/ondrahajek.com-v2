@@ -27,7 +27,6 @@ const {
 
 /** PortfolioCard renders nothing without a thumbnail — exclude from grid and filter model. */
 const gridPortfolios = portfolios.filter((p) => p.thumbnail?.responsiveImage)
-const categoryItems = gridPortfolios.slice(0, 6)
 
 const {
   subcategories,
@@ -36,7 +35,7 @@ const {
   clients,
   locationSlugByValue,
   clientSlugByValue,
-} = buildFilterOptions(categoryItems)
+} = buildFilterOptions(gridPortfolios)
 ---
 
 <section
@@ -50,16 +49,14 @@ const {
   <div class="portfolio-toolbar-enter mb-8 flex flex-col gap-4">
     <PortfolioFilterToolbar
       locale={locale}
-      totalCount={categoryItems.length}
-      categoryTitle={
-        categorySlug === 'drone-cinematography'
-          ? locale === 'cs'
-            ? 'Letecké záběry dronem'
-            : 'Drone Cinematography'
-          : locale === 'cs'
-            ? 'Video Produkce'
-            : 'Video Production'
-      }
+      totalCount={gridPortfolios.length}
+      categoryTitle={categorySlug === 'drone-cinematography'
+        ? locale === 'cs'
+          ? 'Letecké záběry dronem'
+          : 'Drone Cinematography'
+        : locale === 'cs'
+          ? 'Video Produkce'
+          : 'Video Production'}
     />
     <PortfolioFiltersPanel
       locale={locale}
@@ -82,7 +79,7 @@ const {
     class="m-0 grid w-full list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3"
   >
     {
-      categoryItems.map((portfolio, index) => {
+      gridPortfolios.map((portfolio, index) => {
         const year = portfolio.date
           ? new Date(portfolio.date).getFullYear().toString()
           : ''
