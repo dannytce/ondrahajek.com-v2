@@ -16,7 +16,6 @@ const switchUrl = portfolioDetailSwitchUrlWhenMissing(locale)
 <BaseLayout
   title={`Not found - ${t(locale, 'meta.title')}`}
   locale={locale}
-  compactHeader
 >
   <Page locale={locale}>
     <PortfolioDetailNav slot="header" locale={locale} switchUrl={switchUrl} minimal />
@@ -28,7 +27,7 @@ const switchUrl = portfolioDetailSwitchUrlWhenMissing(locale)
       </p>
       <a
         href={localePath(locale, '/')}
-        class="mt-4 inline-block font-teko text-[2rem] uppercase text-white no-underline hover:opacity-80"
+        class="mt-4 inline-block font-anton text-[2rem] uppercase text-white no-underline hover:opacity-80"
       >
         {t(locale, 'detail.back')}
       </a>

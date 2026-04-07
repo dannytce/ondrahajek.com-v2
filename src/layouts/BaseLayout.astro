@@ -5,13 +5,12 @@ import AnalyticsScripts from '~/components/seo/AnalyticsScripts.astro'
 import type { Locale } from '~/i18n'
 
 const fontsHref =
-  'https://fonts.googleapis.com/css2?family=Teko:wght@400;600&family=Roboto:wght@400;700&display=swap'
+  'https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap'
 
 interface Props {
   title?: string
   description?: string
   locale?: Locale
-  compactHeader?: boolean
   /** Absolute path of the current page WITHOUT locale prefix (e.g. "/portfolio/my-slug") */
   canonicalPath?: string
   /**
@@ -27,7 +26,6 @@ const {
   title = 'ondrahajek.com | AERIAL Video & Photography',
   description = 'Web portfolio of drone pilot Ondra Hajek, who will make your projects more interesting. He specialises in documentaries, film, music video, commercials and architecture.',
   locale = 'en',
-  compactHeader = false,
   canonicalPath,
   hreflangPaths,
   jsonLd,
@@ -137,7 +135,7 @@ const jsonLdBlocks = jsonLd
       import '~/scripts/portfolio-list-scroll'
     </script>
   </head>
-  <body class:list={[compactHeader && 'compact-header']}>
+  <body>
     <noscript>
       <iframe
         src="https://www.googletagmanager.com/ns.html?id=GTM-T58QC9G"

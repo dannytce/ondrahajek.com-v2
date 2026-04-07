@@ -1,4 +1,5 @@
 ---
+import LanguageToggle from '~/components/LanguageToggle.astro'
 import { t, localePath, type Locale } from '~/i18n'
 import { localizedPagePath } from '~/i18n/routes'
 
@@ -14,7 +15,7 @@ const { locale, switchUrl, minimal = false } = Astro.props
 
 <header
   slot="header"
-  class="fixed left-0 right-0 top-0 z-nav border-b border-white/10 bg-background/95 backdrop-blur"
+  class="fixed left-0 right-0 top-0 z-nav border-b border-white/5 bg-surface-dark/90 backdrop-blur-md"
 >
   <div
     class:list={[
@@ -24,37 +25,32 @@ const { locale, switchUrl, minimal = false } = Astro.props
   >
     <a
       href={localePath(locale, '/')}
-      class="font-teko text-[1.8rem] uppercase tracking-wide text-white no-underline"
+      class="flex items-center"
     >
-      ONDRAHAJEK.COM
+      <img src="/logo-ondrahajek.svg" alt="ONDRAHAJEK.COM" class="h-5" />
     </a>
     {
       !minimal && (
         <nav aria-label="Primary" class="flex items-center gap-6">
           <a
             href={localePath(locale, localizedPagePath(locale, 'drone'))}
-            class="font-teko text-[1.6rem] uppercase text-secondary no-underline transition-colors hover:text-white"
+            class="hidden font-inter text-[1.3rem] uppercase tracking-wider text-foreground-muted no-underline transition-colors hover:text-white md:block"
           >
             {t(locale, 'nav.drone')}
           </a>
           <a
             href={localePath(locale, localizedPagePath(locale, 'video'))}
-            class="font-teko text-[1.6rem] uppercase text-secondary no-underline transition-colors hover:text-white"
+            class="hidden font-inter text-[1.3rem] uppercase tracking-wider text-foreground-muted no-underline transition-colors hover:text-white md:block"
           >
             {t(locale, 'nav.video')}
           </a>
           <a
             href={localePath(locale, localizedPagePath(locale, 'about'))}
-            class="font-teko text-[1.6rem] uppercase text-secondary no-underline transition-colors hover:text-white"
+            class="hidden font-inter text-[1.3rem] uppercase tracking-wider text-foreground-muted no-underline transition-colors hover:text-white md:block"
           >
             {t(locale, 'nav.about')}
           </a>
-          <a
-            href={switchUrl}
-            class="font-teko text-[1.4rem] uppercase text-secondary no-underline transition-colors hover:text-white"
-          >
-            {t(locale, 'lang.switch')}
-          </a>
+          <LanguageToggle locale={locale} switchUrl={switchUrl} />
         </nav>
       )
     }

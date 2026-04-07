@@ -15,7 +15,7 @@ const telHref = `tel:${phone.replace(/\s/g, '')}`
   <button
     type="button"
     data-hire-open
-    class="pointer-events-auto rounded-full border border-white/25 bg-[#111114]/95 px-5 py-3 font-teko text-[1.6rem] uppercase tracking-wide text-white shadow-lg backdrop-blur transition-colors hover:border-white/50 hover:bg-[#17171a]"
+    class="pointer-events-auto rounded-full border border-white/25 bg-[#111114]/95 px-5 py-3 font-anton text-[1.6rem] uppercase tracking-wide text-white shadow-lg backdrop-blur transition-colors hover:border-white/50 hover:bg-[#17171a]"
   >
     {t(locale, 'hire.open')}
   </button>
@@ -29,41 +29,41 @@ const telHref = `tel:${phone.replace(/\s/g, '')}`
     <div
       class="flex items-center justify-between border-b border-white/10 px-6 py-4"
     >
-      <h2 class="m-0 font-teko text-[2.4rem] uppercase tracking-wide">
+      <h2 class="m-0 font-anton text-[2.4rem] uppercase tracking-wide">
         {t(locale, 'hire.title')}
       </h2>
       <button
         type="button"
         data-hire-close
-        class="rounded border border-white/20 px-3 py-1 font-teko text-[1.4rem] uppercase text-secondary transition-colors hover:border-white/40 hover:text-white"
+        class="rounded border border-white/20 px-3 py-1 font-anton text-[1.4rem] uppercase text-secondary transition-colors hover:border-white/40 hover:text-white"
         aria-label={t(locale, 'hire.close')}
       >
         {t(locale, 'hire.close')}
       </button>
     </div>
     <div class="flex flex-1 flex-col gap-8 overflow-y-auto px-6 py-8">
-      <p class="m-0 font-roboto text-[1.6rem] leading-relaxed text-secondary">
+      <p class="m-0 font-inter text-[1.6rem] leading-relaxed text-secondary">
         {t(locale, 'hire.body')}
       </p>
       <div class="flex flex-col gap-4">
         <div>
-          <p class="m-0 mb-1 font-roboto text-[1.3rem] text-secondary">
+          <p class="m-0 mb-1 font-inter text-[1.3rem] text-secondary">
             {t(locale, 'hire.emailLabel')}
           </p>
           <a
             href={`mailto:${email}`}
-            class="break-all font-teko text-[2rem] uppercase text-white no-underline transition-colors hover:text-primary"
+            class="break-all font-anton text-[2rem] uppercase text-white no-underline transition-colors hover:text-primary"
           >
             {email}
           </a>
         </div>
         <div>
-          <p class="m-0 mb-1 font-roboto text-[1.3rem] text-secondary">
+          <p class="m-0 mb-1 font-inter text-[1.3rem] text-secondary">
             {t(locale, 'hire.phoneLabel')}
           </p>
           <a
             href={telHref}
-            class="font-teko text-[2rem] uppercase text-white no-underline transition-colors hover:text-primary"
+            class="font-anton text-[2rem] uppercase text-white no-underline transition-colors hover:text-primary"
           >
             {phone}
           </a>

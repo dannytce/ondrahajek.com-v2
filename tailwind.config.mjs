@@ -6,11 +6,21 @@ export default {
       colors: {
         primary: '#fff',
         secondary: '#868687',
-        background: '#0D0D10',
+        background: '#0A0A0A',
+        'surface-dark': '#0A0A0A',
+        'surface-card': '#111111',
+        'foreground-primary': '#FFFFFF',
+        'foreground-muted': '#888888',
+        'foreground-dim': '#555555',
+        'border-subtle': '#222222',
+        'accent-primary': '#4A9FD8',
       },
       fontFamily: {
         teko: ['Teko', 'sans-serif'],
         roboto: ['Roboto', 'Impact', 'Arial', 'sans-serif'],
+        anton: ['Anton', 'sans-serif'],
+        inter: ['Inter', 'sans-serif'],
+        geist: ['"Geist Mono"', 'monospace'],
       },
       screens: {
         xs: '25em',

@@ -18,7 +18,7 @@ const withThumbnails = portfolios.filter((p) => p.thumbnail?.responsiveImage)
 {
   withThumbnails.length > 0 && (
     <div class="mx-auto w-full max-w-container px-[15px] xl:px-0">
-      <h2 class="portfolio-toolbar-enter mb-8 font-teko text-[4rem] font-semibold uppercase text-white md:text-[6rem]">
+      <h2 class="portfolio-toolbar-enter mb-8 font-anton text-[4rem] font-semibold uppercase text-white md:text-[6rem]">
         {t(locale, 'home.featured')}
       </h2>
       <ul class="m-0 grid w-full list-none grid-cols-1 gap-12 p-0 sm:grid-cols-2 lg:grid-cols-3">
@@ -35,13 +35,13 @@ const withThumbnails = portfolios.filter((p) => p.thumbnail?.responsiveImage)
       <div class="portfolio-toolbar-enter-delayed mt-16 flex justify-center gap-8">
         <a
           href={localePath(locale, localizedPagePath(locale, 'drone'))}
-          class="border border-white/20 px-8 py-3 font-teko text-[2.4rem] uppercase text-white no-underline transition-colors hover:bg-white/10"
+          class="border border-white/20 px-8 py-3 font-anton text-[2.4rem] uppercase text-white no-underline transition-colors hover:bg-white/10"
         >
           {t(locale, 'nav.drone')}
         </a>
         <a
           href={localePath(locale, localizedPagePath(locale, 'video'))}
-          class="border border-white/20 px-8 py-3 font-teko text-[2.4rem] uppercase text-white no-underline transition-colors hover:bg-white/10"
+          class="border border-white/20 px-8 py-3 font-anton text-[2.4rem] uppercase text-white no-underline transition-colors hover:bg-white/10"
         >
           {t(locale, 'nav.video')}
         </a>

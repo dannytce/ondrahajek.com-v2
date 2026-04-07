@@ -64,12 +64,14 @@ const altLocale = getAlternateLocale(locale)
 const switchUrl = switchHref ?? localePath(altLocale, pagePath)
 ---
 
-<div
-  data-site-header
-  data-homepage={isHomepage ? 'true' : 'false'}
-  data-compact={compact ? 'true' : 'false'}
-  data-video-ready={isHomepage ? 'false' : 'true'}
->
+<div data-site-header>
+  <HeaderNav
+    locale={locale}
+    currentPath={currentPath}
+    switchUrl={switchUrl}
+    navLinks={navLinks}
+  />
+
   <HeaderHero
     isHomepage={isHomepage}
     compact={compact}
@@ -80,68 +82,8 @@ const switchUrl = switchHref ?? localePath(altLocale, pagePath)
   />
 
   {isAboutPage ? <TrustedBy /> : null}
-
-  <HeaderNav
-    locale={locale}
-    currentPath={currentPath}
-    switchUrl={switchUrl}
-    navLinks={navLinks}
-  />
 </div>
 
 <script>
   import '~/scripts/header.ts'
 </script>
-
-<style>
-  [data-site-header][data-video-ready='false'] .header-video {
-    opacity: 0;
-  }
-
-  [data-site-header][data-video-ready='true'] .header-video {
-    opacity: 1;
-  }
-
-  [data-site-header][data-homepage='true'][data-video-ready='true']
-    .header-fallback {
-    opacity: 0;
-  }
-
-  .header-video,
-  .header-fallback,
-  .site-nav,
-  .site-nav-gradient {
-    transition-property: opacity, transform;
-  }
-
-  .site-nav {
-    transition-duration: 300ms;
-    transition-timing-function: ease-out;
-  }
-
-  .site-nav-gradient {
-    opacity: 0;
-    transition-duration: 300ms;
-    background: linear-gradient(
-      to bottom,
-      rgba(13, 13, 16, 0.95) 0%,
-      rgba(13, 13, 16, 0.7) 35%,
-      rgba(13, 13, 16, 0.3) 70%,
-      transparent 100%
-    );
-  }
-
-  [data-site-nav][data-visible='false'] {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-
-  [data-site-nav][data-visible='true'] {
-    transform: translateY(0);
-    opacity: 1;
-  }
-
-  [data-site-nav][data-past-hero='true'] .site-nav-gradient {
-    opacity: 1;
-  }
-</style>

@@ -34,7 +34,7 @@ const {
 <section class="mx-auto w-full max-w-container px-[15px] pb-16 pt-[10.5rem] xl:px-0">
   <a
     href={localePath(locale, backPath)}
-    class="detail-reveal mb-8 inline-block font-teko text-[2rem] uppercase text-secondary no-underline transition-colors hover:text-white"
+    class="detail-reveal mb-8 inline-block font-anton text-[2rem] uppercase text-secondary no-underline transition-colors hover:text-white"
   >
     {backLinkText}
   </a>
@@ -47,13 +47,13 @@ const {
   >
     <div>
       <h1
-        class="detail-reveal m-0 font-teko text-[5.2rem] uppercase leading-[0.95] tracking-[0.01em] text-white md:text-[7.2rem]"
+        class="detail-reveal m-0 font-anton text-[5.2rem] uppercase leading-[0.95] tracking-[0.01em] text-white md:text-[7.2rem]"
       >
         {portfolio.title}
       </h1>
       {
         locationH2 && (
-          <h2 class="detail-reveal mt-4 max-w-[70ch] font-teko text-[2rem] font-normal uppercase leading-tight tracking-wide text-secondary md:text-[2.4rem]">
+          <h2 class="detail-reveal mt-4 max-w-[70ch] font-anton text-[2rem] font-normal uppercase leading-tight tracking-wide text-secondary md:text-[2.4rem]">
             {locationH2}
           </h2>
         )
@@ -106,12 +106,12 @@ const {
                       locale,
                       `${localizedPagePath(locale, pageKey)}?tag=${encodeURIComponent(key)}`
                     )}
-                    class="inline-block rounded-sm border border-secondary/40 px-3 py-1 font-teko text-[1.5rem] uppercase tracking-wide text-secondary no-underline transition-colors hover:border-white hover:text-white"
+                    class="inline-block rounded-full border border-border-subtle bg-white/5 px-3 py-1 font-geist text-[1.2rem] text-foreground-muted no-underline transition-colors hover:border-white/30 hover:text-white"
                   >
                     {label}
                   </a>
                 ) : (
-                  <span class="inline-block rounded-sm border border-secondary/40 px-3 py-1 font-teko text-[1.5rem] uppercase tracking-wide text-secondary">
+                  <span class="inline-block rounded-full border border-border-subtle bg-white/5 px-3 py-1 font-geist text-[1.2rem] text-foreground-muted">
                     {label}
                   </span>
                 )}
@@ -123,7 +123,7 @@ const {
     </div>
     {
       hasDetailMeta && (
-        <aside class="detail-reveal detail-reveal-delay-1 hidden h-fit rounded border border-white/10 bg-[#111114] p-6 xl:sticky xl:top-28 xl:block">
+        <aside class="detail-reveal detail-reveal-delay-1 hidden h-fit rounded border border-border-subtle bg-surface-card p-6 xl:sticky xl:top-28 xl:block">
           <PortfolioDetailMeta
             locale={locale}
             year={year}

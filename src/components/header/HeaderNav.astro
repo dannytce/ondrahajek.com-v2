@@ -1,5 +1,7 @@
 ---
-import { t, localePath, type Locale } from '~/i18n'
+import LanguageToggle from '~/components/LanguageToggle.astro'
+import MobileMenuOverlay from '~/components/MobileMenuOverlay.astro'
+import { localePath, type Locale } from '~/i18n'
 
 interface NavLink {
   text: string
@@ -19,45 +21,65 @@ const { locale, currentPath, switchUrl, navLinks } = Astro.props
 <div
   data-site-nav
   data-visible="true"
-  data-past-hero="false"
-  class="site-nav pointer-events-none fixed left-0 right-0 top-0 z-nav"
+  class="site-nav fixed left-0 right-0 top-0 z-nav"
 >
-  <div
-    class="site-nav-gradient pointer-events-none absolute inset-x-0 -z-10 h-48"
-  >
-  </div>
-  <nav class="relative top-[30px] w-full md:top-[63px]">
-    <div
-      class="mx-auto flex w-full max-w-container justify-between px-[15px] xl:px-0"
-    >
-      <a href={localePath(locale, '/')} class="pointer-events-auto">
-        <img src="/logo-ondrahajek.svg" alt="ONDRAHAJEK.COM" />
-      </a>
-      <div class="flex flex-col items-end gap-1">
-        <ul class="m-0 list-none p-0">
-          {
-            navLinks.map((item) => (
-              <li class="first:[&_a]:pt-0">
-                <a
-                  href={item.link}
-                  class:list={[
-                    'link-animation pointer-events-auto block py-[clamp(5px,1.2vh,10px)] text-right font-teko text-[2rem] uppercase text-white no-underline',
-                    currentPath === item.link && 'active',
-                  ]}
-                >
-                  {item.text}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
+  <div class="site-nav-bg absolute inset-0 bg-surface-dark/90 backdrop-blur-md border-b border-white/5"></div>
+  <nav class="relative mx-auto flex h-20 w-full max-w-container items-center justify-between px-[15px] xl:px-0">
+    <a href={localePath(locale, '/')} class="flex items-center">
+      <img src="/logo-ondrahajek.svg" alt="ONDRAHAJEK.COM" class="h-5" />
+    </a>
+
+    {/* Desktop nav links */}
+    <div class="hidden items-center gap-8 md:flex">
+      {navLinks.map((item) => (
         <a
-          href={switchUrl}
-          class="pointer-events-auto font-teko text-[1.4rem] uppercase text-secondary no-underline transition-colors hover:text-white"
+          href={item.link}
+          class:list={[
+            'font-inter text-[1.3rem] uppercase tracking-wider text-foreground-muted no-underline transition-colors hover:text-white',
+            currentPath === item.link && 'text-white',
+          ]}
         >
-          {t(locale, 'lang.switch')}
+          {item.text}
         </a>
-      </div>
+      ))}
+      <LanguageToggle locale={locale} switchUrl={switchUrl} />
     </div>
+
+    {/* Mobile hamburger button */}
+    <button
+      data-mobile-menu-toggle
+      class="relative z-[100] flex h-10 w-10 flex-col items-center justify-center gap-[5px] md:hidden"
+      aria-label="Toggle menu"
+    >
+      <span class="hamburger-line block h-[2px] w-5 bg-white transition-all duration-300"></span>
+      <span class="hamburger-line block h-[2px] w-5 bg-white transition-all duration-300"></span>
+    </button>
   </nav>
 </div>
+
+<MobileMenuOverlay locale={locale} switchUrl={switchUrl} navLinks={navLinks} />
+
+<style>
+  [data-site-nav] {
+    transition: transform 300ms ease-out, opacity 300ms ease-out;
+  }
+
+  [data-site-nav][data-visible='false'] {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  [data-site-nav][data-visible='true'] {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* Hamburger → X animation */
+  [data-mobile-menu-toggle][aria-expanded='true'] .hamburger-line:first-child {
+    transform: translateY(3.5px) rotate(45deg);
+  }
+
+  [data-mobile-menu-toggle][aria-expanded='true'] .hamburger-line:last-child {
+    transform: translateY(-3.5px) rotate(-45deg);
+  }
+</style>
