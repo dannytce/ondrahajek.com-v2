@@ -39,7 +39,32 @@ export async function getStaticPaths() {
 const locale = getLocaleFromParam(Astro.params.locale)
 const { slug } = Astro.params
 
-const portfolio = await getPortfolioBySlug(slug as string, locale)
+const requestedSlug = (slug ?? '').trim()
+
+let portfolio = requestedSlug
+  ? await getPortfolioBySlug(requestedSlug, locale)
+  : null
+
+if (!portfolio && requestedSlug) {
+  const slugPairs = await getAllPortfoliosWithSlug()
+  const matched = slugPairs.find(
+    (p) => p.slugEn?.trim() === requestedSlug || p.slugCs?.trim() === requestedSlug
+  )
+  const localizedSlug = matched ? portfolioSlugForLocale(matched, locale) : null
+  const lookupSlug = matched?.slugEn?.trim() || matched?.slugCs?.trim() || null
+
+  if (lookupSlug) {
+    portfolio = await getPortfolioBySlug(lookupSlug, locale)
+  }
+
+  if (localizedSlug && localizedSlug !== requestedSlug) {
+    return Astro.redirect(
+      `/${locale}${portfolioDetailCanonicalPath(locale, localizedSlug)}`,
+      302
+    )
+  }
+}
+
 const detail = portfolio
   ? await buildPortfolioDetailModel(portfolio, locale, getPortfoliosByCategory)
   : null
