@@ -1,11 +1,12 @@
 ---
+import { Image } from '@datocms/astro'
 import Player from '~/components/Player.astro'
 import PortfolioDescriptions from '~/components/PortfolioDescriptions.astro'
 import PortfolioDetailMeta from '~/components/PortfolioDetailMeta.astro'
 import type { PortfolioDetail } from '~/api'
 import type { PortfolioDetailModel } from '~/lib/portfolio-detail/buildPortfolioDetail'
 import { localePath, t, type Locale } from '~/i18n'
-import { localizedPagePath } from '~/i18n/routes'
+import { localizedPagePath, portfolioCanonicalPath } from '~/i18n/routes'
 
 interface Props {
   portfolio: PortfolioDetail
@@ -28,6 +29,7 @@ const {
   year,
   hasDetailMeta,
   locationH2,
+  relatedProjects,
 } = detail
 ---
 
@@ -230,4 +232,53 @@ const {
       }
     </div>
   </div>
+
+  {
+    relatedProjects.length > 0 && (
+      <section class="detail-reveal detail-reveal-delay-3 mt-12 hidden lg:block">
+        <div class="mb-6 flex items-center justify-between">
+          <h2 class="m-0 font-anton text-[2.4rem] uppercase leading-none text-white">
+            {locale === 'cs' ? 'Další projekty' : 'More Projects'}
+          </h2>
+          {pageKey && (
+            <a
+              href={localePath(locale, localizedPagePath(locale, pageKey))}
+              class="font-inter text-[1.2rem] text-[#4A9FD8] no-underline transition-colors hover:text-white"
+            >
+              {locale === 'cs' ? 'Zobrazit vše' : 'View all'} &rarr;
+            </a>
+          )}
+        </div>
+        <ul class="m-0 grid list-none grid-cols-3 gap-4 p-0">
+          {relatedProjects.map((item) => {
+            const responsiveImage = item.thumbnail?.responsiveImage
+            if (!responsiveImage || !item.slug) return null
+            return (
+              <li>
+                <a
+                  href={localePath(
+                    locale,
+                    portfolioCanonicalPath(locale, item.slug)
+                  )}
+                  class="group relative block overflow-hidden rounded-lg no-underline"
+                >
+                  <Image
+                    data={{ ...responsiveImage, alt: '' }}
+                    pictureClass="w-full"
+                    imgClass="block h-[200px] w-full object-cover"
+                  />
+                  <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,10,0)_35%,rgba(10,10,10,0.6)_100%)]" />
+                  <div class="pointer-events-none absolute inset-x-0 bottom-0 p-4">
+                    <h3 class="m-0 font-anton text-[1.5rem] uppercase leading-none text-white [text-shadow:0_1px_8px_rgba(0,0,0,0.8)]">
+                      {item.title}
+                    </h3>
+                  </div>
+                </a>
+              </li>
+            )
+          })}
+        </ul>
+      </section>
+    )
+  }
 </section>
