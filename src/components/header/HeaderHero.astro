@@ -23,7 +23,9 @@ const { isHomepage, compact, title, subTitle, homepageHero, headerBackground } =
 <header
   class:list={[
     'relative flex w-full flex-col justify-end overflow-hidden',
-    compact ? 'min-h-[220px] md:min-h-[260px]' : 'min-h-[380px] md:min-h-[520px]',
+    compact
+      ? 'min-h-[220px] md:min-h-[260px]'
+      : 'min-h-[380px] md:min-h-[520px]',
   ]}
 >
   {/* Background image */}
@@ -56,7 +58,9 @@ const { isHomepage, compact, title, subTitle, homepageHero, headerBackground } =
             <span class="font-geist text-[1rem] font-medium uppercase tracking-[0.2em] text-accent-primary">
               {homepageHero.line}
             </span>
-            <span class="font-geist text-[1rem] text-foreground-dim">&middot;</span>
+            <span class="font-geist text-[1rem] text-foreground-dim">
+              &middot;
+            </span>
             <span class="font-geist text-[1rem] uppercase tracking-[0.2em] text-foreground-muted">
               VIDEO & PHOTOGRAPHY
             </span>

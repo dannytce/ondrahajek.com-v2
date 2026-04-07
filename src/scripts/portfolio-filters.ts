@@ -6,6 +6,17 @@ function normalize(value: string | null | undefined) {
   return (value ?? '').trim().toLowerCase()
 }
 
+function getResultLabel(
+  locale: string,
+  count: number,
+  labels: { one: string; few: string; other: string }
+): string {
+  const category = new Intl.PluralRules(locale).select(count)
+  if (category === 'one') return labels.one
+  if (category === 'few') return labels.few
+  return labels.other
+}
+
 /** Match legacy bookmark URLs where option value was the raw label, not a slug. */
 function setSelectFromUrlParam(
   select: HTMLSelectElement | null | undefined,
@@ -30,12 +41,12 @@ function hasUrlAdvancedFilterParams(): boolean {
   const p = new URLSearchParams(window.location.search)
   return Boolean(
     p.get('year') ||
-      p.get('loc') ||
-      p.get('location') ||
-      p.get('cl') ||
-      p.get('client') ||
-      p.get('q') ||
-      p.get('tag')
+    p.get('loc') ||
+    p.get('location') ||
+    p.get('cl') ||
+    p.get('client') ||
+    p.get('q') ||
+    p.get('tag')
   )
 }
 
@@ -142,7 +153,10 @@ function shouldShowSubcategoryButton(
   return false
 }
 
-function collectAvailableYears(items: HTMLElement[], st: FilterState): string[] {
+function collectAvailableYears(
+  items: HTMLElement[],
+  st: FilterState
+): string[] {
   const s = new Set<string>()
   for (const item of items) {
     if (!itemMatchesExcept(item, st, 'year')) continue
@@ -287,13 +301,13 @@ function readUrlIntoGrid(grid: HTMLElement) {
   const subcategoryButtons = Array.from(
     grid.querySelectorAll<HTMLButtonElement>('[data-filter-subcategory]')
   )
-  const yearSelect =
-    grid.querySelector<HTMLSelectElement>('[data-filter-year]')
+  const yearSelect = grid.querySelector<HTMLSelectElement>('[data-filter-year]')
   const locationSelect = grid.querySelector<HTMLSelectElement>(
     '[data-filter-location]'
   )
-  const clientSelect =
-    grid.querySelector<HTMLSelectElement>('[data-filter-client]')
+  const clientSelect = grid.querySelector<HTMLSelectElement>(
+    '[data-filter-client]'
+  )
   const searchInput = grid.querySelector<HTMLInputElement>(
     '[data-filter-search]'
   )
@@ -335,13 +349,13 @@ function bindGrid(grid: HTMLElement) {
   const subcategoryButtons = Array.from(
     grid.querySelectorAll<HTMLButtonElement>('[data-filter-subcategory]')
   )
-  const yearSelect =
-    grid.querySelector<HTMLSelectElement>('[data-filter-year]')
+  const yearSelect = grid.querySelector<HTMLSelectElement>('[data-filter-year]')
   const locationSelect = grid.querySelector<HTMLSelectElement>(
     '[data-filter-location]'
   )
-  const clientSelect =
-    grid.querySelector<HTMLSelectElement>('[data-filter-client]')
+  const clientSelect = grid.querySelector<HTMLSelectElement>(
+    '[data-filter-client]'
+  )
   const searchInput = grid.querySelector<HTMLInputElement>(
     '[data-filter-search]'
   )
@@ -351,6 +365,7 @@ function bindGrid(grid: HTMLElement) {
   const resultCount = grid.querySelector<HTMLElement>(
     '[data-filter-result-count]'
   )
+  const resultLabel = grid.querySelector<HTMLElement>('[data-filter-result-label]')
   const noResults = grid.querySelector<HTMLElement>('[data-filter-empty]')
   const items = Array.from(
     grid.querySelectorAll<HTMLElement>('[data-portfolio-item]')
@@ -416,7 +431,9 @@ function bindGrid(grid: HTMLElement) {
       button.hidden = !shouldShowSubcategoryButton(items, st, subSlug)
     }
 
-    const activeBtn = subcategoryButtons.find((b) => b.dataset.active === 'true')
+    const activeBtn = subcategoryButtons.find(
+      (b) => b.dataset.active === 'true'
+    )
     if (activeBtn?.hidden) {
       const resetBtn = subcategoryButtons.find(
         (b) => (b.dataset.filterSubcategory ?? '') === ''
@@ -468,6 +485,15 @@ function bindGrid(grid: HTMLElement) {
     })
 
     resultCount.textContent = String(visibleCount)
+    if (resultLabel) {
+      const locale = resultCount.dataset.locale ?? grid.dataset.locale ?? 'en'
+      const labels = {
+        one: resultCount.dataset.labelOne ?? 'project',
+        few: resultCount.dataset.labelFew ?? resultCount.dataset.labelOther ?? 'projects',
+        other: resultCount.dataset.labelOther ?? 'projects',
+      }
+      resultLabel.textContent = getResultLabel(locale, visibleCount, labels)
+    }
     const activeCount = countActiveFilters(st)
     const hasActiveFilters = activeCount > 0
     if (clearButton) {
@@ -566,14 +592,14 @@ function initPortfolioFilters() {
 }
 
 function onPopState() {
-  document.querySelectorAll<HTMLElement>('[data-portfolio-grid]').forEach(
-    (grid) => {
+  document
+    .querySelectorAll<HTMLElement>('[data-portfolio-grid]')
+    .forEach((grid) => {
       const actions = gridFilterActions.get(grid)
       if (!actions) return
       actions.readUrl()
       actions.apply()
-    }
-  )
+    })
 }
 
 window.addEventListener('popstate', onPopState)
