@@ -39,12 +39,83 @@ const {
     {backLinkText}
   </a>
 
-  <div
-    class:list={[
-      'grid gap-10',
-      hasDetailMeta && 'xl:grid-cols-[minmax(0,1fr)_300px]',
-    ]}
-  >
+  {
+    portfolio.video && (
+      <div class="detail-reveal detail-reveal-delay-1 mb-8 hidden overflow-hidden rounded-xl lg:block">
+        <Player
+          title={portfolio.title ?? 'Video'}
+          video={portfolio.video}
+          poster={portfolio.thumbnail?.responsiveImage}
+          transitionName={mediaTransitionName}
+        />
+      </div>
+    )
+  }
+
+  <div class:list={['hidden gap-16 lg:grid', hasDetailMeta && 'lg:grid-cols-[minmax(0,1fr)_320px]']}>
+    <div class="min-w-0">
+      <h1
+        class="detail-reveal m-0 font-anton text-[4.2rem] uppercase leading-[0.92] tracking-[0.01em] text-white xl:text-[4.8rem]"
+      >
+        {portfolio.title}
+      </h1>
+      {
+        locationH2 && (
+          <h2 class="detail-reveal mt-4 max-w-[70ch] font-geist text-[1rem] font-normal uppercase leading-tight tracking-[0.2em] text-[#4A9FD8]">
+            {locationH2}
+          </h2>
+        )
+      }
+      <div class="detail-reveal detail-reveal-delay-2 mt-6 max-w-[72ch]">
+        <PortfolioDescriptions
+          descriptionCs={portfolio.descriptionCs}
+          descriptionEn={portfolio.descriptionEn}
+          locale={locale}
+        />
+      </div>
+      {
+        tagLinkPairs.length > 0 && (
+          <ul class="detail-reveal detail-reveal-delay-3 m-0 mt-8 flex max-w-[70ch] list-none flex-wrap gap-2 p-0">
+            {tagLinkPairs.map(({ key, label }) => (
+              <li>
+                {pageKey != null ? (
+                  <a
+                    href={localePath(
+                      locale,
+                      `${localizedPagePath(locale, pageKey)}?tag=${encodeURIComponent(key)}`
+                    )}
+                    class="inline-block rounded-full border border-white/20 bg-white/5 px-3 py-1 font-geist text-[1rem] uppercase tracking-[0.12em] text-[#B7B7B7] no-underline transition-colors hover:border-white/30 hover:text-white"
+                  >
+                    {label}
+                  </a>
+                ) : (
+                  <span class="inline-block rounded-full border border-white/20 bg-white/5 px-3 py-1 font-geist text-[1rem] uppercase tracking-[0.12em] text-[#B7B7B7]">
+                    {label}
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+    {hasDetailMeta && (
+      <aside class="detail-reveal detail-reveal-delay-1 h-fit rounded-xl border border-white/10 bg-[#141414] p-6 lg:sticky lg:top-24">
+        <PortfolioDetailMeta
+          locale={locale}
+          year={year}
+          client={portfolio.client}
+          location={portfolio.location}
+          moreForClientHref={moreForClientHref}
+          moreForClientLabel={moreForClientLabel}
+          moreInLocationHref={moreInLocationHref}
+          moreInLocationLabel={moreInLocationLabel}
+        />
+      </aside>
+    )}
+  </div>
+
+  <div class="lg:hidden">
     <div>
       <h1
         class="detail-reveal m-0 font-anton text-[3.8rem] uppercase leading-[0.92] tracking-[0.01em] text-white md:text-[7.2rem]"
@@ -60,7 +131,7 @@ const {
       }
       {
         (subtitle || hasDetailMeta) && (
-          <div class="detail-reveal detail-reveal-delay-1 mt-4 max-w-[70ch] xl:hidden">
+          <div class="detail-reveal detail-reveal-delay-1 mt-4 max-w-[70ch]">
             <PortfolioDetailMeta
               variant="inline"
               locale={locale}
@@ -121,21 +192,5 @@ const {
         )
       }
     </div>
-    {
-      hasDetailMeta && (
-        <aside class="detail-reveal detail-reveal-delay-1 hidden h-fit rounded-xl border border-white/10 bg-[#141414] p-6 xl:sticky xl:top-24 xl:block">
-          <PortfolioDetailMeta
-            locale={locale}
-            year={year}
-            client={portfolio.client}
-            location={portfolio.location}
-            moreForClientHref={moreForClientHref}
-            moreForClientLabel={moreForClientLabel}
-            moreInLocationHref={moreInLocationHref}
-            moreInLocationLabel={moreInLocationLabel}
-          />
-        </aside>
-      )
-    }
   </div>
 </section>
