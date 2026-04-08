@@ -1,6 +1,7 @@
 ---
 import LanguageToggle from '~/components/LanguageToggle.astro'
 import MobileMenuOverlay from '~/components/MobileMenuOverlay.astro'
+import NavDesktopLinkLabel from '~/components/NavDesktopLinkLabel.astro'
 import { localePath, type Locale } from '~/i18n'
 
 interface NavLink {
@@ -16,10 +17,6 @@ interface Props {
 }
 
 const { locale, currentPath, switchUrl, navLinks } = Astro.props
-const desktopLabels =
-  locale === 'cs'
-    ? ['Dron', 'Video', 'Galerie', 'O mně']
-    : ['Drone', 'Video', 'Gallery', 'About']
 ---
 
 <div
@@ -51,7 +48,11 @@ const desktopLabels =
                 currentPath === item.link && 'font-medium text-white',
               ]}
             >
-              {desktopLabels[index] ?? item.text}
+              <NavDesktopLinkLabel
+                locale={locale}
+                index={index}
+                fallback={item.text}
+              />
             </a>
           ))
         }

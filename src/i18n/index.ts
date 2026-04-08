@@ -26,6 +26,23 @@ export function getAlternateUrl(locale: Locale, path: string): string {
   return localePath(alt, path)
 }
 
+/** Short labels for main nav links on desktop (differs from full `t()` strings). */
+const DESKTOP_NAV_LINK_LABELS: Record<
+  Locale,
+  readonly [string, string, string, string]
+> = {
+  en: ['Drone', 'Video', 'Gallery', 'About'],
+  cs: ['Dron', 'Video', 'Galerie', 'O mně'],
+}
+
+export function getDesktopNavLinkLabel(
+  locale: Locale,
+  index: number,
+  fallback: string
+): string {
+  return DESKTOP_NAV_LINK_LABELS[locale][index] ?? fallback
+}
+
 /** Category slug → DatoCMS category ID mapping */
 export const CATEGORY_IDS = {
   'drone-cinematography': 'EBVBwMDdRCOpARMhmTbKaQ',

@@ -1,5 +1,6 @@
 ---
 import LanguageToggle from '~/components/LanguageToggle.astro'
+import NavDesktopLinkLabel from '~/components/NavDesktopLinkLabel.astro'
 import { t, localePath, type Locale } from '~/i18n'
 import { localizedPagePath } from '~/i18n/routes'
 
@@ -29,10 +30,6 @@ const navLinks = [
     link: localePath(locale, localizedPagePath(locale, 'about')),
   },
 ]
-const desktopLabels =
-  locale === 'cs'
-    ? ['Dron', 'Video', 'Galerie', 'O mně']
-    : ['Drone', 'Video', 'Gallery', 'About']
 ---
 
 <header
@@ -60,7 +57,11 @@ const desktopLabels =
                 href={item.link}
                 class="font-inter text-[1.3rem] text-[#888888] no-underline transition-colors hover:text-white"
               >
-                {desktopLabels[index] ?? item.text}
+                <NavDesktopLinkLabel
+                  locale={locale}
+                  index={index}
+                  fallback={item.text}
+                />
               </a>
             ))}
           </div>
