@@ -78,7 +78,8 @@ export const translations = {
     'category.video.description': 'Video production portfolio by Ondra Hajek',
     'category.video.seoTitleLocation':
       'Video Production in {location} · {siteTitle}',
-    'category.video.seoTitleClient': 'Video Production for {client} · {siteTitle}',
+    'category.video.seoTitleClient':
+      'Video Production for {client} · {siteTitle}',
     'category.video.seoTitleLocationClient':
       'Video Production in {location} · {client} · {siteTitle}',
     'category.video.seoDescLocation':
@@ -88,7 +89,8 @@ export const translations = {
     'category.video.seoDescLocationClient':
       'Video production in {location} for {client} — portfolio by Ondra Hajek.',
     'category.video.seoTitleFiltered': 'Video Production · {siteTitle}',
-    'category.video.seoDescFiltered': 'Filtered video production portfolio by Ondra Hajek.',
+    'category.video.seoDescFiltered':
+      'Filtered video production portfolio by Ondra Hajek.',
 
     'category.drone.seoTitleLocation':
       'Drone Cinematography in {location} · {siteTitle}',
@@ -120,7 +122,6 @@ export const translations = {
     'filter.project.one': 'project',
     'filter.project.few': 'projects',
     'filter.project.other': 'projects',
-
 
     // Detail
     'detail.back': '← Back to portfolio',
@@ -187,7 +188,8 @@ export const translations = {
     'category.video.description': 'Portfolio video produkce od Ondry Hajka',
     'category.video.seoTitleLocation':
       'Video produkce v lokalitě {location} · {siteTitle}',
-    'category.video.seoTitleClient': 'Video produkce pro {client} · {siteTitle}',
+    'category.video.seoTitleClient':
+      'Video produkce pro {client} · {siteTitle}',
     'category.video.seoTitleLocationClient':
       'Video produkce v lokalitě {location} · {client} · {siteTitle}',
     'category.video.seoDescLocation':
@@ -197,7 +199,8 @@ export const translations = {
     'category.video.seoDescLocationClient':
       'Video produkce v lokalitě {location} pro {client} — portfolio Ondry Hajka.',
     'category.video.seoTitleFiltered': 'Video produkce · {siteTitle}',
-    'category.video.seoDescFiltered': 'Filtrované portfolio video produkce od Ondry Hajka.',
+    'category.video.seoDescFiltered':
+      'Filtrované portfolio video produkce od Ondry Hajka.',
 
     'category.drone.seoTitleLocation':
       'Letecká kinematografie v lokalitě {location} · {siteTitle}',
