@@ -22,42 +22,73 @@ const desktopLabels =
     : ['Drone', 'Video', 'Gallery', 'About']
 ---
 
-<div data-site-nav data-visible="true" class="site-nav fixed left-0 right-0 top-0 z-nav">
-  <div class="site-nav-bg absolute inset-0 border-b border-white/10 bg-[#0A0A0A]/90 backdrop-blur-md"></div>
-  <nav class="relative mx-auto flex h-[64px] w-full max-w-container items-center justify-between px-5 xl:px-0">
+<div
+  data-site-nav
+  data-visible="true"
+  class="site-nav fixed left-0 right-0 top-0 z-nav"
+>
+  <div
+    class="site-nav-bg absolute inset-0 border-b border-white/10 bg-[#0A0A0A]/90 backdrop-blur-md"
+  >
+  </div>
+  <nav
+    class="relative mx-auto flex h-[64px] w-full max-w-container items-center justify-between px-5 xl:px-0"
+  >
     <div class="hidden items-center gap-12 md:flex">
-      <a href={localePath(locale, '/')} class="flex items-center font-anton text-[1.3rem] tracking-[0.08em] text-white no-underline">
+      <a
+        href={localePath(locale, '/')}
+        class="flex items-center font-anton text-[1.3rem] tracking-[0.08em] text-white no-underline"
+      >
         ONDRAHAJEK.COM
       </a>
       <div class="flex items-center gap-8">
-        {navLinks.map((item, index) => (
-          <a
-            href={item.link}
-            class:list={[
-              'font-inter text-[1.3rem] text-[#888888] no-underline transition-colors hover:text-white',
-              currentPath === item.link && 'font-medium text-white',
-            ]}
-          >
-            {desktopLabels[index] ?? item.text}
-          </a>
-        ))}
+        {
+          navLinks.map((item, index) => (
+            <a
+              href={item.link}
+              class:list={[
+                'font-inter text-[1.3rem] text-[#888888] no-underline transition-colors hover:text-white',
+                currentPath === item.link && 'font-medium text-white',
+              ]}
+            >
+              {desktopLabels[index] ?? item.text}
+            </a>
+          ))
+        }
       </div>
     </div>
 
-    <a href={localePath(locale, '/')} class="flex items-center font-anton text-[1.3rem] tracking-[0.08em] text-white no-underline md:hidden">
+    <a
+      href={localePath(locale, '/')}
+      class="flex items-center font-anton text-[1.3rem] tracking-[0.08em] text-white no-underline md:hidden"
+    >
       ONDRAHAJEK.COM
     </a>
+
+    <div class="flex items-center gap-2 md:hidden">
+      <LanguageToggle
+        locale={locale}
+        switchUrl={switchUrl}
+        class="scale-90 border-white/25 text-[1rem]"
+      />
+      <button
+        data-mobile-menu-toggle
+        class="relative z-[100] flex h-10 w-10 flex-col items-center justify-center gap-[5px]"
+        aria-label="Toggle menu"
+      >
+        <span
+          class="hamburger-line block h-[2px] w-5 bg-white transition-all duration-300"
+        ></span>
+        <span
+          class="hamburger-line block h-[2px] w-5 bg-white transition-all duration-300"
+        ></span>
+      </button>
+    </div>
 
     {/* Desktop language switch on right */}
     <div class="hidden md:block">
       <LanguageToggle locale={locale} switchUrl={switchUrl} />
     </div>
-
-    {/* Mobile hamburger button */}
-    <button data-mobile-menu-toggle class="relative z-[100] flex h-10 w-10 flex-col items-center justify-center gap-[5px] md:hidden" aria-label="Toggle menu">
-      <span class="hamburger-line block h-[2px] w-5 bg-white transition-all duration-300"></span>
-      <span class="hamburger-line block h-[2px] w-5 bg-white transition-all duration-300"></span>
-    </button>
   </nav>
 </div>
 
@@ -65,7 +96,9 @@ const desktopLabels =
 
 <style>
   [data-site-nav] {
-    transition: transform 300ms ease-out, opacity 300ms ease-out;
+    transition:
+      transform 300ms ease-out,
+      opacity 300ms ease-out;
   }
 
   [data-site-nav][data-visible='false'] {
