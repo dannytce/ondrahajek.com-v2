@@ -140,6 +140,12 @@ export const translations = {
     'meta.title': 'ondrahajek.com | AERIAL Video & Photography',
     'meta.description':
       'Web portfolio of drone pilot Ondra Hajek, who will make your projects more interesting. He specialises in documentaries, film, music video, commercials and architecture.',
+
+    // Footer
+    'footer.tagline': 'Aerial Video & Photography',
+    'footer.work': 'Work',
+    'footer.info': 'Info',
+    'footer.contact': 'Contact',
   },
   cs: {
     'nav.drone': 'Letecké záběry dronem',
@@ -228,6 +234,11 @@ export const translations = {
     'meta.title': 'ondrahajek.com | AERIAL Video & Fotografie',
     'meta.description':
       'Portfolio pilota dronů Ondry Hajka, který vaše projekty udělá zajímavějšími. Specializuje se na dokumenty, film, hudební klipy, reklamy a architekturu.',
+
+    'footer.tagline': 'Aerial Video & Photography',
+    'footer.work': 'Práce',
+    'footer.info': 'Info',
+    'footer.contact': 'Kontakt',
   },
 } as const
 

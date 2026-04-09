@@ -1,5 +1,5 @@
 ---
-import { localePath, type Locale } from '~/i18n'
+import { t, localePath, type Locale } from '~/i18n'
 import { localizedPagePath } from '~/i18n/routes'
 
 interface Props {
@@ -10,22 +10,22 @@ const { locale = 'en' } = Astro.props
 
 const workLinks = [
   {
-    text: locale === 'cs' ? 'Letecké záběry' : 'Drone',
+    text: t(locale, 'nav.drone'),
     href: localePath(locale, localizedPagePath(locale, 'drone')),
   },
   {
-    text: locale === 'cs' ? 'Video' : 'Video',
+    text: t(locale, 'nav.video'),
     href: localePath(locale, localizedPagePath(locale, 'video')),
   },
   {
-    text: locale === 'cs' ? 'Galerie' : 'Gallery',
+    text: t(locale, 'nav.gallery'),
     href: localePath(locale, localizedPagePath(locale, 'gallery')),
   },
 ]
 
 const infoLinks = [
   {
-    text: locale === 'cs' ? 'O mně' : 'About',
+    text: t(locale, 'nav.about'),
     href: localePath(locale, localizedPagePath(locale, 'about')),
   },
 ]
@@ -40,13 +40,13 @@ const contactHref = localePath(locale, localizedPagePath(locale, 'about'))
         <a href={localePath(locale, '/')} class="font-anton text-[1.3rem] tracking-[0.06em] text-white no-underline">
           ONDRAHAJEK.COM
         </a>
-        <p class="m-0 font-inter text-[1.2rem] text-[#888888]">Aerial Video & Photography</p>
+        <p class="m-0 font-inter text-[1.2rem] text-[#888888]">{t(locale, 'footer.tagline')}</p>
       </div>
 
       <div class="flex gap-6">
         {workLinks.map((link) => (
           <a href={link.href} class="font-inter text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">
-            {link.text.split(' ')[0]}
+            {link.text}
           </a>
         ))}
       </div>
@@ -77,13 +77,13 @@ const contactHref = localePath(locale, localizedPagePath(locale, 'about'))
         <a href={localePath(locale, '/')} class="font-anton text-[1.4rem] tracking-[0.08em] text-white no-underline">
           ONDRAHAJEK.COM
         </a>
-        <p class="m-0 font-inter text-[1.2rem] text-[#888888]">Aerial Video & Photography</p>
+        <p class="m-0 font-inter text-[1.2rem] text-[#888888]">{t(locale, 'footer.tagline')}</p>
         <p class="m-0 font-geist text-[1rem] text-[#555555]">© 2016–{new Date().getFullYear()} Ondřej Hájek</p>
       </div>
 
       <div class="flex gap-12">
         <div class="flex flex-col gap-3">
-          <p class="m-0 font-inter text-[1.2rem] font-semibold text-white">{locale === 'cs' ? 'Práce' : 'Work'}</p>
+          <p class="m-0 font-inter text-[1.2rem] font-semibold text-white">{t(locale, 'footer.work')}</p>
           {workLinks.map((link) => (
             <a href={link.href} class="font-inter text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">
               {link.text}
@@ -91,14 +91,14 @@ const contactHref = localePath(locale, localizedPagePath(locale, 'about'))
           ))}
         </div>
         <div class="flex flex-col gap-3">
-          <p class="m-0 font-inter text-[1.2rem] font-semibold text-white">Info</p>
+          <p class="m-0 font-inter text-[1.2rem] font-semibold text-white">{t(locale, 'footer.info')}</p>
           {infoLinks.map((link) => (
             <a href={link.href} class="font-inter text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">
               {link.text}
             </a>
           ))}
           <a href={contactHref} class="font-inter text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">
-            {locale === 'cs' ? 'Kontakt' : 'Contact'}
+            {t(locale, 'footer.contact')}
           </a>
         </div>
       </div>
