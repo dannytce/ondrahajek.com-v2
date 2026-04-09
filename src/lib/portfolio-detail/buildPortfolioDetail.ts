@@ -56,7 +56,7 @@ export interface PortfolioDetailModel {
   jsonLd: Record<string, unknown> | undefined
   hrefPair: { en: string; cs: string } | undefined
   locationLabel: string
-  locationH2: string | undefined
+  heroSubtitle: string | undefined
 }
 
 export async function buildPortfolioDetailModel(
@@ -213,7 +213,7 @@ export async function buildPortfolioDetailModel(
 
   const hrefPair = hreflangPairForPortfolio(portfolio.slugEn, portfolio.slugCs)
 
-  const locationH2 = locationLabel
+  const heroSubtitle = locationLabel
     ? `Commercial Drone Filming in ${locationLabel}`
     : undefined
 
@@ -236,7 +236,7 @@ export async function buildPortfolioDetailModel(
     jsonLd,
     hrefPair,
     locationLabel,
-    locationH2,
+    heroSubtitle,
   }
 }
 
