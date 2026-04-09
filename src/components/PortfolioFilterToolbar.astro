@@ -8,19 +8,35 @@ interface Props {
 }
 
 const { locale, totalCount, categoryTitle } = Astro.props
+const titleWords = categoryTitle.split(' ')
+const firstWord = titleWords[0] ?? categoryTitle
+const secondWord = titleWords.slice(1).join(' ')
 ---
 
 <div class="flex flex-wrap items-end justify-between gap-4">
-  <div class="flex min-w-0 flex-col gap-[6px]">
-    <span class="font-geist text-[1rem] font-medium uppercase tracking-[0.2em] text-[#4A9FD8]">
+  <div class="flex w-full min-w-0 flex-col gap-[6px] md:w-auto">
+    <span
+      class="font-geist text-[1rem] font-medium uppercase tracking-[0.2em] text-[#4A9FD8]"
+    >
       {categoryTitle}
     </span>
-    <h2 class="m-0 font-anton text-[3.2rem] leading-[0.95] text-white md:text-[3.6rem]">
+    <div class="w-full md:hidden">
+      <h2 class="m-0 font-anton text-[3.2rem] leading-[1.08] text-white">
+        <span class="block">{firstWord}</span>
+      </h2>
+      <div class="flex w-full items-end justify-between">
+        <h2 class="m-0 font-anton text-[3.2rem] leading-[1.08] text-white">
+          {secondWord}
+        </h2>
+        <span class="font-geist text-[1.2rem] text-[#888888]">{totalCount}</span>
+      </div>
+    </div>
+    <h2 class="m-0 hidden font-anton text-[3.6rem] leading-[1.08] text-white md:block">
       {categoryTitle}
     </h2>
   </div>
 
-  <div class="flex w-full shrink-0 items-center justify-end gap-2 sm:w-auto">
+  <div class="hidden w-full shrink-0 items-center justify-end gap-2 sm:w-auto md:flex">
     <span class="font-geist text-[1.2rem] text-[#888888]">
       <span
         data-filter-result-count
