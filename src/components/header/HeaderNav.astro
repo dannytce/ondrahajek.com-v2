@@ -16,10 +16,6 @@ interface Props {
 }
 
 const { locale, currentPath, switchUrl, navLinks } = Astro.props
-const desktopLabels =
-  locale === 'cs'
-    ? ['Dron', 'Video', 'Galerie', 'O mne']
-    : ['Drone', 'Video', 'Gallery', 'About']
 ---
 
 <div
@@ -43,7 +39,7 @@ const desktopLabels =
       </a>
       <div class="flex items-center gap-8">
         {
-          navLinks.map((item, index) => (
+          navLinks.map((item) => (
             <a
               href={item.link}
               class:list={[
@@ -51,7 +47,7 @@ const desktopLabels =
                 currentPath === item.link && 'font-medium text-white',
               ]}
             >
-              {desktopLabels[index] ?? item.text}
+              {item.text}
             </a>
           ))
         }
