@@ -23,7 +23,7 @@ const withThumbnails = portfolios.filter((p) => p.thumbnail?.responsiveImage)
           {t(locale, 'home.featured')}
         </h2>
         <div class="hidden font-geist text-[1rem] uppercase tracking-[0.2em] text-[#8F8F8F] md:block">
-          {withThumbnails.length} {locale === 'cs' ? 'projektů' : 'projects'}
+          {withThumbnails.length} {t(locale, 'home.projectsLabel')}
         </div>
       </div>
       <ul class="m-0 grid w-full list-none grid-cols-1 gap-4 p-0 md:grid-cols-2 md:gap-4 lg:grid-cols-3">
@@ -37,18 +37,13 @@ const withThumbnails = portfolios.filter((p) => p.thumbnail?.responsiveImage)
         ))}
       </ul>
 
-      <div class="portfolio-toolbar-enter-delayed mt-8 flex flex-wrap justify-center gap-3 md:mt-10">
+      <div class="portfolio-toolbar-enter-delayed mt-8 flex justify-center md:mt-10">
         <a
           href={localePath(locale, localizedPagePath(locale, 'drone'))}
-          class="rounded-full border border-white/20 px-6 py-2 font-geist text-[1.1rem] uppercase tracking-[0.2em] text-white no-underline transition-colors hover:bg-white/10"
+          class="inline-flex items-center gap-2 rounded-full border border-[#222222] px-6 py-3 font-inter text-[1.3rem] font-medium text-white no-underline transition-colors hover:border-white/30"
         >
-          {t(locale, 'nav.drone')}
-        </a>
-        <a
-          href={localePath(locale, localizedPagePath(locale, 'video'))}
-          class="rounded-full border border-white/20 px-6 py-2 font-geist text-[1.1rem] uppercase tracking-[0.2em] text-white no-underline transition-colors hover:bg-white/10"
-        >
-          {t(locale, 'nav.video')}
+          {t(locale, 'home.viewAllProjects')}
+          <span aria-hidden="true">→</span>
         </a>
       </div>
     </section>
