@@ -1,0 +1,22 @@
+---
+import { t, type Locale } from '~/i18n'
+
+interface Props {
+  locale: Locale
+  switchUrl: string
+  class?: string
+}
+
+const { locale, switchUrl, class: className } = Astro.props
+const isEn = locale === 'en'
+---
+
+<div class:list={['inline-flex items-center rounded-full border border-white/20 p-[2px] text-[1.2rem] font-geist uppercase tracking-wider', className]}>
+  {isEn ? (
+    <span class="rounded-full bg-white px-3 py-1 font-medium text-black">EN</span>
+    <a href={switchUrl} class="rounded-full px-3 py-1 text-foreground-muted no-underline transition-colors hover:text-white">CZ</a>
+  ) : (
+    <a href={switchUrl} class="rounded-full px-3 py-1 text-foreground-muted no-underline transition-colors hover:text-white">EN</a>
+    <span class="rounded-full bg-white px-3 py-1 font-medium text-black">CZ</span>
+  )}
+</div>

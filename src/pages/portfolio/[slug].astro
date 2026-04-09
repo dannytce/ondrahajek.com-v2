@@ -1,13 +1,43 @@
 ---
 import { getAllPortfoliosWithSlug } from '~/api'
 
+type Row = { slugEn: string | null; slugCs: string | null }
+
 export async function getStaticPaths() {
   const portfolios = await getAllPortfoliosWithSlug()
-  return portfolios.map((p) => ({ params: { slug: p.slug } }))
+  const seen = new Set<string>()
+  const paths: { params: { slug: string }; props: { row: Row } }[] = []
+  for (const p of portfolios) {
+    if (p.slugEn?.trim()) {
+      const s = p.slugEn.trim()
+      if (!seen.has(s)) {
+        seen.add(s)
+        paths.push({ params: { slug: s }, props: { row: p } })
+      }
+    }
+    if (p.slugCs?.trim()) {
+      const s = p.slugCs.trim()
+      if (!seen.has(s)) {
+        seen.add(s)
+        paths.push({ params: { slug: s }, props: { row: p } })
+      }
+    }
+  }
+  return paths
 }
 
 const { slug } = Astro.params
-const redirectUrl = `/en/portfolio/${slug}`
+const row = Astro.props.row as Row
+const en = row.slugEn?.trim() ?? ''
+const cs = row.slugCs?.trim() ?? ''
+const redirectUrl =
+  en && slug === en
+    ? `/en/portfolio/${en}`
+    : cs && slug === cs
+      ? `/cs/projekty/${cs}`
+      : en
+        ? `/en/portfolio/${en}`
+        : `/cs/projekty/${cs}`
 ---
 
 <!doctype html>
@@ -15,7 +45,7 @@ const redirectUrl = `/en/portfolio/${slug}`
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="refresh" content={`0;url=${redirectUrl}`} />
-    <link rel="canonical" href={redirectUrl} />
+    <link rel="canonical" href={`https://ondrahajek.com${redirectUrl}`} />
     <title>Redirecting...</title>
   </head>
   <body>

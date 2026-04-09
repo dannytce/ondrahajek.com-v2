@@ -10,16 +10,24 @@ interface Props {
 }
 
 const { portfolios, locale } = Astro.props
+
+/** PortfolioCard renders nothing without a responsive thumbnail — skip those so the grid has no empty cells. */
+const withThumbnails = portfolios.filter((p) => p.thumbnail?.responsiveImage)
 ---
 
 {
-  portfolios.length > 0 && (
-    <div class="mx-auto w-full max-w-container px-[15px] xl:px-0">
-      <h2 class="portfolio-toolbar-enter mb-8 font-teko text-[4rem] font-semibold uppercase text-white md:text-[6rem]">
-        {t(locale, 'home.featured')}
-      </h2>
-      <ul class="m-0 grid w-full list-none grid-cols-1 gap-12 p-0 sm:grid-cols-2 lg:grid-cols-3">
-        {portfolios.map((portfolio, index) => (
+  withThumbnails.length > 0 && (
+    <section class="mx-auto w-full max-w-container px-5 py-12 xl:px-0">
+      <div class="portfolio-toolbar-enter mb-8 flex items-end justify-between gap-4">
+        <h2 class="m-0 font-anton text-[3.2rem] text-white md:text-[5rem]">
+          {t(locale, 'home.featured')}
+        </h2>
+        <div class="hidden font-geist text-[1rem] uppercase tracking-[0.2em] text-[#8F8F8F] md:block">
+          {withThumbnails.length} {locale === 'cs' ? 'projektů' : 'projects'}
+        </div>
+      </div>
+      <ul class="m-0 grid w-full list-none grid-cols-1 gap-4 p-0 md:grid-cols-2 md:gap-4 lg:grid-cols-3">
+        {withThumbnails.map((portfolio, index) => (
           <li
             class="portfolio-grid-item-enter"
             style={{ '--stagger': String(Math.min(index, 20)) }}
@@ -29,20 +37,20 @@ const { portfolios, locale } = Astro.props
         ))}
       </ul>
 
-      <div class="portfolio-toolbar-enter-delayed mt-16 flex justify-center gap-8">
+      <div class="portfolio-toolbar-enter-delayed mt-8 flex flex-wrap justify-center gap-3 md:mt-10">
         <a
           href={localePath(locale, localizedPagePath(locale, 'drone'))}
-          class="border border-white/20 px-8 py-3 font-teko text-[2.4rem] uppercase text-white no-underline transition-colors hover:bg-white/10"
+          class="rounded-full border border-white/20 px-6 py-2 font-geist text-[1.1rem] uppercase tracking-[0.2em] text-white no-underline transition-colors hover:bg-white/10"
         >
           {t(locale, 'nav.drone')}
         </a>
         <a
           href={localePath(locale, localizedPagePath(locale, 'video'))}
-          class="border border-white/20 px-8 py-3 font-teko text-[2.4rem] uppercase text-white no-underline transition-colors hover:bg-white/10"
+          class="rounded-full border border-white/20 px-6 py-2 font-geist text-[1.1rem] uppercase tracking-[0.2em] text-white no-underline transition-colors hover:bg-white/10"
         >
           {t(locale, 'nav.video')}
         </a>
       </div>
-    </div>
+    </section>
   )
 }

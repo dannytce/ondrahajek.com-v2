@@ -3,12 +3,12 @@ let cleanupHeader: (() => void) | undefined
 function initHeader() {
   cleanupHeader?.()
 
-  const header = document.querySelector<HTMLElement>('[data-site-header]')
-  const hero = header?.querySelector<HTMLElement>('header')
   const nav = document.querySelector<HTMLElement>('[data-site-nav]')
-  const video = header?.querySelector<HTMLVideoElement>('[data-header-video]')
+  const menuToggle = document.querySelector<HTMLButtonElement>('[data-mobile-menu-toggle]')
+  const mobileMenu = document.querySelector<HTMLElement>('[data-mobile-menu]')
+  const menuLinks = document.querySelectorAll<HTMLElement>('[data-mobile-menu-link]')
 
-  if (!header || !nav) {
+  if (!nav) {
     cleanupHeader = undefined
     return
   }
@@ -16,8 +16,28 @@ function initHeader() {
   let lastScrollY = window.scrollY
   let hasScrolled = false
   let ticking = false
+  let menuOpen = false
+
+  const toggleMenu = () => {
+    menuOpen = !menuOpen
+    if (mobileMenu) {
+      mobileMenu.style.opacity = menuOpen ? '1' : '0'
+      mobileMenu.style.pointerEvents = menuOpen ? 'auto' : 'none'
+    }
+    if (menuToggle) {
+      menuToggle.setAttribute('aria-expanded', menuOpen ? 'true' : 'false')
+    }
+    document.body.style.overflow = menuOpen ? 'hidden' : ''
+  }
+
+  const closeMenu = () => {
+    if (!menuOpen) return
+    toggleMenu()
+  }
 
   const updateNav = () => {
+    if (menuOpen) return
+
     const currentScrollY = window.scrollY
     const topThreshold = 80
     const scrollThreshold = 40
@@ -41,13 +61,6 @@ function initHeader() {
         lastScrollY = currentScrollY
       }
     }
-
-    const pastHeroY =
-      hero && hero.offsetHeight > 0
-        ? hero.offsetHeight
-        : window.innerHeight * 0.9
-    nav.dataset.pastHero =
-      currentScrollY >= pastHeroY ? 'true' : 'false'
   }
 
   const onScroll = () => {
@@ -60,25 +73,19 @@ function initHeader() {
     })
   }
 
-  const onResize = () => updateNav()
-  const onCanPlay = () => {
-    header.dataset.videoReady = 'true'
-  }
-
+  menuToggle?.addEventListener('click', toggleMenu)
+  menuLinks.forEach((link) => link.addEventListener('click', closeMenu))
   window.addEventListener('scroll', onScroll, { passive: true })
-  window.addEventListener('resize', onResize)
-  video?.addEventListener('canplay', onCanPlay, { once: true })
-
-  if (video && video.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) {
-    header.dataset.videoReady = 'true'
-  }
 
   updateNav()
 
   cleanupHeader = () => {
+    menuToggle?.removeEventListener('click', toggleMenu)
+    menuLinks.forEach((link) => link.removeEventListener('click', closeMenu))
     window.removeEventListener('scroll', onScroll)
-    window.removeEventListener('resize', onResize)
-    video?.removeEventListener('canplay', onCanPlay)
+    if (menuOpen) {
+      document.body.style.overflow = ''
+    }
   }
 }
 

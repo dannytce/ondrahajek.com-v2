@@ -14,8 +14,11 @@ import {
 import { uniqueSlugsForValues } from '~/lib/portfolio-filter-slugs'
 
 export async function getStaticPaths() {
-  const portfolios = await getAllPortfolios('en')
-  const locs = portfolios
+  const merged = [
+    ...(await getAllPortfolios('en')),
+    ...(await getAllPortfolios('cs')),
+  ]
+  const locs = merged
     .map((p) => p.location?.trim())
     .filter((v): v is string => Boolean(v))
   const slugByValue = uniqueSlugsForValues(locs)
@@ -71,11 +74,10 @@ const description = `${t(locale, 'category.drone.description')} ${locationLabel}
   title={title}
   description={description}
   locale={locale}
-  compactHeader
   canonicalPath={canonicalPath}
   hreflangPaths={href}
 >
-  <Page locale={locale} compactTopSpacing>
+  <Page locale={locale}>
     <Header
       slot="header"
       compact
@@ -87,7 +89,7 @@ const description = `${t(locale, 'category.drone.description')} ${locationLabel}
       switchHref={switchHref}
     />
     <div class="mx-auto w-full max-w-container px-[15px] pb-16 pt-[10.5rem] xl:px-0">
-      <p class="mb-10 font-teko text-[2rem] uppercase text-secondary">
+      <p class="mb-10 font-anton text-[2rem] uppercase text-secondary">
         <a
           href={localePath(locale, '/')}
           class="text-secondary no-underline hover:text-white"
@@ -95,7 +97,7 @@ const description = `${t(locale, 'category.drone.description')} ${locationLabel}
           {t(locale, 'detail.back')}
         </a>
       </p>
-      <h1 class="mb-12 font-teko text-[4rem] font-semibold uppercase text-white md:text-[6rem]">
+      <h1 class="mb-12 font-anton text-[4rem] font-semibold uppercase text-white md:text-[6rem]">
         {locationLabel}
       </h1>
       <ul class="m-0 grid w-full list-none grid-cols-1 gap-12 p-0 sm:grid-cols-2 lg:grid-cols-3">

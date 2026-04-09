@@ -4,38 +4,25 @@ import Player from '~/components/Player.astro'
 const dialogId = 'showreel-dialog'
 ---
 
-<div
-  class="my-[125px] -mb-[125px] flex items-center justify-center md:my-0 md:flex-1"
->
+<div class="mt-2">
   <button
     type="button"
     data-showreel-trigger={dialogId}
     title="Play Showreel"
-    class="link-animation group flex cursor-pointer items-center justify-center border-0 bg-transparent p-0 font-teko font-bold uppercase text-white no-underline outline-none md:p-[50px] hover:[&_.play-circle]:border-white/80"
+    class="group flex cursor-pointer items-center gap-2 rounded-full bg-white px-6 py-3 border-0 transition-opacity hover:opacity-90"
   >
-    <span
-      class="play-circle relative mr-[25px] flex h-[70px] w-[70px] items-center justify-center rounded-full border-[8px] border-white/20 bg-white bg-clip-padding pr-0.5 text-center transition-all duration-[0.8s]"
+    <svg
+      width="12"
+      height="14"
+      viewBox="0 0 14 16"
+      fill="none"
     >
-      <span
-        class="absolute left-1/2 top-1/2 -z-10 -ml-5 -mt-5 h-10 w-10 rounded-full bg-white/10 md:-ml-10 md:-mt-10 md:h-20 md:w-20 md:animate-circleExpand md:opacity-0"
-      ></span>
-      <span
-        class="absolute left-1/2 top-1/2 -z-10 -ml-5 -mt-5 h-10 w-10 rounded-full bg-white/10 md:-ml-10 md:-mt-10 md:h-20 md:w-20 md:animate-circleExpand md:opacity-0 md:[animation-delay:2s]"
-      ></span>
-      <svg
-        class="ml-[5px]"
-        width="14"
-        height="16"
-        viewBox="0 0 14 16"
-        fill="none"
-      >
-        <path
-          d="M1.50389526,0.136099186 L13.5032156,7.13615397 L13.5032156,7.13615397 C13.9802597,7.41444764 14.1413788,8.02676989 13.8630851,8.50381399 C13.7761718,8.65279876 13.6522004,8.77677011 13.5032156,8.8636835 L1.50389526,15.8637383 L1.50389526,15.8637383 C1.02685115,16.1420319 0.414528904,15.9809129 0.136235236,15.5038688 C0.0470134485,15.350927 -5.14889621e-16,15.1770377 -2.22044605e-16,14.9999735 L0,0.99986395 L-4.4408921e-16,0.99986395 C-2.66460887e-16,0.4475792 0.44771525,-0.000136050417 1,-0.000136050417 C1.17706415,-0.000136050417 1.35095348,0.0468773981 1.50389526,0.136099186 Z"
-          fill="#212327"
-          fill-rule="evenodd"></path>
-      </svg>
-    </span>
-    Play Showreel
+      <path
+        d="M1.50389526,0.136099186 L13.5032156,7.13615397 L13.5032156,7.13615397 C13.9802597,7.41444764 14.1413788,8.02676989 13.8630851,8.50381399 C13.7761718,8.65279876 13.6522004,8.77677011 13.5032156,8.8636835 L1.50389526,15.8637383 L1.50389526,15.8637383 C1.02685115,16.1420319 0.414528904,15.9809129 0.136235236,15.5038688 C0.0470134485,15.350927 -5.14889621e-16,15.1770377 -2.22044605e-16,14.9999735 L0,0.99986395 L-4.4408921e-16,0.99986395 C-2.66460887e-16,0.4475792 0.44771525,-0.000136050417 1,-0.000136050417 C1.17706415,-0.000136050417 1.35095348,0.0468773981 1.50389526,0.136099186 Z"
+        fill="#0A0A0A"
+        fill-rule="evenodd"></path>
+    </svg>
+    <span class="font-inter text-[1.3rem] font-semibold text-surface-dark">Play Showreel</span>
   </button>
 
   <dialog
@@ -49,7 +36,7 @@ const dialogId = 'showreel-dialog'
         data-dialog-close
         class="fixed right-[15px] top-5 z-modalCloseButton h-8 w-8 cursor-pointer select-none appearance-none border-0 bg-transparent p-0 text-2xl leading-8 text-white opacity-60 transition-opacity duration-200 hover:opacity-100"
       >
-        ×
+        &times;
       </button>
       <div class="animate-scaleIn">
         <Player

@@ -1,25 +1,21 @@
 ---
 import Footer from './Footer.astro'
+import HireProjectDrawer from './HireProjectDrawer.astro'
 import type { Locale } from '~/i18n'
 
 interface Props {
   isHomepage?: boolean
   isAboutPage?: boolean
-  /** Offset main below fixed compact category header (must match Header `compact` height). */
-  compactTopSpacing?: boolean
   locale?: Locale
 }
 
-const { isHomepage, compactTopSpacing = false, locale = 'en' } = Astro.props
+const { isHomepage, locale = 'en' } = Astro.props
 ---
 
 <slot name="header" />
 <main
   id={isHomepage ? 'portfolio' : undefined}
-  class:list={[
-    "relative z-main bg-background before:pointer-events-none before:absolute before:left-0 before:top-0.5 before:h-[45vh] before:w-full before:-translate-y-full before:bg-gradient-to-b before:from-[rgba(13,13,16,0)] before:to-background before:content-['']",
-    compactTopSpacing && 'pt-[min(320px,38vh)]',
-  ]}
+  class="relative bg-surface-dark"
 >
   <slot />
   <Footer locale={locale} />

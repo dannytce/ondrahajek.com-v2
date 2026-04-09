@@ -62,7 +62,6 @@ export interface PortfolioDetailModel {
 export async function buildPortfolioDetailModel(
   portfolio: PortfolioDetail,
   locale: Locale,
-  slug: string,
   getPortfoliosByCategory: (
     categoryId: string,
     locale: Locale
@@ -148,13 +147,19 @@ export async function buildPortfolioDetailModel(
   const subtitle =
     locale === 'cs'
       ? portfolio.subtitleCs || portfolio.subtitleEn
-      : portfolio.subtitleEn || portfolio.subtitleCs
+      : portfolio.subtitleEn || null
 
-  const mediaTransitionName = portfolio.slug
-    ? `portfolio-media-${portfolio.slug}`
-    : undefined
+  const mediaTransitionName = portfolio.id
+    ? `portfolio-media-${portfolio.id}`
+    : portfolio.slug
+      ? `portfolio-media-${portfolio.slug}`
+      : undefined
 
-  const switchUrl = languageSwitchHrefForPortfolio(locale, portfolio.slug!)
+  const switchUrl = languageSwitchHrefForPortfolio(
+    locale,
+    portfolio.slugEn,
+    portfolio.slugCs
+  )
 
   const year = portfolio.date ? new Date(portfolio.date).getFullYear() : null
 
@@ -206,7 +211,7 @@ export async function buildPortfolioDetailModel(
       : undefined,
   }
 
-  const hrefPair = hreflangPairForPortfolio(slug)
+  const hrefPair = hreflangPairForPortfolio(portfolio.slugEn, portfolio.slugCs)
 
   const locationH2 = locationLabel
     ? `Commercial Drone Filming in ${locationLabel}`

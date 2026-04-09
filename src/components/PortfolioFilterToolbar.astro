@@ -20,7 +20,7 @@ const { locale, subcategories, totalCount } = Astro.props
             type="button"
             data-filter-subcategory=""
             data-active="true"
-            class="filter-subcategory-chip cursor-pointer border border-white bg-white px-4 py-1 font-teko text-[1.6rem] uppercase text-background transition-colors data-[active=false]:border-secondary/40 data-[active=false]:bg-transparent data-[active=false]:text-secondary data-[active=false]:hover:border-white data-[active=false]:hover:text-white"
+            class="filter-subcategory-chip cursor-pointer border border-white bg-white px-4 py-1 font-anton text-[1.6rem] uppercase text-background transition-colors data-[active=false]:border-secondary/40 data-[active=false]:bg-transparent data-[active=false]:text-secondary data-[active=false]:hover:border-white data-[active=false]:hover:text-white"
           >
             {t(locale, 'filter.all')}
           </button>
@@ -29,7 +29,7 @@ const { locale, subcategories, totalCount } = Astro.props
               type="button"
               data-filter-subcategory={subcategory.value}
               data-active="false"
-              class="filter-subcategory-chip cursor-pointer border border-white bg-white px-4 py-1 font-teko text-[1.6rem] uppercase text-background transition-colors data-[active=false]:border-secondary/40 data-[active=false]:bg-transparent data-[active=false]:text-secondary data-[active=false]:hover:border-white data-[active=false]:hover:text-white"
+              class="filter-subcategory-chip cursor-pointer border border-white bg-white px-4 py-1 font-anton text-[1.6rem] uppercase text-background transition-colors data-[active=false]:border-secondary/40 data-[active=false]:bg-transparent data-[active=false]:text-secondary data-[active=false]:hover:border-white data-[active=false]:hover:text-white"
             >
               {subcategory.label}
             </button>
@@ -40,7 +40,7 @@ const { locale, subcategories, totalCount } = Astro.props
   </div>
 
   <div class="flex w-full shrink-0 items-center justify-end gap-2 sm:w-auto">
-    <span class="font-roboto text-[1.3rem] text-secondary/60">
+    <span class="font-inter text-[1.3rem] text-secondary/60">
       <span data-filter-result-count>{totalCount}</span> / {totalCount}{' '}
       {t(locale, 'filter.results')}
     </span>
@@ -67,7 +67,7 @@ const { locale, subcategories, totalCount } = Astro.props
       <span
         data-filter-active-badge
         hidden
-        class="pointer-events-none absolute -right-4 -top-4 flex min-h-[1.8rem] min-w-[1.8rem] items-center justify-center rounded-full bg-secondary px-0.5 font-teko text-[1.1rem] font-semibold tabular-nums leading-none text-background ring-2 ring-background"
+        class="pointer-events-none absolute -right-4 -top-4 flex min-h-[1.8rem] min-w-[1.8rem] items-center justify-center rounded-full bg-secondary px-0.5 font-anton text-[1.1rem] font-semibold tabular-nums leading-none text-background ring-2 ring-background"
         aria-hidden="true"
       >
         0

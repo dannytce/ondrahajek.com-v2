@@ -53,10 +53,15 @@ export function locationHubCanonicalPath(locale: Locale, locationSlug: string): 
   return `/${locationsSegment(locale)}/${locationSlug}`
 }
 
-export function hreflangPairForPortfolio(slug: string): { en: string; cs: string } {
+export function hreflangPairForPortfolio(
+  slugEn: string | null | undefined,
+  slugCs: string | null | undefined
+): { en: string; cs: string } {
+  const en = (slugEn ?? '').trim() || (slugCs ?? '').trim()
+  const cs = (slugCs ?? '').trim() || (slugEn ?? '').trim()
   return {
-    en: portfolioCanonicalPath('en', slug),
-    cs: portfolioCanonicalPath('cs', slug),
+    en: portfolioCanonicalPath('en', en),
+    cs: portfolioCanonicalPath('cs', cs),
   }
 }
 
@@ -132,9 +137,17 @@ export function languageSwitchHref(locale: Locale, key: SitePageKey): string {
   return localePath(alt, localizedPagePath(alt, key))
 }
 
-export function languageSwitchHrefForPortfolio(locale: Locale, slug: string): string {
+export function languageSwitchHrefForPortfolio(
+  locale: Locale,
+  slugEn: string | null | undefined,
+  slugCs: string | null | undefined
+): string {
   const alt = getAlternateLocale(locale)
-  return localePath(alt, portfolioCanonicalPath(alt, slug))
+  const altSlug =
+    alt === 'cs'
+      ? (slugCs ?? '').trim() || (slugEn ?? '').trim()
+      : (slugEn ?? '').trim() || (slugCs ?? '').trim()
+  return localePath(alt, portfolioCanonicalPath(alt, altSlug))
 }
 
 export function languageSwitchHrefForLocation(

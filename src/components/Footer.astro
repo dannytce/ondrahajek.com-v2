@@ -8,73 +8,114 @@ interface Props {
 
 const { locale = 'en' } = Astro.props
 
-const footerLinks = [
+const workLinks = [
   {
-    title: 'Go and see the',
-    name: 'Gallery',
-    link: localePath(locale, localizedPagePath(locale, 'gallery')),
+    text: locale === 'cs' ? 'Letecké záběry' : 'Drone',
+    href: localePath(locale, localizedPagePath(locale, 'drone')),
   },
   {
-    title: 'Read something',
-    name: 'About me',
-    link: localePath(locale, localizedPagePath(locale, 'about')),
+    text: locale === 'cs' ? 'Video' : 'Video',
+    href: localePath(locale, localizedPagePath(locale, 'video')),
   },
-  { title: 'Check out my', name: 'Portfolio', link: localePath(locale, '/') },
   {
-    title: 'Hit me up on',
-    name: 'info',
-    email: 'info@ondrahajek.com',
-    phone: '+420 773 604 400',
+    text: locale === 'cs' ? 'Galerie' : 'Gallery',
+    href: localePath(locale, localizedPagePath(locale, 'gallery')),
   },
 ]
+
+const infoLinks = [
+  {
+    text: locale === 'cs' ? 'O mně' : 'About',
+    href: localePath(locale, localizedPagePath(locale, 'about')),
+  },
+]
+
+const contactHref = localePath(locale, localizedPagePath(locale, 'about'))
 ---
 
-<footer
-  class="mt-0 px-6 py-16 pb-24 md:mt-[100px] md:flex md:h-[80vh] md:px-0 md:py-[50px] md:pt-0"
->
-  <div class="flex w-full flex-col gap-0 md:flex-row md:flex-nowrap">
-    {
-      footerLinks.map((item, index) =>
-        item.link ? (
-          <a
-            href={item.link}
-            class:list={[
-              'flex min-h-[120px] w-full flex-col justify-center border-b border-white/10 py-8 text-center last:border-b-0 md:h-full md:flex-1 md:border-b-0 md:py-0 md:transition-colors md:hover:bg-[#17171a]',
-              index === 1 && 'md:bg-[#111114]',
-            ]}
-          >
-            <p class="m-0 mb-5 p-0 font-roboto text-[1.8rem] normal-case text-secondary">
-              {item.title}
-            </p>
-            <h3 class="m-0 p-0 font-teko text-[4rem] uppercase leading-6 text-primary no-underline">
-              {item.name}
-            </h3>
+<footer class="mt-16 border-t border-white/10">
+  <div class="mx-auto max-w-container px-5 py-8 md:hidden">
+    <div class="flex flex-col gap-8">
+      <div class="flex flex-col gap-2">
+        <a href={localePath(locale, '/')} class="font-anton text-[1.3rem] tracking-[0.06em] text-white no-underline">
+          ONDRAHAJEK.COM
+        </a>
+        <p class="m-0 font-inter text-[1.2rem] text-[#888888]">Aerial Video & Photography</p>
+      </div>
+
+      <div class="flex gap-6">
+        {workLinks.map((link) => (
+          <a href={link.href} class="font-inter text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">
+            {link.text.split(' ')[0]}
           </a>
-        ) : (
-          <div class="flex min-h-[120px] w-full flex-col justify-center border-b border-white/10 py-8 text-center last:border-b-0 md:h-full md:flex-1 md:border-b-0 md:py-0 md:transition-colors md:hover:bg-[#17171a]">
-            <p class="m-0 mb-5 p-0 font-roboto text-[1.8rem] normal-case text-secondary">
-              {item.title}
-            </p>
-            <h3 class="m-0 p-0 font-teko text-[4rem] uppercase leading-6 text-primary">
-              <a
-                href={`mailto:${item.email}`}
-                class="text-primary no-underline"
-              >
-                {item.name}
-                <span class="block text-[2rem]">
-                  @{item.email?.split('@')[1]}
-                </span>
-              </a>
-            </h3>
-            <a
-              href={`tel:${item.phone?.replace(/\s/g, '')}`}
-              class="font-teko text-[2rem] text-secondary no-underline"
-            >
-              {item.phone}
+        ))}
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <a href="mailto:info@ondrahajek.com" class="font-geist text-[1.1rem] text-[#4A9FD8] no-underline transition-colors hover:text-white">
+          info@ondrahajek.com
+        </a>
+        <a href="tel:+420773604400" class="font-geist text-[1.1rem] text-[#888888] no-underline transition-colors hover:text-white">
+          +420 773 604 400
+        </a>
+      </div>
+
+      <div class="flex items-center justify-between">
+        <p class="m-0 font-geist text-[0.9rem] text-[#555555]">© 2016–{new Date().getFullYear()} Ondřej Hájek</p>
+        <div class="flex gap-4">
+          <a href="https://www.linkedin.com/in/ondrahajek/" target="_blank" rel="noopener" class="font-inter text-[1.1rem] text-[#888888] no-underline transition-colors hover:text-white">LinkedIn</a>
+          <a href="https://www.instagram.com/ondrahajek.drone/" target="_blank" rel="noopener" class="font-inter text-[1.1rem] text-[#888888] no-underline transition-colors hover:text-white">Instagram</a>
+          <a href="https://vimeo.com/ondrahajek" target="_blank" rel="noopener" class="font-inter text-[1.1rem] text-[#888888] no-underline transition-colors hover:text-white">Vimeo</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mx-auto hidden max-w-container px-10 py-10 md:block xl:px-0">
+    <div class="flex items-start justify-between gap-12">
+      <div class="flex flex-col gap-3">
+        <a href={localePath(locale, '/')} class="font-anton text-[1.4rem] tracking-[0.08em] text-white no-underline">
+          ONDRAHAJEK.COM
+        </a>
+        <p class="m-0 font-inter text-[1.2rem] text-[#888888]">Aerial Video & Photography</p>
+        <p class="m-0 font-geist text-[1rem] text-[#555555]">© 2016–{new Date().getFullYear()} Ondřej Hájek</p>
+      </div>
+
+      <div class="flex gap-12">
+        <div class="flex flex-col gap-3">
+          <p class="m-0 font-inter text-[1.2rem] font-semibold text-white">{locale === 'cs' ? 'Práce' : 'Work'}</p>
+          {workLinks.map((link) => (
+            <a href={link.href} class="font-inter text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">
+              {link.text}
             </a>
-          </div>
-        )
-      )
-    }
+          ))}
+        </div>
+        <div class="flex flex-col gap-3">
+          <p class="m-0 font-inter text-[1.2rem] font-semibold text-white">Info</p>
+          {infoLinks.map((link) => (
+            <a href={link.href} class="font-inter text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">
+              {link.text}
+            </a>
+          ))}
+          <a href={contactHref} class="font-inter text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">
+            {locale === 'cs' ? 'Kontakt' : 'Contact'}
+          </a>
+        </div>
+      </div>
+
+      <div class="flex flex-col items-end gap-3">
+        <a href="mailto:info@ondrahajek.com" class="font-geist text-[1.2rem] text-[#4A9FD8] no-underline transition-colors hover:text-white">
+          info@ondrahajek.com
+        </a>
+        <a href="tel:+420773604400" class="font-geist text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">
+          +420 773 604 400
+        </a>
+        <div class="flex gap-4">
+          <a href="https://www.linkedin.com/in/ondrahajek/" target="_blank" rel="noopener" class="font-inter text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">LinkedIn</a>
+          <a href="https://www.instagram.com/ondrahajek.drone/" target="_blank" rel="noopener" class="font-inter text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">Instagram</a>
+          <a href="https://vimeo.com/ondrahajek" target="_blank" rel="noopener" class="font-inter text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">Vimeo</a>
+        </div>
+      </div>
+    </div>
   </div>
 </footer>

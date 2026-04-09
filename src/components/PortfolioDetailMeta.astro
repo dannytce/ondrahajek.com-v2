@@ -32,7 +32,7 @@ const {
 } = Astro.props
 
 const linkClass =
-  'mt-2 inline-block font-teko text-[1.4rem] uppercase tracking-wide text-secondary no-underline transition-colors hover:text-white'
+  'mt-2 inline-block font-anton text-[1.4rem] uppercase tracking-wide text-secondary no-underline transition-colors hover:text-white'
 
 const parts: string[] = []
 if (year != null) parts.push(String(year))
@@ -52,7 +52,7 @@ const hasFilterLinks =
       <div class:list={[className]}>
         <p
           class:list={[
-            'm-0 font-teko text-[1.5rem] leading-snug tracking-wide text-secondary',
+            'm-0 font-anton text-[1.5rem] leading-snug tracking-wide text-secondary',
           ]}
         >
           {inlineText}
@@ -83,7 +83,7 @@ const hasFilterLinks =
         {
           year != null && (
             <div>
-              <dt class="font-teko text-[1.5rem] uppercase text-secondary">
+              <dt class="font-anton text-[1.5rem] uppercase text-secondary">
                 {t(locale, 'detail.year')}
               </dt>
               <dd class="m-0 text-[1.8rem] text-white">{year}</dd>
@@ -93,7 +93,7 @@ const hasFilterLinks =
         {
           client?.trim() && (
             <div>
-              <dt class="font-teko text-[1.5rem] uppercase text-secondary">
+              <dt class="font-anton text-[1.5rem] uppercase text-secondary">
                 {t(locale, 'detail.client')}
               </dt>
               <dd class="m-0 text-[1.8rem] text-white">{client}</dd>
@@ -110,7 +110,7 @@ const hasFilterLinks =
         {
           location?.trim() && (
             <div>
-              <dt class="font-teko text-[1.5rem] uppercase text-secondary">
+              <dt class="font-anton text-[1.5rem] uppercase text-secondary">
                 {t(locale, 'detail.location')}
               </dt>
               <dd class="m-0 text-[1.8rem] text-white">{location}</dd>

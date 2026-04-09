@@ -54,8 +54,20 @@ export const translations = {
     // Homepage
     'home.title': 'Aerial',
     'home.subtitle': 'Video & Photography',
+    'home.heroBrand': 'Ondra Hajek',
+    'home.heroLine': 'Aerial',
+    'home.heroDescriptor': 'High-End Cinematography & Video Production',
     'home.featured': 'Selected Work',
     'home.viewAll': 'View all',
+
+    // Hire CTA
+    'hire.open': 'Hire for project',
+    'hire.title': 'Start a project',
+    'hire.body':
+      'Tell us about your production — we reply quickly with availability and next steps.',
+    'hire.emailLabel': 'Email',
+    'hire.phoneLabel': 'Phone',
+    'hire.close': 'Close',
 
     // Category pages
     'category.drone.title': 'Drone Cinematography',
@@ -134,8 +146,19 @@ export const translations = {
 
     'home.title': 'Aerial',
     'home.subtitle': 'Video & Photography',
-    'home.featured': 'Vybrané Práce',
+    'home.heroBrand': 'Ondra Hajek',
+    'home.heroLine': 'Aerial',
+    'home.heroDescriptor': 'Špičková kinematografie a video produkce',
+    'home.featured': 'Vybrané práce',
     'home.viewAll': 'Zobrazit vše',
+
+    'hire.open': 'Zakázka / kontakt',
+    'hire.title': 'Nový projekt',
+    'hire.body':
+      'Napište nám o produkci — ozveme se s dostupností a dalšími kroky.',
+    'hire.emailLabel': 'E-mail',
+    'hire.phoneLabel': 'Telefon',
+    'hire.close': 'Zavřít',
 
     'category.drone.title': 'Letecké záběry dronem',
     'category.drone.description':

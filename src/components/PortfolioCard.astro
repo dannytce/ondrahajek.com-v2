@@ -13,13 +13,15 @@ const { portfolio, locale } = Astro.props
 
 const thumb = portfolio.thumbnail
 const responsiveImage = thumb?.responsiveImage
-const subtitle =
-  locale === 'cs'
-    ? portfolio.subtitleCs || portfolio.subtitleEn
-    : portfolio.subtitleEn || portfolio.subtitleCs
-const transitionName = portfolio.slug
-  ? `portfolio-media-${portfolio.slug}`
-  : undefined
+const transitionName = portfolio.id
+  ? `portfolio-media-${portfolio.id}`
+  : portfolio.slug
+    ? `portfolio-media-${portfolio.slug}`
+    : undefined
+
+const firstSubcategory = portfolio.subcategory?.[0]?.name || null
+const location = portfolio.location || null
+const chips = [firstSubcategory, location].filter(Boolean) as string[]
 ---
 
 {
@@ -28,7 +30,7 @@ const transitionName = portfolio.slug
       href={localePath(locale, portfolioCanonicalPath(locale, portfolio.slug!))}
       class="portfolio-card group relative block w-full no-underline"
     >
-      <div class="portfolio-card-frame relative overflow-hidden bg-black">
+      <div class="portfolio-card-frame relative overflow-hidden rounded-lg bg-black">
         <div
           class="portfolio-card-media"
           style={
@@ -47,13 +49,26 @@ const transitionName = portfolio.slug
           />
         </div>
         <div class="portfolio-card-overlay pointer-events-none absolute inset-0" />
+
+        {/* Title + chips overlaid on image */}
+        <div class="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col gap-2 p-4 md:p-5">
+          <h3
+            class="portfolio-card-title m-0 font-anton text-[2.4rem] uppercase leading-[0.95] text-white md:text-[2.8rem]"
+            style="text-shadow: 0 2px 12px rgba(0,0,0,0.7), 0 1px 3px rgba(0,0,0,0.5);"
+          >
+            {portfolio.title}
+          </h3>
+          {chips.length > 0 && (
+            <div class="flex flex-wrap gap-1.5">
+              {chips.map((chip) => (
+                <span class="rounded-full border border-white/15 bg-black/25 px-2.5 py-0.5 font-geist text-[0.95rem] uppercase tracking-[0.12em] text-white/85 backdrop-blur-md md:text-[1rem]">
+                  {chip}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-      <h3 class="portfolio-card-title relative z-10 -mt-[0.5em] ml-5 font-teko text-[2.4rem] font-semibold uppercase leading-none text-white md:text-[3rem] lg:text-[4rem] xs:text-[2.6rem]">
-        {portfolio.title}
-      </h3>
-      <h4 class="portfolio-card-subtitle relative z-10 ml-5 text-[1.5rem] font-normal text-secondary">
-        {subtitle}
-      </h4>
     </a>
   )
 }
