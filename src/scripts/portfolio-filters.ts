@@ -91,21 +91,24 @@ function countActiveFilters(st: FilterState): number {
 
 function readStateFromControls(
   subcategoryButtons: HTMLButtonElement[],
+  categorySelect: HTMLSelectElement | null | undefined,
   yearSelect: HTMLSelectElement | null | undefined,
   locationSelect: HTMLSelectElement | null | undefined,
   clientSelect: HTMLSelectElement | null | undefined,
-  searchInput: HTMLInputElement,
+  searchInput: HTMLInputElement | null | undefined,
   grid: HTMLElement
 ): FilterState {
   const activeSubcategory =
-    subcategoryButtons.find((button) => button.dataset.active === 'true')
-      ?.dataset.filterSubcategory ?? ''
+    categorySelect?.value ||
+    (subcategoryButtons.find((button) => button.dataset.active === 'true')
+      ?.dataset.filterSubcategory ??
+      '')
   return {
     sub: activeSubcategory,
     year: yearSelect?.value ?? '',
     locSlug: locationSelect?.value ?? '',
     clientSlug: clientSelect?.value ?? '',
-    q: normalize(searchInput.value),
+    q: normalize(searchInput?.value),
     tag: (grid.dataset.filterTag ?? '').trim(),
   }
 }
@@ -301,6 +304,9 @@ function readUrlIntoGrid(grid: HTMLElement) {
   const subcategoryButtons = Array.from(
     grid.querySelectorAll<HTMLButtonElement>('[data-filter-subcategory]')
   )
+  const categorySelect = grid.querySelector<HTMLSelectElement>(
+    '[data-filter-category]'
+  )
   const yearSelect = grid.querySelector<HTMLSelectElement>('[data-filter-year]')
   const locationSelect = grid.querySelector<HTMLSelectElement>(
     '[data-filter-location]'
@@ -312,7 +318,7 @@ function readUrlIntoGrid(grid: HTMLElement) {
     '[data-filter-search]'
   )
 
-  if (!searchInput) return
+  if (!searchInput && !categorySelect) return
 
   const validSubSlugs = new Set(
     subcategoryButtons
@@ -324,10 +330,14 @@ function readUrlIntoGrid(grid: HTMLElement) {
   let sub = params.get('sub') ?? ''
   if (sub && !validSubSlugs.has(sub)) sub = ''
 
-  subcategoryButtons.forEach((button) => {
-    const val = button.dataset.filterSubcategory ?? ''
-    button.dataset.active = val === sub ? 'true' : 'false'
-  })
+  if (categorySelect) {
+    categorySelect.value = sub
+  } else {
+    subcategoryButtons.forEach((button) => {
+      const val = button.dataset.filterSubcategory ?? ''
+      button.dataset.active = val === sub ? 'true' : 'false'
+    })
+  }
 
   const year = params.get('year') ?? ''
   if (yearSelect) yearSelect.value = year
@@ -339,7 +349,7 @@ function readUrlIntoGrid(grid: HTMLElement) {
   setSelectFromUrlParam(clientSelect, clParam)
 
   const q = params.get('q') ?? ''
-  searchInput.value = q
+  if (searchInput) searchInput.value = q
 
   const rawTag = params.get('tag') ?? ''
   grid.dataset.filterTag = tagMatchesGrid(grid, tagParamAllowed(rawTag))
@@ -348,6 +358,9 @@ function readUrlIntoGrid(grid: HTMLElement) {
 function bindGrid(grid: HTMLElement) {
   const subcategoryButtons = Array.from(
     grid.querySelectorAll<HTMLButtonElement>('[data-filter-subcategory]')
+  )
+  const categorySelect = grid.querySelector<HTMLSelectElement>(
+    '[data-filter-category]'
   )
   const yearSelect = grid.querySelector<HTMLSelectElement>('[data-filter-year]')
   const locationSelect = grid.querySelector<HTMLSelectElement>(
@@ -378,7 +391,7 @@ function bindGrid(grid: HTMLElement) {
     '[data-filter-active-badge]'
   )
 
-  if (!resultCount || !searchInput) return
+  if (!resultCount) return
 
   const pathname = window.location.pathname
 
@@ -386,7 +399,7 @@ function bindGrid(grid: HTMLElement) {
   let filtersPanelOpen = false
 
   const syncFiltersPanelFromUrl = () => {
-    if (!filterPanel) return
+    if (!filterPanel || !filterToggle) return
     filtersPanelOpen = hasUrlAdvancedFilterParams()
     applyFiltersPanelOpen(filterPanel, filtersPanelOpen, filterToggle)
   }
@@ -401,6 +414,7 @@ function bindGrid(grid: HTMLElement) {
   const applyFilters = () => {
     let st = readStateFromControls(
       subcategoryButtons,
+      categorySelect,
       yearSelect,
       locationSelect,
       clientSelect,
@@ -414,6 +428,7 @@ function bindGrid(grid: HTMLElement) {
       rebuildClientSelect(clientSelect, items, st, clientPlaceholder)
       st = readStateFromControls(
         subcategoryButtons,
+        categorySelect,
         yearSelect,
         locationSelect,
         clientSelect,
@@ -422,19 +437,21 @@ function bindGrid(grid: HTMLElement) {
       )
     }
 
-    for (const button of subcategoryButtons) {
-      const subSlug = button.dataset.filterSubcategory ?? ''
-      if (subSlug === '') {
-        button.hidden = false
-        continue
+    if (!categorySelect) {
+      for (const button of subcategoryButtons) {
+        const subSlug = button.dataset.filterSubcategory ?? ''
+        if (subSlug === '') {
+          button.hidden = false
+          continue
+        }
+        button.hidden = !shouldShowSubcategoryButton(items, st, subSlug)
       }
-      button.hidden = !shouldShowSubcategoryButton(items, st, subSlug)
     }
 
     const activeBtn = subcategoryButtons.find(
       (b) => b.dataset.active === 'true'
     )
-    if (activeBtn?.hidden) {
+    if (!categorySelect && activeBtn?.hidden) {
       const resetBtn = subcategoryButtons.find(
         (b) => (b.dataset.filterSubcategory ?? '') === ''
       )
@@ -444,6 +461,7 @@ function bindGrid(grid: HTMLElement) {
       if (resetBtn) resetBtn.dataset.active = 'true'
       st = readStateFromControls(
         subcategoryButtons,
+        categorySelect,
         yearSelect,
         locationSelect,
         clientSelect,
@@ -455,6 +473,7 @@ function bindGrid(grid: HTMLElement) {
       rebuildClientSelect(clientSelect, items, st, clientPlaceholder)
       st = readStateFromControls(
         subcategoryButtons,
+        categorySelect,
         yearSelect,
         locationSelect,
         clientSelect,
@@ -473,10 +492,12 @@ function bindGrid(grid: HTMLElement) {
 
     let visibleCount = 0
 
-    subcategoryButtons.forEach((button) => {
-      const val = button.dataset.filterSubcategory ?? ''
-      button.dataset.active = val === st.sub ? 'true' : 'false'
-    })
+    if (!categorySelect) {
+      subcategoryButtons.forEach((button) => {
+        const val = button.dataset.filterSubcategory ?? ''
+        button.dataset.active = val === st.sub ? 'true' : 'false'
+      })
+    }
 
     items.forEach((item) => {
       const visible = itemMatchesAll(item, st)
@@ -512,7 +533,7 @@ function bindGrid(grid: HTMLElement) {
     if (st.year) params.set('year', st.year)
     if (st.locSlug) params.set('loc', st.locSlug)
     if (st.clientSlug) params.set('cl', st.clientSlug)
-    if (searchInput.value.trim()) params.set('q', searchInput.value.trim())
+    if (searchInput?.value.trim()) params.set('q', searchInput.value.trim())
     if (st.tag) params.set('tag', st.tag)
 
     syncUrlFromState(pathname, params)
@@ -536,44 +557,50 @@ function bindGrid(grid: HTMLElement) {
     applyFiltersPanelOpen(filterPanel, filtersPanelOpen, filterToggle)
   })
 
-  subcategoryButtons.forEach((button) => {
-    button.addEventListener('click', () => {
-      const nextValue = button.dataset.filterSubcategory ?? ''
-      const isActive = button.dataset.active === 'true'
+  if (!categorySelect) {
+    subcategoryButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const nextValue = button.dataset.filterSubcategory ?? ''
+        const isActive = button.dataset.active === 'true'
 
-      subcategoryButtons.forEach((candidate) => {
-        candidate.dataset.active = 'false'
+        subcategoryButtons.forEach((candidate) => {
+          candidate.dataset.active = 'false'
+        })
+
+        const resetButton = subcategoryButtons.find(
+          (candidate) => (candidate.dataset.filterSubcategory ?? '') === ''
+        )
+
+        if (isActive || nextValue === '') {
+          if (resetButton) resetButton.dataset.active = 'true'
+        } else {
+          button.dataset.active = 'true'
+        }
+
+        applyFilters()
       })
-
-      const resetButton = subcategoryButtons.find(
-        (candidate) => (candidate.dataset.filterSubcategory ?? '') === ''
-      )
-
-      if (isActive || nextValue === '') {
-        if (resetButton) resetButton.dataset.active = 'true'
-      } else {
-        button.dataset.active = 'true'
-      }
-
-      applyFilters()
     })
-  })
+  }
 
+  categorySelect?.addEventListener('change', applyFilters)
   yearSelect?.addEventListener('change', applyFilters)
   locationSelect?.addEventListener('change', applyFilters)
   clientSelect?.addEventListener('change', applyFilters)
-  searchInput.addEventListener('input', applyFilters)
+  searchInput?.addEventListener('input', applyFilters)
   clearButton?.addEventListener('click', () => {
+    if (categorySelect) categorySelect.value = ''
     if (yearSelect) yearSelect.value = ''
     if (locationSelect) locationSelect.value = ''
     if (clientSelect) clientSelect.value = ''
-    searchInput.value = ''
+    if (searchInput) searchInput.value = ''
     grid.dataset.filterTag = ''
 
-    subcategoryButtons.forEach((button) => {
-      button.dataset.active =
-        button.dataset.filterSubcategory === '' ? 'true' : 'false'
-    })
+    if (!categorySelect) {
+      subcategoryButtons.forEach((button) => {
+        button.dataset.active =
+          button.dataset.filterSubcategory === '' ? 'true' : 'false'
+      })
+    }
 
     applyFilters()
   })

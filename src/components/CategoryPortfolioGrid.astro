@@ -54,12 +54,12 @@ const categoryTitleKey =
   <div class="portfolio-toolbar-enter mb-8 flex flex-col gap-4">
     <PortfolioFilterToolbar
       locale={locale}
-      subcategories={subcategories}
       totalCount={gridPortfolios.length}
       categoryTitle={t(locale, categoryTitleKey)}
     />
     <PortfolioFiltersPanel
       locale={locale}
+      subcategories={subcategories}
       years={years}
       locations={locations}
       clients={clients}
