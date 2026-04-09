@@ -11,6 +11,7 @@ interface Props {
   isHomepage?: boolean
   /** Shorter hero (category pages with compact body layout). */
   compact?: boolean
+  isHeroVisible?: boolean
   title: string
   subTitle?: string
   /** Homepage: SEO-friendly multi-line H1 (overrides title/subTitle in hero). */
@@ -34,6 +35,7 @@ const {
   isAboutPage = false,
   isHomepage = false,
   compact = false,
+  isHeroVisible = true,
   headerBackground,
   currentPath = '/',
   locale = 'en',
@@ -72,14 +74,18 @@ const switchUrl = switchHref ?? localePath(altLocale, pagePath)
     navLinks={navLinks}
   />
 
-  <HeaderHero
-    isHomepage={isHomepage}
-    compact={compact}
-    title={title}
-    subTitle={subTitle}
-    homepageHero={homepageHero}
-    headerBackground={headerBackground}
-  />
+  {
+    isHeroVisible && (
+      <HeaderHero
+        isHomepage={isHomepage}
+        compact={compact}
+        title={title}
+        subTitle={subTitle}
+        homepageHero={homepageHero}
+        headerBackground={headerBackground}
+      />
+    )
+  }
 
   {isAboutPage ? <TrustedBy /> : null}
 </div>

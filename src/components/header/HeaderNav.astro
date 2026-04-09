@@ -65,12 +65,7 @@ const desktopLabels =
       ONDRAHAJEK.COM
     </a>
 
-    <div class="flex items-center gap-2 md:hidden">
-      <LanguageToggle
-        locale={locale}
-        switchUrl={switchUrl}
-        class="scale-90 border-white/25 text-[1rem]"
-      />
+    <div class="md:hidden">
       <button
         data-mobile-menu-toggle
         class="relative z-[100] flex h-10 w-10 flex-col items-center justify-center gap-[5px]"
@@ -92,7 +87,7 @@ const desktopLabels =
   </nav>
 </div>
 
-<MobileMenuOverlay locale={locale} switchUrl={switchUrl} navLinks={navLinks} />
+<MobileMenuOverlay locale={locale} navLinks={navLinks} />
 
 <style>
   [data-site-nav] {

@@ -118,6 +118,9 @@ export const translations = {
     'filter.noResults': 'No projects match your filters.',
     'filter.toggleFilters': 'Show or hide filters',
     'filter.refine': 'Refine',
+    'filter.project.one': 'project',
+    'filter.project.few': 'projects',
+    'filter.project.other': 'projects',
 
 
     // Detail
@@ -209,6 +212,9 @@ export const translations = {
     'filter.noResults': 'Žádné projekty neodpovídají filtrům.',
     'filter.toggleFilters': 'Zobrazit nebo skrýt filtry',
     'filter.refine': 'Upřesnit',
+    'filter.project.one': 'projekt',
+    'filter.project.few': 'projekty',
+    'filter.project.other': 'projektů',
 
     'detail.back': '← Zpět na portfolio',
     'detail.backTo': '← Zpět na',
@@ -233,6 +239,13 @@ export type TranslationKey = keyof (typeof translations)['en']
 
 export function t(locale: Locale, key: TranslationKey): string {
   return translations[locale][key] ?? translations.en[key] ?? key
+}
+
+export function projectCountLabel(locale: Locale, count: number): string {
+  const category = new Intl.PluralRules(locale).select(count)
+  if (category === 'one') return t(locale, 'filter.project.one')
+  if (category === 'few') return t(locale, 'filter.project.few')
+  return t(locale, 'filter.project.other')
 }
 
 /** Replace `{name}` placeholders in a string (used for SEO and detail link copy). */
