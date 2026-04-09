@@ -501,8 +501,8 @@ function bindGrid(grid: HTMLElement) {
 
     items.forEach((item) => {
       const visible = itemMatchesAll(item, st)
-      item.hidden = !visible
       if (visible) visibleCount += 1
+      item.hidden = !visible
     })
 
     resultCount.textContent = String(visibleCount)

@@ -1,7 +1,6 @@
 ---
 import PortfolioCard from '~/components/PortfolioCard.astro'
-import { t, localePath, type Locale } from '~/i18n'
-import { localizedPagePath } from '~/i18n/routes'
+import { t, type Locale } from '~/i18n'
 import type { PortfolioListItem } from '~/api'
 
 interface Props {
@@ -13,17 +12,23 @@ const { portfolios, locale } = Astro.props
 
 /** PortfolioCard renders nothing without a responsive thumbnail — skip those so the grid has no empty cells. */
 const withThumbnails = portfolios.filter((p) => p.thumbnail?.responsiveImage)
+const featuredTitle = t(locale, 'home.featured')
+const projectsLabel = t(locale, 'home.projectsLabel')
 ---
 
 {
   withThumbnails.length > 0 && (
-    <section class="mx-auto w-full max-w-container px-5 py-12 xl:px-0">
+    <section
+      class="mx-auto w-full max-w-container px-5 py-12 xl:px-0"
+      data-featured-work
+      data-locale={locale}
+    >
       <div class="portfolio-toolbar-enter mb-8 flex items-end justify-between gap-4">
         <h2 class="m-0 font-anton text-[3.2rem] text-white md:text-[5rem]">
-          {t(locale, 'home.featured')}
+          {featuredTitle}
         </h2>
         <div class="hidden font-geist text-[1rem] uppercase tracking-[0.2em] text-[#8F8F8F] md:block">
-          {withThumbnails.length} {t(locale, 'home.projectsLabel')}
+          {withThumbnails.length} {projectsLabel}
         </div>
       </div>
       <ul class="m-0 grid w-full list-none grid-cols-1 gap-4 p-0 md:grid-cols-2 md:gap-4 lg:grid-cols-3">
@@ -36,16 +41,6 @@ const withThumbnails = portfolios.filter((p) => p.thumbnail?.responsiveImage)
           </li>
         ))}
       </ul>
-
-      <div class="portfolio-toolbar-enter-delayed mt-8 flex justify-center md:mt-10">
-        <a
-          href={localePath(locale, localizedPagePath(locale, 'drone'))}
-          class="inline-flex items-center gap-2 rounded-full border border-[#222222] px-6 py-3 font-inter text-[1.3rem] font-medium text-white no-underline transition-colors hover:border-white/30"
-        >
-          {t(locale, 'home.viewAllProjects')}
-          <span aria-hidden="true">→</span>
-        </a>
-      </div>
     </section>
   )
 }
