@@ -65,7 +65,8 @@
                       "fill": "$foreground-muted",
                       "content": "Video",
                       "fontFamily": "Inter",
-                      "fontSize": 13
+                      "fontSize": 13,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -73,7 +74,8 @@
                       "fill": "$foreground-muted",
                       "content": "Gallery",
                       "fontFamily": "Inter",
-                      "fontSize": 13
+                      "fontSize": 13,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -81,7 +83,8 @@
                       "fill": "$foreground-muted",
                       "content": "About",
                       "fontFamily": "Inter",
-                      "fontSize": 13
+                      "fontSize": 13,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -144,7 +147,8 @@
                           "fill": "$foreground-muted",
                           "content": "CZ",
                           "fontFamily": "Geist Mono",
-                          "fontSize": 11
+                          "fontSize": 11,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -1541,7 +1545,8 @@
                           "fill": "$foreground-muted",
                           "content": "CZ",
                           "fontFamily": "Geist Mono",
-                          "fontSize": 10
+                          "fontSize": 10,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -2470,7 +2475,8 @@
                       "fill": "$foreground-muted",
                       "content": "Video",
                       "fontFamily": "Inter",
-                      "fontSize": 13
+                      "fontSize": 13,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -2478,7 +2484,8 @@
                       "fill": "$foreground-muted",
                       "content": "Gallery",
                       "fontFamily": "Inter",
-                      "fontSize": 13
+                      "fontSize": 13,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -2486,7 +2493,8 @@
                       "fill": "$foreground-muted",
                       "content": "About",
                       "fontFamily": "Inter",
-                      "fontSize": 13
+                      "fontSize": 13,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -2549,7 +2557,8 @@
                           "fill": "$foreground-muted",
                           "content": "CZ",
                           "fontFamily": "Geist Mono",
-                          "fontSize": 11
+                          "fontSize": 11,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -3974,7 +3983,8 @@
                           "fill": "$foreground-muted",
                           "content": "CZ",
                           "fontFamily": "Geist Mono",
-                          "fontSize": 10
+                          "fontSize": 10,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -4872,7 +4882,8 @@
                       "fill": "$foreground-muted",
                       "content": "Video",
                       "fontFamily": "Inter",
-                      "fontSize": 13
+                      "fontSize": 13,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -4880,7 +4891,8 @@
                       "fill": "$foreground-muted",
                       "content": "Gallery",
                       "fontFamily": "Inter",
-                      "fontSize": 13
+                      "fontSize": 13,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -4888,7 +4900,8 @@
                       "fill": "$foreground-muted",
                       "content": "About",
                       "fontFamily": "Inter",
-                      "fontSize": 13
+                      "fontSize": 13,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -4951,7 +4964,8 @@
                           "fill": "$foreground-muted",
                           "content": "CZ",
                           "fontFamily": "Geist Mono",
-                          "fontSize": 11
+                          "fontSize": 11,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -6182,7 +6196,8 @@
                           "fill": "$foreground-muted",
                           "content": "CZ",
                           "fontFamily": "Geist Mono",
-                          "fontSize": 10
+                          "fontSize": 10,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -7205,7 +7220,8 @@
                           "fill": "$foreground-muted",
                           "content": "CZ",
                           "fontFamily": "Geist Mono",
-                          "fontSize": 10
+                          "fontSize": 10,
+                          "fontWeight": "normal"
                         }
                       ]
                     }

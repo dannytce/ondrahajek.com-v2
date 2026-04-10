@@ -131,6 +131,9 @@ export const translations = {
     'detail.moreForClient': 'More for {client}',
     'detail.description': 'Description',
     'detail.tags': 'Tags',
+    'detail.share': 'Share',
+    'detail.getInTouch': 'Get in Touch',
+    'detail.videoTitleFallback': 'Video',
 
     // Language
     'lang.switch': 'Česky',
@@ -227,6 +230,9 @@ export const translations = {
     'detail.moreForClient': 'Další práce pro {client}',
     'detail.description': 'Popis',
     'detail.tags': 'Štítky',
+    'detail.share': 'Sdílet',
+    'detail.getInTouch': 'Ozvat se',
+    'detail.videoTitleFallback': 'Video',
 
     'lang.switch': 'English',
     'lang.current': 'CZ',

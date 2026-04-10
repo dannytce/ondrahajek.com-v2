@@ -6,6 +6,7 @@ interface Props {
   year: number | null
   client?: string | null
   location?: string | null
+  categoryLabel?: string | null
   /** `labeled` = dt/dd (aside). `inline` = values only, middot-separated (mobile under title). */
   variant?: 'labeled' | 'inline'
   /** Extra classes for the root element */
@@ -23,6 +24,7 @@ const {
   year,
   client,
   location,
+  categoryLabel,
   variant = 'labeled',
   class: className,
   moreForClientHref,
@@ -44,6 +46,17 @@ const inlineText = parts.join(' · ')
 const hasFilterLinks =
   Boolean(moreForClientHref && moreForClientLabel) ||
   Boolean(moreInLocationHref && moreInLocationLabel)
+const clientValue = client?.trim() ?? ''
+const locationValue = location?.trim() ?? ''
+const yearValue = year != null ? String(year) : ''
+const categoryValue = categoryLabel?.trim() ?? ''
+
+const rows = [
+  { key: 'client', label: t(locale, 'detail.client').toUpperCase(), value: clientValue },
+  { key: 'location', label: t(locale, 'detail.location').toUpperCase(), value: locationValue },
+  { key: 'year', label: t(locale, 'detail.year').toUpperCase(), value: yearValue },
+  { key: 'category', label: 'CATEGORY', value: categoryValue },
+].filter((row) => row.value)
 ---
 
 {
@@ -79,51 +92,34 @@ const hasFilterLinks =
         }
       </div>
     ) : (
-      <dl class:list={['m-0 space-y-4', className]}>
-        {
-          year != null && (
-            <div>
-              <dt class="font-anton text-[1.5rem] uppercase text-secondary">
-                {t(locale, 'detail.year')}
-              </dt>
-              <dd class="m-0 text-[1.8rem] text-white">{year}</dd>
-            </div>
-          )
-        }
-        {
-          client?.trim() && (
-            <div>
-              <dt class="font-anton text-[1.5rem] uppercase text-secondary">
-                {t(locale, 'detail.client')}
-              </dt>
-              <dd class="m-0 text-[1.8rem] text-white">{client}</dd>
-              {
-                moreForClientHref && moreForClientLabel && (
-                  <a href={moreForClientHref} class={linkClass}>
-                    {moreForClientLabel}
-                  </a>
-                )
-              }
-            </div>
-          )
-        }
-        {
-          location?.trim() && (
-            <div>
-              <dt class="font-anton text-[1.5rem] uppercase text-secondary">
-                {t(locale, 'detail.location')}
-              </dt>
-              <dd class="m-0 text-[1.8rem] text-white">{location}</dd>
-              {
-                moreInLocationHref && moreInLocationLabel && (
-                  <a href={moreInLocationHref} class={linkClass}>
-                    {moreInLocationLabel}
-                  </a>
-                )
-              }
-            </div>
-          )
-        }
-      </dl>
+      <div class:list={['rounded-xl border border-white/10 bg-[#141414] p-6', className]}>
+        <dl class="m-0">
+          {rows.map((row, index) => (
+            <>
+              <div class="space-y-1">
+                <dt class="font-geist text-[0.9rem] uppercase tracking-[0.2em] text-[#555555]">
+                  {row.label}
+                </dt>
+                <dd class="m-0 font-inter text-[1.4rem] text-white">{row.value}</dd>
+                {
+                  row.key === 'client' && moreForClientHref && moreForClientLabel && (
+                    <a href={moreForClientHref} class={linkClass}>
+                      {moreForClientLabel}
+                    </a>
+                  )
+                }
+                {
+                  row.key === 'location' && moreInLocationHref && moreInLocationLabel && (
+                    <a href={moreInLocationHref} class={linkClass}>
+                      {moreInLocationLabel}
+                    </a>
+                  )
+                }
+              </div>
+              {index < rows.length - 1 && <div class="my-4 h-px w-full bg-[#222222]"></div>}
+            </>
+          ))}
+        </dl>
+      </div>
     ))
 }
