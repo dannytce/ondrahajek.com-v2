@@ -56,7 +56,8 @@ export const translations = {
     'home.subtitle': 'Video & Photography',
     'home.heroBrand': 'Ondra Hajek',
     'home.heroLine': 'Aerial',
-    'home.heroDescriptor': 'High-End Cinematography & Video Production',
+    'home.heroDescriptor':
+      'Drone cinematography & aerial photography for film, commercial and documentary.',
     'home.featured': 'Selected Work',
     'home.projectsLabel': 'projects',
 
