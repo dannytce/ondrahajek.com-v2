@@ -7,6 +7,8 @@ interface Props {
 }
 
 const { locale = 'en' } = Astro.props
+const pathname = Astro.url.pathname
+const homePath = localePath(locale, '/')
 
 const workLinks = [
   {
@@ -30,6 +32,32 @@ const infoLinks = [
   },
 ]
 
+const dronePath = localePath(locale, localizedPagePath(locale, 'drone'))
+const videoPath = localePath(locale, localizedPagePath(locale, 'video'))
+const isCategoryHubPage = pathname === dronePath || pathname === videoPath
+const isHomePage = pathname === homePath
+
+const mobileCategoryLinks = [
+  {
+    text: t(locale, 'footer.mobile.drone'),
+    href: dronePath,
+  },
+  {
+    text: t(locale, 'footer.mobile.video'),
+    href: videoPath,
+  },
+  {
+    text: t(locale, 'footer.mobile.gallery'),
+    href: localePath(locale, localizedPagePath(locale, 'gallery')),
+  },
+  {
+    text: t(locale, 'footer.mobile.about'),
+    href: localePath(locale, localizedPagePath(locale, 'about')),
+  },
+]
+
+const mobileLinks = isCategoryHubPage || isHomePage ? mobileCategoryLinks : workLinks
+
 const contactHref = localePath(locale, localizedPagePath(locale, 'about'))
 ---
 
@@ -44,7 +72,7 @@ const contactHref = localePath(locale, localizedPagePath(locale, 'about'))
       </div>
 
       <div class="flex gap-6">
-        {workLinks.map((link) => (
+        {mobileLinks.map((link) => (
           <a href={link.href} class="font-inter text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">
             {link.text}
           </a>
@@ -63,9 +91,9 @@ const contactHref = localePath(locale, localizedPagePath(locale, 'about'))
       <div class="flex items-center justify-between">
         <p class="m-0 font-geist text-[0.9rem] text-[#555555]">© 2016–{new Date().getFullYear()} Ondřej Hájek</p>
         <div class="flex gap-4">
-          <a href="https://www.linkedin.com/in/ondrahajek/" target="_blank" rel="noopener" class="font-inter text-[1.1rem] text-[#888888] no-underline transition-colors hover:text-white">LinkedIn</a>
-          <a href="https://www.instagram.com/ondrahajek.drone/" target="_blank" rel="noopener" class="font-inter text-[1.1rem] text-[#888888] no-underline transition-colors hover:text-white">Instagram</a>
-          <a href="https://vimeo.com/ondrahajek" target="_blank" rel="noopener" class="font-inter text-[1.1rem] text-[#888888] no-underline transition-colors hover:text-white">Vimeo</a>
+          <a href="https://www.linkedin.com/in/ondrahajek/" target="_blank" rel="noopener" class="font-inter text-[1.1rem] text-[#888888] no-underline transition-colors hover:text-white">{t(locale, 'footer.social.linkedin')}</a>
+          <a href="https://www.instagram.com/ondrahajek.drone/" target="_blank" rel="noopener" class="font-inter text-[1.1rem] text-[#888888] no-underline transition-colors hover:text-white">{t(locale, 'footer.social.instagram')}</a>
+          <a href="https://vimeo.com/ondrahajek" target="_blank" rel="noopener" class="font-inter text-[1.1rem] text-[#888888] no-underline transition-colors hover:text-white">{t(locale, 'footer.social.vimeo')}</a>
         </div>
       </div>
     </div>
@@ -111,9 +139,9 @@ const contactHref = localePath(locale, localizedPagePath(locale, 'about'))
           +420 773 604 400
         </a>
         <div class="flex gap-4">
-          <a href="https://www.linkedin.com/in/ondrahajek/" target="_blank" rel="noopener" class="font-inter text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">LinkedIn</a>
-          <a href="https://www.instagram.com/ondrahajek.drone/" target="_blank" rel="noopener" class="font-inter text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">Instagram</a>
-          <a href="https://vimeo.com/ondrahajek" target="_blank" rel="noopener" class="font-inter text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">Vimeo</a>
+          <a href="https://www.linkedin.com/in/ondrahajek/" target="_blank" rel="noopener" class="font-inter text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">{t(locale, 'footer.social.linkedin')}</a>
+          <a href="https://www.instagram.com/ondrahajek.drone/" target="_blank" rel="noopener" class="font-inter text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">{t(locale, 'footer.social.instagram')}</a>
+          <a href="https://vimeo.com/ondrahajek" target="_blank" rel="noopener" class="font-inter text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">{t(locale, 'footer.social.vimeo')}</a>
         </div>
       </div>
     </div>
