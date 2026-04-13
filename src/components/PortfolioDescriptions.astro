@@ -15,14 +15,8 @@ const hasCs = descriptionCs?.value != null
 const hasEn = descriptionEn?.value != null
 const primary =
   locale === 'cs'
-    ? { data: descriptionCs, label: 'Čeština', has: hasCs }
-    : { data: descriptionEn, label: 'English', has: hasEn }
-const secondary =
-  locale === 'cs'
-    ? { data: descriptionEn, label: 'English', has: hasEn }
-    : { data: descriptionCs, label: 'Čeština', has: hasCs }
-const collapsedLabel = `▸ ${secondary.label}`
-const expandedLabel = `▾ ${secondary.label}`
+    ? { data: descriptionCs ?? descriptionEn, has: hasCs || hasEn }
+    : { data: descriptionEn ?? descriptionCs, has: hasEn || hasCs }
 ---
 
 {
@@ -38,31 +32,6 @@ const expandedLabel = `▾ ${secondary.label}`
           </div>
         </section>
       )}
-
-      {secondary.has && secondary.data && (
-        <section>
-          <button
-            type="button"
-            data-description-toggle
-            data-label-collapsed={collapsedLabel}
-            data-label-expanded={expandedLabel}
-            aria-expanded="false"
-            class="cursor-pointer border-none bg-transparent font-anton text-[1.5rem] uppercase tracking-wide text-secondary transition-colors hover:text-white"
-          >
-            {collapsedLabel}
-          </button>
-          <div
-            data-description-secondary
-            class="mt-3 [&_a]:text-secondary [&_a]:underline [&_p]:mb-3"
-          >
-            <StructuredText data={secondary.data} />
-          </div>
-        </section>
-      )}
     </div>
   )
 }
-
-<script>
-  import '~/scripts/portfolio-descriptions.ts'
-</script>
