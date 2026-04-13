@@ -370,10 +370,11 @@ export async function getPortfolioBySlug(
   slug: string,
   locale: Locale
 ): Promise<PortfolioDetail | null> {
+  const safeSlug = slug.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
   const loc = locale === 'cs' ? 'cs' : 'en'
   const data = await fetchAPI(`
     {
-      portfolio(filter: { slug: { eq: "${slug}" } }) {
+      portfolio(filter: { slug: { eq: "${safeSlug}" } }) {
         id
         title
         titleCs: title(locale: cs)
