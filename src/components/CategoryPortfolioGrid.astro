@@ -41,6 +41,10 @@ const categoryTitleKey =
   categorySlug === 'drone-cinematography'
     ? 'category.drone.title'
     : 'category.video.title'
+const categoryIntroKey =
+  categorySlug === 'drone-cinematography'
+    ? 'category.drone.intro'
+    : 'category.video.intro'
 ---
 
 <section
@@ -51,12 +55,17 @@ const categoryTitleKey =
   data-default-seo-title={defaultSeoTitle}
   data-default-seo-description={defaultSeoDescription}
 >
-  <div class="portfolio-toolbar-enter mb-8 flex flex-col gap-4">
+  <div class="portfolio-toolbar-enter flex flex-col gap-4">
     <PortfolioFilterToolbar
       locale={locale}
       totalCount={gridPortfolios.length}
       categoryTitle={t(locale, categoryTitleKey)}
     />
+    <p class="m-0 max-w-[72ch] font-inter text-[1.15rem] leading-relaxed text-foreground-muted">
+      {t(locale, categoryIntroKey)}
+    </p>
+  </div>
+  <div class="portfolio-toolbar-enter mb-8">
     <PortfolioFiltersPanel
       locale={locale}
       subcategories={subcategories}

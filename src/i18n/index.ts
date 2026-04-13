@@ -74,9 +74,13 @@ export const translations = {
 
     // Category pages
     'category.drone.title': 'Drone Cinematography',
+    'category.drone.intro':
+      "Specializing in professional drone cinematography, I deliver high-end aerial video production for commercial, corporate, and creative projects-focusing on advertising, real estate, architecture, and construction. With 10+ years of experience filming for brands worldwide, I combine technical precision with a creative, human touch. As a fully licensed pilot, I guarantee safe operations in any environment. Let's elevate your visual storytelling from dynamic wide-angle shots to stunning bird's-eye details.",
     'category.drone.description':
       'Aerial drone cinematography portfolio by Ondra Hajek',
     'category.video.title': 'Video Production',
+    'category.video.intro':
+      'I provide full-service video production-from the initial concept to the final delivery. I create visually engaging corporate videos, commercials, event videos, and modern social media content with one clear goal: to effectively communicate your story and elevate your brand. I manage the entire video creation process, including pre-production, directing, filming, and precise post-production with advanced color grading. For larger-scale projects, I assemble a trusted team of industry professionals to ensure high-end quality without compromise. The result is content that not only looks stunning but, more importantly, drives results and engages the right audience.',
     'category.video.description': 'Video production portfolio by Ondra Hajek',
     'category.video.seoTitleLocation':
       'Video Production in {location} · {siteTitle}',
@@ -190,9 +194,13 @@ export const translations = {
     'hire.close': 'Zavřít',
 
     'category.drone.title': 'Letecké záběry dronem',
+    'category.drone.intro':
+      'Poskytuji profesionální letecké záběry dronem pro komerční, firemní i kreativní projekty v oblasti reklamy, realit, architektury či stavebnictví. Mám přes 10 let zkušeností a s dronem jsem natáčel pro desítky značek po celém světě. Jako licencovaný pilot zaručuji maximální bezpečnost a preciznost i v náročných podmínkách. Vaší prezentaci dodám kreativní filmové záběry na míru s osobním a lidským přesahem - od dynamických celků až po detaily z ptačí perspektivy.',
     'category.drone.description':
       'Portfolio letecké kinematografie od Ondry Hajka',
     'category.video.title': 'Video Produkce',
+    'category.video.intro':
+      'Zajišťuji profesionální video produkci na klíč - od úvodního konceptu až po finální export. Tvořím vizuálně poutavá firemní videa, reklamní kampaně, eventová videa i moderní obsah pro sociální sítě s jediným cílem: efektivně odkomunikovat váš příběh a posílit vaši značku. Řídím kompletní proces tvorby videa. Postarám se o přípravu, režii, natáčení i precizní postprodukci včetně pokročilého color gradingu. Pro rozsáhlejší projekty sestavuji tým ověřených profesionálů, díky čemuž dodávám špičkovou kvalitu bez kompromisů. Výsledkem je obsah, který nejen skvěle vypadá, ale hlavně funguje a osloví to správné publikum.',
     'category.video.description': 'Portfolio video produkce od Ondry Hajka',
     'category.video.seoTitleLocation':
       'Video produkce v lokalitě {location} · {siteTitle}',

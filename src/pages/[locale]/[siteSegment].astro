@@ -44,8 +44,7 @@ const href = hreflangPairForSitePage(pageKey)
 const switchHref = languageSwitchHref(locale, pageKey)
 const canonicalPath = localizedPagePath(locale, pageKey)
 
-const photos =
-  pageKey === 'gallery' ? await getGallery() : null
+const photos = pageKey === 'gallery' ? await getGallery() : null
 const headerBackgroundGallery =
   pageKey === 'gallery' ? await getHeaderBackgroundByPage('/gallery') : null
 const headerBackgroundAbout =
@@ -73,7 +72,10 @@ const hubSeo =
     : null
 
 const collectionJsonLd =
-  portfolios && categorySlug && hubSeo && (pageKey === 'drone' || pageKey === 'video')
+  portfolios &&
+  categorySlug &&
+  hubSeo &&
+  (pageKey === 'drone' || pageKey === 'video')
     ? buildCategoryCollectionJsonLd(
         locale,
         pageKey,
