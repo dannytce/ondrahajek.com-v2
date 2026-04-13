@@ -149,6 +149,13 @@ export const translations = {
     'footer.work': 'Work',
     'footer.info': 'Info',
     'footer.contact': 'Contact',
+    'footer.mobile.drone': 'Drone',
+    'footer.mobile.video': 'Video',
+    'footer.mobile.gallery': 'Gallery',
+    'footer.mobile.about': 'About',
+    'footer.social.linkedin': 'LinkedIn',
+    'footer.social.instagram': 'Instagram',
+    'footer.social.vimeo': 'Vimeo',
   },
   cs: {
     'nav.drone': 'Letecké záběry dronem',
@@ -245,6 +252,13 @@ export const translations = {
     'footer.work': 'Práce',
     'footer.info': 'Info',
     'footer.contact': 'Kontakt',
+    'footer.mobile.drone': 'Dron',
+    'footer.mobile.video': 'Video',
+    'footer.mobile.gallery': 'Galerie',
+    'footer.mobile.about': 'O mně',
+    'footer.social.linkedin': 'LinkedIn',
+    'footer.social.instagram': 'Instagram',
+    'footer.social.vimeo': 'Vimeo',
   },
 } as const
 
