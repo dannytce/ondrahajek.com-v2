@@ -1,6 +1,6 @@
 ---
 import { t, localePath, type Locale } from '~/i18n'
-import { localizedPagePath } from '~/i18n/routes'
+import { localizedPagePath, portfolioSegment } from '~/i18n/routes'
 
 interface Props {
   locale?: Locale
@@ -34,8 +34,10 @@ const infoLinks = [
 
 const dronePath = localePath(locale, localizedPagePath(locale, 'drone'))
 const videoPath = localePath(locale, localizedPagePath(locale, 'video'))
+const portfolioBasePath = localePath(locale, `/${portfolioSegment(locale)}`)
 const isCategoryHubPage = pathname === dronePath || pathname === videoPath
 const isHomePage = pathname === homePath
+const isDetailPage = pathname.startsWith(`${portfolioBasePath}/`)
 
 const mobileCategoryLinks = [
   {
@@ -56,7 +58,9 @@ const mobileCategoryLinks = [
   },
 ]
 
-const mobileLinks = isCategoryHubPage || isHomePage ? mobileCategoryLinks : workLinks
+const mobileLinks = isCategoryHubPage || isHomePage || isDetailPage
+  ? mobileCategoryLinks
+  : workLinks
 
 const contactHref = localePath(locale, localizedPagePath(locale, 'about'))
 ---
