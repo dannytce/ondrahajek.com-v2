@@ -17,6 +17,11 @@ interface Props {
 
 const { locale, canonicalPath, hreflangPaths, switchHref, headerBackground } =
   Astro.props
+
+const PERSON_NAME = 'ONDŘEJ HÁJEK'
+const COMPANY_NAME = 'COPTER VISION S.R.O.'
+const COMPANY_ICO = '03813452'
+const COMPANY_DIC = 'CZ03813452'
 ---
 
 <BaseLayout
@@ -150,7 +155,7 @@ const { locale, canonicalPath, hreflangPaths, switchHref, headerBackground } =
         <h3
           class="my-[2em] mt-[25px] font-anton text-[4rem] font-semibold uppercase text-white"
         >
-          {t(locale, 'about.credentials.personName')}
+          {PERSON_NAME}
         </h3>
         {t(locale, 'about.credentials.phoneLabel')}{' '}
         <a href="tel:+420773604400" class="text-secondary no-underline">
@@ -168,14 +173,14 @@ const { locale, canonicalPath, hreflangPaths, switchHref, headerBackground } =
         <h3
           class="my-[2em] mt-[25px] font-anton text-[4rem] font-semibold uppercase text-white"
         >
-          {t(locale, 'about.credentials.companyName')}
+          {COMPANY_NAME}
         </h3>
         {t(locale, 'about.credentials.licenseText')}
         <br />
         <br />
-        {t(locale, 'about.credentials.icoLabel')}: {t(locale, 'about.credentials.icoValue')}
+        ICO: {COMPANY_ICO}
         <br />
-        {t(locale, 'about.credentials.dicLabel')}: {t(locale, 'about.credentials.dicValue')}
+        DIC: {COMPANY_DIC}
       </div>
     </Section>
   </Page>

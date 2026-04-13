@@ -161,15 +161,9 @@ export const translations = {
     'footer.social.instagram': 'Instagram',
     'footer.social.vimeo': 'Vimeo',
     'about.credentials.title': 'Credentials',
-    'about.credentials.personName': 'ONDREJ HAJEK',
     'about.credentials.phoneLabel': 'Tel.:',
-    'about.credentials.companyName': 'COPTER VISION S.R.O.',
     'about.credentials.licenseText':
       'Holder of the permit for aerial work operations issued by the Civil Aviation Authority.',
-    'about.credentials.icoLabel': 'ICO',
-    'about.credentials.icoValue': '03813452',
-    'about.credentials.dicLabel': 'DIC',
-    'about.credentials.dicValue': 'CZ03813452',
   },
   cs: {
     'nav.drone': 'Letecké záběry dronem',
@@ -278,15 +272,9 @@ export const translations = {
     'footer.social.instagram': 'Instagram',
     'footer.social.vimeo': 'Vimeo',
     'about.credentials.title': 'Údaje',
-    'about.credentials.personName': 'ONDŘEJ HÁJEK',
     'about.credentials.phoneLabel': 'Tel.:',
-    'about.credentials.companyName': 'COPTER VISION S.R.O.',
     'about.credentials.licenseText':
       'držitel povolení k provozování leteckých prací od Úřadu pro civilní letectví',
-    'about.credentials.icoLabel': 'ICO',
-    'about.credentials.icoValue': '03813452',
-    'about.credentials.dicLabel': 'DIC',
-    'about.credentials.dicValue': 'CZ03813452',
   },
 } as const
 
