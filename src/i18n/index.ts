@@ -160,6 +160,10 @@ export const translations = {
     'footer.social.linkedin': 'LinkedIn',
     'footer.social.instagram': 'Instagram',
     'footer.social.vimeo': 'Vimeo',
+    'about.credentials.title': 'Credentials',
+    'about.credentials.phoneLabel': 'Tel.:',
+    'about.credentials.licenseText':
+      'Holder of the permit for aerial work operations issued by the Civil Aviation Authority.',
   },
   cs: {
     'nav.drone': 'Letecké záběry dronem',
@@ -267,6 +271,10 @@ export const translations = {
     'footer.social.linkedin': 'LinkedIn',
     'footer.social.instagram': 'Instagram',
     'footer.social.vimeo': 'Vimeo',
+    'about.credentials.title': 'Údaje',
+    'about.credentials.phoneLabel': 'Tel.:',
+    'about.credentials.licenseText':
+      'držitel povolení k provozování leteckých prací od Úřadu pro civilní letectví',
   },
 } as const
 

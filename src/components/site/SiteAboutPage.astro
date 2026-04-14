@@ -17,6 +17,11 @@ interface Props {
 
 const { locale, canonicalPath, hreflangPaths, switchHref, headerBackground } =
   Astro.props
+
+const PERSON_NAME = 'ONDŘEJ HÁJEK'
+const COMPANY_NAME = 'COPTER VISION S.R.O.'
+const COMPANY_ICO = '03813452'
+const COMPANY_DIC = 'CZ03813452'
 ---
 
 <BaseLayout
@@ -145,14 +150,14 @@ const { locale, canonicalPath, hreflangPaths, switchHref, headerBackground } =
         </li>
       </ul>
     </Section>
-    <Section title="Credentials">
+    <Section title={t(locale, 'about.credentials.title')}>
       <div class="mx-auto max-w-[420px] text-secondary">
         <h3
           class="my-[2em] mt-[25px] font-anton text-[4rem] font-semibold uppercase text-white"
         >
-          ONDŘEJ HÁJEK
+          {PERSON_NAME}
         </h3>
-        Tel.:{' '}
+        {t(locale, 'about.credentials.phoneLabel')}{' '}
         <a href="tel:+420773604400" class="text-secondary no-underline">
           +420 773 604 400
         </a>
@@ -168,14 +173,14 @@ const { locale, canonicalPath, hreflangPaths, switchHref, headerBackground } =
         <h3
           class="my-[2em] mt-[25px] font-anton text-[4rem] font-semibold uppercase text-white"
         >
-          COPTER VISION S.R.O.
+          {COMPANY_NAME}
         </h3>
-        držitel povolení k provozování leteckých prací od Úřadu pro civilní letectví
+        {t(locale, 'about.credentials.licenseText')}
         <br />
         <br />
-        ICO: 03803452
+        ICO: {COMPANY_ICO}
         <br />
-        DIC: CZ03803452
+        DIC: {COMPANY_DIC}
       </div>
     </Section>
   </Page>
