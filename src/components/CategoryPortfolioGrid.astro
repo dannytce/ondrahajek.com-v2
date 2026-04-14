@@ -2,7 +2,7 @@
 import PortfolioCard from '~/components/PortfolioCard.astro'
 import PortfolioFilterToolbar from '~/components/PortfolioFilterToolbar.astro'
 import PortfolioFiltersPanel from '~/components/PortfolioFiltersPanel.astro'
-import { t, type Locale } from '~/i18n'
+import { t, projectCountLabel, type Locale } from '~/i18n'
 import type { PortfolioListItem } from '~/api'
 import { buildFilterOptions } from '~/lib/portfolio-filters'
 import { splitPortfolioTags } from '~/lib/portfolio-tags'
@@ -65,7 +65,46 @@ const categoryIntroKey =
       {t(locale, categoryIntroKey)}
     </p>
   </div>
-  <div class="portfolio-toolbar-enter mb-8">
+  <div class="portfolio-toolbar-enter relative z-40 mb-8 mt-4 flex justify-end">
+    <div class="flex items-center gap-3">
+      <span class="font-geist text-[1.2rem] text-[#888888]">
+        <span
+          data-filter-result-count
+          data-locale={locale}
+          data-label-one={t(locale, 'filter.project.one')}
+          data-label-few={t(locale, 'filter.project.few')}
+          data-label-other={t(locale, 'filter.project.other')}
+        >
+          {gridPortfolios.length}
+        </span>{' '}
+        <span data-filter-result-label>{projectCountLabel(locale, gridPortfolios.length)}</span>
+      </span>
+
+      <button
+        type="button"
+        data-filter-toggle
+        aria-expanded="false"
+        aria-controls="portfolio-filters-panel"
+        aria-label={t(locale, 'filter.toggleFilters')}
+        class="inline-flex h-12 items-center gap-2 rounded-full border border-[#222222] bg-transparent px-5 font-geist text-[1.2rem] uppercase tracking-[0.08em] text-[#c2c2c4] transition-colors hover:border-white/35 hover:text-white focus:outline-none focus-visible:border-white/60"
+      >
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path
+            d="M4 6h16M7 12h10M10 18h4"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+          ></path>
+        </svg>
+        <span>{t(locale, 'filter.refine')}</span>
+        <span
+          data-filter-active-badge
+          hidden
+          class="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-white px-1.5 text-[1rem] font-semibold leading-none text-black"
+        ></span>
+      </button>
+    </div>
+
     <PortfolioFiltersPanel
       locale={locale}
       subcategories={subcategories}

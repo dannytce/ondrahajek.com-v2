@@ -2581,6 +2581,7 @@
             24,
             40
           ],
+          "alignItems": "center",
           "children": [
             {
               "type": "frame",

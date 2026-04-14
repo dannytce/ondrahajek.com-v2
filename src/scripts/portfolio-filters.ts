@@ -557,6 +557,15 @@ function bindGrid(grid: HTMLElement) {
     applyFiltersPanelOpen(filterPanel, filtersPanelOpen, filterToggle)
   })
 
+  document.addEventListener('pointerdown', (event) => {
+    if (!filterPanel || !filterToggle || !filtersPanelOpen) return
+    const target = event.target as Node | null
+    if (!target) return
+    if (filterPanel.contains(target) || filterToggle.contains(target)) return
+    filtersPanelOpen = false
+    applyFiltersPanelOpen(filterPanel, filtersPanelOpen, filterToggle)
+  })
+
   if (!categorySelect) {
     subcategoryButtons.forEach((button) => {
       button.addEventListener('click', () => {
