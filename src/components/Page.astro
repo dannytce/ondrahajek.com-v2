@@ -1,17 +1,28 @@
 ---
 import Footer from './Footer.astro'
 import HireProjectDrawer from './HireProjectDrawer.astro'
+import HeaderNav from '~/components/header/HeaderNav.astro'
+import { getNavLinks } from '~/lib/navigation'
 import type { Locale } from '~/i18n'
 
 interface Props {
   isHomepage?: boolean
   isAboutPage?: boolean
   locale?: Locale
+  switchUrl: string
 }
 
-const { isHomepage, locale = 'en' } = Astro.props
+const { isHomepage, locale = 'en', switchUrl } = Astro.props
+const navLinks = getNavLinks(locale)
+const currentPath = Astro.url.pathname
 ---
 
+<HeaderNav
+  locale={locale}
+  currentPath={currentPath}
+  switchUrl={switchUrl}
+  navLinks={navLinks}
+/>
 <slot name="header" />
 <main
   id={isHomepage ? 'portfolio' : undefined}
@@ -20,3 +31,7 @@ const { isHomepage, locale = 'en' } = Astro.props
   <slot />
   <Footer locale={locale} />
 </main>
+
+<script>
+  import '~/scripts/header.ts'
+</script>

@@ -21,69 +21,59 @@ const { locale, currentPath, switchUrl, navLinks } = Astro.props
 <div
   data-site-nav
   data-visible="true"
-  class="site-nav fixed left-0 right-0 top-0 z-nav"
+  class="site-nav pointer-events-none fixed left-0 right-0 top-[max(10px,env(safe-area-inset-top))] z-nav w-full md:top-[16px]"
 >
   <div
-    class="site-nav-bg absolute inset-0 border-b border-white/10 bg-[#0A0A0A]/90 backdrop-blur-md"
+    class="mx-auto flex h-14 w-full max-w-container items-center justify-between gap-4 px-[15px]"
   >
-  </div>
-  <nav
-    class="relative mx-auto flex h-[64px] w-full max-w-container items-center justify-between px-5 xl:px-0"
-  >
-    <div class="hidden items-center gap-12 md:flex">
-      <a
-        href={localePath(locale, '/')}
-        class="flex items-center text-white no-underline"
-        aria-label={t(locale, 'header.homepageAriaLabel')}
-      >
-        <img
-          src="/logo-ondrahajek.svg"
-          alt="Ondrahajek.com"
-          width="137"
-          height="13"
-          class="h-5 w-auto"
-        />
-      </a>
-      <div class="flex items-center gap-8">
-        {
-          navLinks.map((item) => (
-            <a
-              href={item.link}
-              class:list={[
-                'font-inter text-[1.3rem] text-[#888888] no-underline transition-colors hover:text-white',
-                currentPath === item.link && 'font-medium text-white',
-              ]}
-            >
-              {item.text}
-            </a>
-          ))
-        }
-      </div>
-    </div>
-
     <a
       href={localePath(locale, '/')}
-      class="flex items-center text-white no-underline md:hidden"
+      class="pointer-events-auto flex shrink-0 items-center text-white no-underline"
       aria-label={t(locale, 'header.homepageAriaLabel')}
     >
       <img
         src="/logo-ondrahajek.svg"
-        alt="Ondrahajek.com"
+        alt="ONDRAHAJEK.COM"
         width="137"
         height="13"
-        class="h-4 w-auto"
+        class="h-5 w-auto"
       />
     </a>
 
+    <div class="hidden items-center gap-8 md:flex">
+      <ul class="m-0 flex list-none items-center gap-6 p-0 lg:gap-8">
+        {
+          navLinks.map((item) => (
+            <li class="m-0 p-0">
+              <a
+                href={item.link}
+                class:list={[
+                  'nav-header-link pointer-events-auto flex items-center text-right font-teko text-[2rem] font-normal uppercase leading-none no-underline',
+                  currentPath === item.link && 'is-active',
+                ]}
+              >
+                {item.text}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="pointer-events-auto">
+        <LanguageToggle locale={locale} switchUrl={switchUrl} />
+      </div>
+    </div>
+
     <div class="flex items-center gap-2 md:hidden">
-      <LanguageToggle
-        locale={locale}
-        switchUrl={switchUrl}
-        class="scale-90 border-white/25 text-[1rem]"
-      />
+      <div class="pointer-events-auto">
+        <LanguageToggle
+          locale={locale}
+          switchUrl={switchUrl}
+          class="scale-90 border-white/25 text-[1rem]"
+        />
+      </div>
       <button
         data-mobile-menu-toggle
-        class="relative z-[100] flex h-10 w-10 flex-col items-center justify-center gap-[5px]"
+        class="pointer-events-auto relative z-[100] flex h-10 w-10 flex-col items-center justify-center gap-[5px]"
         aria-label={t(locale, 'header.menuToggleAriaLabel')}
       >
         <span
@@ -94,17 +84,29 @@ const { locale, currentPath, switchUrl, navLinks } = Astro.props
         ></span>
       </button>
     </div>
-
-    {/* Desktop language switch on right */}
-    <div class="hidden md:block">
-      <LanguageToggle locale={locale} switchUrl={switchUrl} />
-    </div>
-  </nav>
+  </div>
 </div>
 
 <MobileMenuOverlay locale={locale} navLinks={navLinks} />
 
 <style>
+  /* Legacy ondrahajek.com /about: gradient text + sweep (Teko nav) */
+  .nav-header-link {
+    padding-top: 0.1em;
+    background: linear-gradient(to right, #ddd, #ddd 50%, #fff 50%);
+    background-size: 200% 100%;
+    background-position: 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: background-position 275ms ease;
+  }
+
+  .nav-header-link:hover,
+  .nav-header-link.is-active {
+    background-position: 0 100%;
+  }
+
   [data-site-nav] {
     transition:
       transform 300ms ease-out,
@@ -121,7 +123,6 @@ const { locale, currentPath, switchUrl, navLinks } = Astro.props
     opacity: 1;
   }
 
-  /* Hamburger → X animation */
   [data-mobile-menu-toggle][aria-expanded='true'] .hamburger-line:first-child {
     transform: translateY(3.5px) rotate(45deg);
   }

@@ -1,6 +1,6 @@
 ---
-import LanguageToggle from '~/components/LanguageToggle.astro'
-import { localePath, type Locale } from '~/i18n'
+import HeaderNav from '~/components/header/HeaderNav.astro'
+import { type Locale } from '~/i18n'
 import { getNavLinks } from '~/lib/navigation'
 
 interface Props {
@@ -11,51 +11,17 @@ interface Props {
 }
 
 const { locale, switchUrl, minimal = false } = Astro.props
-const navLinks = getNavLinks(locale)
+const navLinks = minimal ? [] : getNavLinks(locale)
 ---
 
-<header
-  slot="header"
-  class="fixed left-0 right-0 top-0 z-nav border-b border-white/10 bg-[#0A0A0A]/90 backdrop-blur-md"
->
-  <div
-    class:list={[
-      'mx-auto flex h-[64px] w-full max-w-container items-center px-5 xl:px-0',
-      !minimal && 'justify-between',
-    ]}
-  >
-    <div class="hidden items-center gap-12 md:flex">
-      <a
-        href={localePath(locale, '/')}
-        class="flex items-center font-anton text-[1.3rem] tracking-[0.08em] text-white no-underline"
-      >
-        ONDRAHAJEK.COM
-      </a>
-      {!minimal && (
-        <div class="flex items-center gap-8">
-          {navLinks.map((item) => (
-            <a
-              href={item.link}
-              class="font-inter text-[1.3rem] text-[#888888] no-underline transition-colors hover:text-white"
-            >
-              {item.text}
-            </a>
-          ))}
-        </div>
-      )}
-    </div>
-    <a
-      href={localePath(locale, '/')}
-      class="flex items-center font-anton text-[1.3rem] tracking-[0.08em] text-white no-underline md:hidden"
-    >
-      ONDRAHAJEK.COM
-    </a>
-    {
-      !minimal && (
-        <nav aria-label="Primary" class="flex items-center gap-6">
-          <LanguageToggle locale={locale} switchUrl={switchUrl} />
-        </nav>
-      )
-    }
-  </div>
-</header>
+<HeaderNav
+  locale={locale}
+  currentPath=""
+  switchUrl={switchUrl}
+  navLinks={navLinks}
+/>
+
+<script>
+  import '~/scripts/header.ts'
+</script>
+

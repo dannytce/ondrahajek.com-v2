@@ -1,9 +1,7 @@
 ---
 import HeaderHero from '~/components/header/HeaderHero.astro'
-import HeaderNav from '~/components/header/HeaderNav.astro'
+import TrustedBy from '~/components/About/TrustedBy.astro'
 import type { ResponsiveImage } from '~/api/generated/types'
-import { t, localePath, getAlternateLocale, type Locale } from '~/i18n'
-import { getNavLinks } from '~/lib/navigation'
 
 interface Props {
   isAboutPage?: boolean
@@ -21,11 +19,6 @@ interface Props {
     descriptor: string
   }
   headerBackground: ResponsiveImage
-  currentPath?: string
-  locale?: Locale
-  pagePath?: string
-  /** Full URL path for language switch (other locale). Overrides pagePath when set. */
-  switchHref?: string
 }
 
 const {
@@ -37,41 +30,34 @@ const {
   compact = false,
   isHeroVisible = true,
   headerBackground,
-  currentPath = '/',
-  locale = 'en',
-  pagePath = '/',
-  switchHref,
 } = Astro.props
-
-const navLinks = getNavLinks(locale)
-
-const altLocale = getAlternateLocale(locale)
-const switchUrl = switchHref ?? localePath(altLocale, pagePath)
 ---
 
 <div data-site-header>
-  <HeaderNav
-    locale={locale}
-    currentPath={currentPath}
-    switchUrl={switchUrl}
-    navLinks={navLinks}
-  />
-
   {
-    isHeroVisible && (
-      <HeaderHero
-        isHomepage={isHomepage}
-        compact={compact}
-        title={title}
-        subTitle={subTitle}
-        homepageHero={homepageHero}
-        headerBackground={headerBackground}
-      />
-    )
+    isHeroVisible &&
+      (isAboutPage ? (
+        <HeaderHero
+          isHomepage={isHomepage}
+          compact={compact}
+          fullViewport
+          title={title}
+          subTitle={subTitle}
+          homepageHero={homepageHero}
+          headerBackground={headerBackground}
+        >
+          <TrustedBy slot="trustedBy" />
+        </HeaderHero>
+      ) : (
+        <HeaderHero
+          isHomepage={isHomepage}
+          compact={compact}
+          fullViewport={false}
+          title={title}
+          subTitle={subTitle}
+          homepageHero={homepageHero}
+          headerBackground={headerBackground}
+        />
+      ))
   }
-
 </div>
-
-<script>
-  import '~/scripts/header.ts'
-</script>

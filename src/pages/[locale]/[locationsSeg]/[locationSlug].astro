@@ -77,16 +77,12 @@ const description = `${t(locale, 'category.drone.description')} ${locationLabel}
   canonicalPath={canonicalPath}
   hreflangPaths={href}
 >
-  <Page locale={locale}>
+  <Page locale={locale} switchUrl={switchHref}>
     <Header
       slot="header"
       compact
       title={locationLabel}
       headerBackground={headerBackground}
-      currentPath={`/${locale}${canonicalPath}`}
-      locale={locale}
-      pagePath={canonicalPath}
-      switchHref={switchHref}
     />
     <div class="mx-auto w-full max-w-container px-[15px] pb-16 pt-[10.5rem] xl:px-0">
       <p class="mb-10 font-anton text-[2rem] uppercase text-secondary">
