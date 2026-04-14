@@ -1,7 +1,6 @@
 ---
 import HeaderHero from '~/components/header/HeaderHero.astro'
 import HeaderNav from '~/components/header/HeaderNav.astro'
-import TrustedBy from '~/components/About/TrustedBy.astro'
 import type { ResponsiveImage } from '~/api/generated/types'
 import { t, localePath, getAlternateLocale, type Locale } from '~/i18n'
 import { getNavLinks } from '~/lib/navigation'
@@ -71,7 +70,6 @@ const switchUrl = switchHref ?? localePath(altLocale, pagePath)
     )
   }
 
-  {isAboutPage ? <TrustedBy /> : null}
 </div>
 
 <script>
