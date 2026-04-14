@@ -77,34 +77,41 @@ const { isHomepage, compact, title, subTitle, homepageHero, headerBackground } =
     )
   }
 
-  {/* Gradient overlay */}
+  {/* Mobile: slightly lighter scrim so footage reads through; desktop: original strength */}
   <div
-    class="pointer-events-none absolute inset-0 z-[2]"
+    class="pointer-events-none absolute inset-0 z-[2] md:hidden"
+    style="background: linear-gradient(to bottom, rgba(10,10,10,0.72) 0%, rgba(10,10,10,0.04) 42%, rgba(10,10,10,0.62) 100%);"
+  >
+  </div>
+  <div
+    class="pointer-events-none absolute inset-0 z-[2] hidden md:block"
     style="background: linear-gradient(to bottom, rgba(10,10,10,0.80) 0%, rgba(10,10,10,0.05) 40%, rgba(10,10,10,0.70) 100%);"
   >
   </div>
 
   {/* Content */}
   <div
-    class="relative z-[3] mx-auto flex w-full max-w-container flex-col gap-5 px-5 pb-8 pt-24 md:pb-12 xl:px-0"
+    class="relative z-[3] mx-auto flex w-full max-w-container flex-col gap-4 px-5 pb-8 pt-24 sm:gap-5 md:pb-12 xl:px-0"
   >
     {
       isHomepage && homepageHero ? (
         <>
-          {/* Matches design.pen heroBreadcrumb (Bsxvs): Geist Mono 11px, gap-2, uppercase */}
+          {/* design.pen heroBreadcrumb — larger type on small screens, desktop matches spec */}
           <p
-            class="m-0 flex flex-wrap items-center gap-2 font-geist text-[0.625rem] font-normal uppercase leading-none tracking-[0.14em] text-foreground-muted md:text-[11px] md:tracking-[0.18em]"
+            class="m-0 flex flex-wrap items-center gap-2 font-geist text-xs font-normal uppercase leading-none tracking-[0.12em] text-foreground-muted [text-shadow:0_1px_12px_rgba(0,0,0,0.65)] md:text-[11px] md:tracking-[0.14em] md:[text-shadow:none]"
           >
-            <span class="font-medium text-accent-primary">{homepageHero.tagline}</span>
+            <span class="font-medium text-accent-primary">{title}</span>
             <span aria-hidden="true" class="select-none">&middot;</span>
             <span>{subTitle}</span>
           </p>
           <h1
-            class="m-0 max-w-[min(100%,42rem)] whitespace-pre-line p-0 font-anton text-[3rem] leading-[1.05] tracking-[0.01em] md:text-[4.5rem] md:leading-[1.04]"
+            class="m-0 max-w-[min(100%,42rem)] whitespace-pre-line p-0 font-anton text-[clamp(2.875rem,11vw,3.875rem)] leading-[1.04] tracking-[0.01em] [text-shadow:0_2px_24px_rgba(0,0,0,0.55),0_1px_3px_rgba(0,0,0,0.9)] sm:text-[clamp(3.25rem,10vw,4.25rem)] md:max-w-[min(100%,52rem)] md:text-[4.5rem] md:leading-[1.04] md:[text-shadow:0_2px_40px_rgba(0,0,0,0.35)] lg:max-w-[min(100%,58rem)] lg:text-[5.5rem] xl:max-w-[min(100%,65rem)] xl:text-[6.8rem]"
           >
-            {homepageHero.line}.
+            {homepageHero.line}
           </h1>
-          <p class="m-0 max-w-[56ch] font-inter text-sm leading-relaxed text-foreground-muted md:text-base">
+          <p
+            class="m-0 max-w-[56ch] text-pretty font-inter text-[1.0625rem] font-normal leading-relaxed text-foreground-primary/90 [text-shadow:0_1px_16px_rgba(0,0,0,0.75)] md:max-w-[62ch] md:text-[1.5rem] md:text-foreground-muted md:[text-shadow:none] lg:max-w-[68ch] xl:max-w-[72ch]"
+          >
             {homepageHero.descriptor}
           </p>
           <PlayShowreel />
