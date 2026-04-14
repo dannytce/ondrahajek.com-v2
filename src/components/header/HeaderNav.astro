@@ -1,7 +1,7 @@
 ---
 import LanguageToggle from '~/components/LanguageToggle.astro'
 import MobileMenuOverlay from '~/components/MobileMenuOverlay.astro'
-import { localePath, type Locale } from '~/i18n'
+import { localePath, t, type Locale } from '~/i18n'
 
 interface NavLink {
   text: string
@@ -33,9 +33,16 @@ const { locale, currentPath, switchUrl, navLinks } = Astro.props
     <div class="hidden items-center gap-12 md:flex">
       <a
         href={localePath(locale, '/')}
-        class="flex items-center font-anton text-[1.3rem] tracking-[0.08em] text-white no-underline"
+        class="flex items-center text-white no-underline"
+        aria-label={t(locale, 'header.homepageAriaLabel')}
       >
-        ONDRAHAJEK.COM
+        <img
+          src="/logo-ondrahajek.svg"
+          alt="Ondrahajek.com"
+          width="137"
+          height="13"
+          class="h-5 w-auto"
+        />
       </a>
       <div class="flex items-center gap-8">
         {
@@ -56,9 +63,16 @@ const { locale, currentPath, switchUrl, navLinks } = Astro.props
 
     <a
       href={localePath(locale, '/')}
-      class="flex items-center font-anton text-[1.3rem] tracking-[0.08em] text-white no-underline md:hidden"
+      class="flex items-center text-white no-underline md:hidden"
+      aria-label={t(locale, 'header.homepageAriaLabel')}
     >
-      ONDRAHAJEK.COM
+      <img
+        src="/logo-ondrahajek.svg"
+        alt="Ondrahajek.com"
+        width="137"
+        height="13"
+        class="h-4 w-auto"
+      />
     </a>
 
     <div class="flex items-center gap-2 md:hidden">
@@ -70,7 +84,7 @@ const { locale, currentPath, switchUrl, navLinks } = Astro.props
       <button
         data-mobile-menu-toggle
         class="relative z-[100] flex h-10 w-10 flex-col items-center justify-center gap-[5px]"
-        aria-label="Toggle menu"
+        aria-label={t(locale, 'header.menuToggleAriaLabel')}
       >
         <span
           class="hamburger-line block h-[2px] w-5 bg-white transition-all duration-300"

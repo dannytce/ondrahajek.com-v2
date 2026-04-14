@@ -50,6 +50,8 @@ export const translations = {
     'nav.video': 'Video Production',
     'nav.gallery': 'Gallery',
     'nav.about': 'About',
+    'header.homepageAriaLabel': 'Ondrahajek homepage',
+    'header.menuToggleAriaLabel': 'Toggle menu',
 
     // Homepage
     'home.title': 'Aerial',
@@ -164,6 +166,8 @@ export const translations = {
     'nav.video': 'Video Produkce',
     'nav.gallery': 'Galerie',
     'nav.about': 'O mně',
+    'header.homepageAriaLabel': 'Domovská stránka Ondrahajek',
+    'header.menuToggleAriaLabel': 'Přepnout menu',
 
     'home.title': 'Aerial',
     'home.subtitle': 'Video & Photography',
