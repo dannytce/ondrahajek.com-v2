@@ -7826,11 +7826,11 @@
                         "colors": [
                           {
                             "color": "#0A0A0A00",
-                            "position": 0.3
+                            "position": 0.15
                           },
                           {
-                            "color": "#0A0A0AE6",
-                            "position": 0.85
+                            "color": "#0A0A0AF0",
+                            "position": 0.72
                           },
                           {
                             "color": "#0A0A0A",
