@@ -6,7 +6,8 @@ import type { ResponsiveImage } from '~/api/generated/types'
 interface Props {
   isHomepage: boolean
   compact: boolean
-  /** Breadcrumb first segment (e.g. home.title — matches design.pen heroBreadcrumb). */
+  /** Full viewport height (About page hero). */
+  fullViewport?: boolean
   title: string
   /** Breadcrumb third segment (e.g. home.subtitle). */
   subTitle?: string
@@ -19,17 +20,42 @@ interface Props {
   headerBackground: ResponsiveImage
 }
 
-const { isHomepage, compact, title, subTitle, homepageHero, headerBackground } = Astro.props
+const {
+  isHomepage,
+  compact,
+  fullViewport = false,
+  title,
+  subTitle,
+  homepageHero,
+  headerBackground,
+} = Astro.props
+
+const gradientStyle = fullViewport
+  ? 'linear-gradient(to bottom, rgba(10,10,10,0.78) 0%, rgba(10,10,10,0.12) 38%, rgba(10,10,10,0.88) 100%)'
+  : 'linear-gradient(to bottom, rgba(10,10,10,0.80) 0%, rgba(10,10,10,0.05) 40%, rgba(10,10,10,0.70) 100%)'
+
+/**
+ * Clear legacy fixed nav (ondrahajek.com): top 30px mobile / 63px md — no bar, Teko links.
+ */
+const contentPaddingClass = compact
+  ? 'pt-[calc(max(30px,env(safe-area-inset-top,0px))+3.5rem)] pb-6 md:pb-8 md:pt-[calc(63px+3.5rem)]'
+  : 'pb-8 pt-[calc(max(30px,env(safe-area-inset-top,0px))+5rem)] md:pb-12 md:pt-[calc(63px+6rem)]'
+
+/** About hero: nav clearance + title only; TrustedBy has its own padding. */
+const fullViewportTitlePad =
+  'pt-[calc(max(30px,env(safe-area-inset-top,0px))+5rem)] pb-6 md:pt-[calc(63px+6rem)] md:pb-8'
 ---
 
 <header
   class:list={[
-    'relative flex w-full flex-col justify-end overflow-hidden',
+    'relative flex w-full flex-col overflow-hidden',
     compact
-      ? 'min-h-[220px] md:min-h-[260px]'
+      ? 'min-h-[220px] justify-end md:min-h-[260px]'
       : isHomepage
-        ? 'min-h-[100svh] md:min-h-screen'
-        : 'min-h-[380px] md:min-h-[520px]',
+        ? 'min-h-[100svh] justify-end md:min-h-screen'
+        : fullViewport
+          ? 'min-h-[100svh]'
+          : 'min-h-[380px] justify-end md:min-h-[520px]',
   ]}
 >
   {
@@ -77,58 +103,80 @@ const { isHomepage, compact, title, subTitle, homepageHero, headerBackground } =
     )
   }
 
-  {/* Mobile: slightly lighter scrim so footage reads through; desktop: original strength */}
+  {
+    /* Mobile: slightly lighter scrim so footage reads through; desktop: original strength */
+  }
   <div
-    class="pointer-events-none absolute inset-0 z-[2] md:hidden"
-    style="background: linear-gradient(to bottom, rgba(10,10,10,0.72) 0%, rgba(10,10,10,0.04) 42%, rgba(10,10,10,0.62) 100%);"
-  >
-  </div>
-  <div
-    class="pointer-events-none absolute inset-0 z-[2] hidden md:block"
-    style="background: linear-gradient(to bottom, rgba(10,10,10,0.80) 0%, rgba(10,10,10,0.05) 40%, rgba(10,10,10,0.70) 100%);"
+    class="pointer-events-none absolute inset-0 z-[2]"
+    style={`background: ${gradientStyle}`}
   >
   </div>
 
-  {/* Content */}
-  <div
-    class="relative z-[3] mx-auto flex w-full max-w-container flex-col gap-4 px-5 pb-8 pt-24 sm:gap-5 md:pb-12 xl:px-0"
-  >
-    {
-      isHomepage && homepageHero ? (
-        <>
-          {/* design.pen heroBreadcrumb — larger type on small screens, desktop matches spec */}
-          <p
-            class="m-0 flex flex-wrap items-center gap-2 font-geist text-xs font-normal uppercase leading-none tracking-[0.12em] text-foreground-muted [text-shadow:0_1px_12px_rgba(0,0,0,0.65)] md:text-[11px] md:tracking-[0.14em] md:[text-shadow:none]"
-          >
-            <span class="font-medium text-accent-primary">{title}</span>
-            <span aria-hidden="true" class="select-none">&middot;</span>
-            <span>{subTitle}</span>
-          </p>
-          <h1
-            class="m-0 max-w-[min(100%,42rem)] whitespace-pre-line p-0 font-anton text-[clamp(2.875rem,11vw,3.875rem)] leading-[1.04] tracking-[0.01em] [text-shadow:0_2px_24px_rgba(0,0,0,0.55),0_1px_3px_rgba(0,0,0,0.9)] sm:text-[clamp(3.25rem,10vw,4.25rem)] md:max-w-[min(100%,52rem)] md:text-[4.5rem] md:leading-[1.04] md:[text-shadow:0_2px_40px_rgba(0,0,0,0.35)] lg:max-w-[min(100%,58rem)] lg:text-[5.5rem] xl:max-w-[min(100%,65rem)] xl:text-[6.8rem]"
-          >
-            {homepageHero.line}
-          </h1>
-          <p
-            class="m-0 max-w-[56ch] text-pretty font-inter text-[1.0625rem] font-normal leading-relaxed text-foreground-primary/90 [text-shadow:0_1px_16px_rgba(0,0,0,0.75)] md:max-w-[62ch] md:text-[1.5rem] md:text-foreground-muted md:[text-shadow:none] lg:max-w-[68ch] xl:max-w-[72ch]"
-          >
-            {homepageHero.descriptor}
-          </p>
-          <PlayShowreel />
-        </>
-      ) : (
-        <>
+  {
+    fullViewport ? (
+      <div class="relative z-[3] flex min-h-0 w-full flex-1 flex-col">
+        <div
+          class:list={[
+            'mx-auto flex w-full max-w-container flex-1 flex-col justify-end gap-5 px-5 xl:px-0',
+            fullViewportTitlePad,
+          ]}
+        >
+          {subTitle && (
+            <span class="font-geist text-[1.1rem] uppercase tracking-widest text-foreground-muted">
+              {subTitle}
+            </span>
+          )}
           <h1 class="m-0 p-0 font-anton text-[3.4rem] uppercase leading-[0.95] md:text-[5rem]">
             {title}
           </h1>
-        </>
-      )
-    }
-  </div>
+        </div>
+        <div class="relative z-[3] w-full shrink-0">
+          <slot name="trustedBy" />
+        </div>
+      </div>
+    ) : (
+      <div
+        class:list={[
+          'relative z-[3] mx-auto flex w-full max-w-container flex-col gap-5 px-5 xl:px-0',
+          contentPaddingClass,
+        ]}
+      >
+        {isHomepage && homepageHero ? (
+          <>
+            <div class="flex items-center gap-2">
+              <span class="font-geist text-[1rem] font-medium uppercase tracking-[0.2em] text-accent-primary">
+                {homepageHero.line}
+              </span>
+              <span class="font-geist text-[1rem] text-foreground-dim">
+                &middot;
+              </span>
+              <span class="font-geist text-[1rem] uppercase tracking-[0.2em] text-foreground-muted">
+                VIDEO & PHOTOGRAPHY
+              </span>
+            </div>
+            <h1 class="m-0 max-w-[11ch] p-0 font-anton text-[4.8rem] uppercase leading-[0.9] tracking-[0.02em] md:text-[9.6rem]">
+              {homepageHero.line}
+            </h1>
+            <p class="m-0 max-w-[56ch] font-inter text-[1.4rem] leading-relaxed text-foreground-muted md:text-[1.5rem]">
+              {homepageHero.descriptor}
+            </p>
+            <PlayShowreel />
+          </>
+        ) : (
+          <>
+            {subTitle && (
+              <span class="font-geist text-[1.1rem] uppercase tracking-widest text-foreground-muted">
+                {subTitle}
+              </span>
+            )}
+            <h1 class="m-0 p-0 font-anton text-[3.4rem] uppercase leading-[0.95] md:text-[5rem]">
+              {title}
+            </h1>
+          </>
+        )}
+      </div>
+    )
+  }
 </header>
 
-{isHomepage && (
-  <script>
-    import '~/scripts/hero-background-video.ts'
-  </script>
-)}
+{isHomepage && <script>import '~/scripts/hero-background-video.ts'</script>}
