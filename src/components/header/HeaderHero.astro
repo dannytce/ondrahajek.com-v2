@@ -25,20 +25,55 @@ const { isHomepage, compact, title, subTitle, homepageHero, headerBackground } =
     'relative flex w-full flex-col justify-end overflow-hidden',
     compact
       ? 'min-h-[220px] md:min-h-[260px]'
-      : 'min-h-[380px] md:min-h-[520px]',
+      : isHomepage
+        ? 'min-h-[100svh]'
+        : 'min-h-[380px] md:min-h-[520px]',
   ]}
 >
-  {/* Background image */}
-  <div class="absolute inset-0">
-    <DatoImageCover
-      data={{ ...headerBackground, alt: '' }}
-      class="pointer-events-none absolute inset-0 z-[1]"
-      imgClass="h-full w-full object-cover"
-      priority
-      layout="fill"
-      objectFit="cover"
-    />
-  </div>
+  {
+    isHomepage ? (
+      <div class="absolute inset-0 overflow-hidden" data-hero-video-root>
+        <div
+          data-hero-poster
+          class="pointer-events-none absolute inset-0 z-[1] opacity-100 transition-opacity duration-700"
+        >
+          <DatoImageCover
+            data={{ ...headerBackground, alt: '' }}
+            class="absolute inset-0 block size-full min-h-full min-w-full"
+            imgClass="h-full w-full object-cover object-center"
+            priority
+            layout="fill"
+            objectFit="cover"
+            objectPosition="center"
+          />
+        </div>
+        <video
+          class="pointer-events-none absolute inset-0 z-[2] h-full w-full object-cover object-center opacity-0 transition-opacity duration-700"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          aria-hidden="true"
+          data-hero-video
+        >
+          <source type="video/mp4" />
+        </video>
+      </div>
+    ) : (
+      <div class="absolute inset-0 overflow-hidden">
+        <DatoImageCover
+          data={{ ...headerBackground, alt: '' }}
+          class="pointer-events-none absolute inset-0 z-[1] block size-full min-h-full min-w-full"
+          imgClass="h-full w-full object-cover object-center"
+          priority
+          layout="fill"
+          objectFit="cover"
+          objectPosition="center"
+        />
+      </div>
+    )
+  }
 
   {/* Gradient overlay */}
   <div
@@ -88,3 +123,9 @@ const { isHomepage, compact, title, subTitle, homepageHero, headerBackground } =
     }
   </div>
 </header>
+
+{isHomepage && (
+  <script>
+    import '~/scripts/hero-background-video.ts'
+  </script>
+)}
