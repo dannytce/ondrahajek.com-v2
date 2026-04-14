@@ -55,11 +55,12 @@ export const translations = {
 
     // Homepage
     'home.title': 'Aerial',
-    'home.subtitle': 'Video & Photography',
+    'home.subtitle': 'Drone Cinematography & Video Production',
     'home.heroBrand': 'Ondra Hajek',
-    'home.heroLine': 'Aerial',
+    'home.heroLine': 'Professional drone\ncinematography\n& video production',
+    'home.heroTagline': '12 years of experience',
     'home.heroDescriptor':
-      'Drone cinematography & aerial photography for film, commercial and documentary.',
+      'Filming for global brands and commercial campaigns with a maximum focus on detail, creativity, and safety. Providing full-service video production—from initial concept and scripting to professional filming, editing, and color grading.',
     'home.featured': 'Selected Work',
     'home.projectsLabel': 'projects',
 
@@ -178,10 +179,12 @@ export const translations = {
     'header.menuToggleAriaLabel': 'Přepnout menu',
 
     'home.title': 'Aerial',
-    'home.subtitle': 'Video & Photography',
+    'home.subtitle': 'Letecké záběry dronem & videoprodukce',
     'home.heroBrand': 'Ondra Hajek',
-    'home.heroLine': 'Aerial',
-    'home.heroDescriptor': 'Špičková kinematografie a video produkce',
+    'home.heroLine': 'Profesionální letecké\nzáběry dronem\n& videoprodukce',
+    'home.heroTagline': '12 let zkušeností',
+    'home.heroDescriptor':
+      'Natáčím pro světové značky a reklamní kampaně s maximálním důrazem na detail, kreativitu a bezpečnost. Zajišťuji kompletní realizaci video projektů na klíč – od prvotního nápadu a scénáře přes profesionální natáčení až po finální střih a color grading.',
     'home.featured': 'Vybrané práce',
     'home.projectsLabel': 'projektů',
 
