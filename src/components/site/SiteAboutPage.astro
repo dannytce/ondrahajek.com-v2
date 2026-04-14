@@ -30,16 +30,12 @@ const COMPANY_DIC = 'CZ03813452'
   canonicalPath={canonicalPath}
   hreflangPaths={hreflangPaths}
 >
-  <Page isAboutPage locale={locale}>
+  <Page isAboutPage locale={locale} switchUrl={switchHref}>
     <Header
       slot="header"
       title={t(locale, 'nav.about')}
       headerBackground={headerBackground}
       isAboutPage
-      currentPath={`/${locale}${canonicalPath}`}
-      locale={locale}
-      pagePath={canonicalPath}
-      switchHref={switchHref}
     />
     <Section title="I can help with" gray>
       <ul class="m-0 list-none p-0">

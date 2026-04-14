@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro'
 import Page from '~/components/Page.astro'
-import PortfolioDetailNav from '~/components/portfolio/PortfolioDetailNav.astro'
 import PortfolioDetailView from '~/components/portfolio/PortfolioDetailView.astro'
 import PortfolioNotFound from '~/components/portfolio/PortfolioNotFound.astro'
 import {
@@ -123,12 +122,7 @@ const detail = portfolio
       hreflangPaths={detail.hrefPair}
       jsonLd={detail.jsonLd}
     >
-      <Page locale={locale}>
-        <PortfolioDetailNav
-          slot="header"
-          locale={locale}
-          switchUrl={detail.switchUrl}
-        />
+      <Page locale={locale} switchUrl={detail.switchUrl}>
         <PortfolioDetailView portfolio={portfolio} locale={locale} detail={detail} />
       </Page>
     </BaseLayout>

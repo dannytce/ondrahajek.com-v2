@@ -4,7 +4,7 @@ import Page from '~/components/Page.astro'
 import Header from '~/components/Header.astro'
 import FeaturedWork from '~/components/FeaturedWork.astro'
 import { getFeaturedPortfolios, getHeaderBackgroundByPage } from '~/api'
-import { localeStaticPaths, getLocaleFromParam, t, CATEGORY_IDS } from '~/i18n'
+import { localeStaticPaths, getLocaleFromParam, t, localePath, getAlternateLocale, CATEGORY_IDS } from '~/i18n'
 
 export function getStaticPaths() {
   return localeStaticPaths()
@@ -16,6 +16,7 @@ const featured = await getFeaturedPortfolios(
   locale
 )
 const headerBackground = await getHeaderBackgroundByPage('/')
+const switchUrl = localePath(getAlternateLocale(locale), '/')
 ---
 
 <BaseLayout
@@ -24,7 +25,7 @@ const headerBackground = await getHeaderBackgroundByPage('/')
   locale={locale}
   canonicalPath="/"
 >
-  <Page isHomepage locale={locale}>
+  <Page isHomepage locale={locale} switchUrl={switchUrl}>
     <Header
       slot="header"
       title={t(locale, 'home.title')}
@@ -37,9 +38,6 @@ const headerBackground = await getHeaderBackgroundByPage('/')
       }}
       headerBackground={headerBackground}
       isHomepage
-      currentPath={`/${locale}`}
-      locale={locale}
-      pagePath="/"
     />
     <FeaturedWork portfolios={featured} locale={locale} />
   </Page>

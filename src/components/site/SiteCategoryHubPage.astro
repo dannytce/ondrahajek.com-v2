@@ -43,17 +43,13 @@ const {
   hreflangPaths={hreflangPaths}
   jsonLd={collectionJsonLd}
 >
-  <Page locale={locale}>
+  <Page locale={locale} switchUrl={switchHref}>
     <Header
       slot="header"
       compact
       isHeroVisible={false}
       title={categoryTitle}
       headerBackground={headerBackground}
-      currentPath={`/${locale}${canonicalPath}`}
-      locale={locale}
-      pagePath={canonicalPath}
-      switchHref={switchHref}
     />
     <CategoryPortfolioGrid
       portfolios={portfolios}

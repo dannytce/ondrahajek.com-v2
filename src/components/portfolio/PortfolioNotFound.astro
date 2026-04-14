@@ -1,7 +1,6 @@
 ---
 import Page from '~/components/Page.astro'
 import BaseLayout from '~/layouts/BaseLayout.astro'
-import PortfolioDetailNav from '~/components/portfolio/PortfolioDetailNav.astro'
 import { t, localePath, type Locale } from '~/i18n'
 import { portfolioDetailSwitchUrlWhenMissing } from '~/lib/portfolio-detail/buildPortfolioDetail'
 
@@ -17,8 +16,7 @@ const switchUrl = portfolioDetailSwitchUrlWhenMissing(locale)
   title={`Not found - ${t(locale, 'meta.title')}`}
   locale={locale}
 >
-  <Page locale={locale}>
-    <PortfolioDetailNav slot="header" locale={locale} switchUrl={switchUrl} minimal />
+  <Page locale={locale} switchUrl={switchUrl}>
     <section
       class="mx-auto w-full max-w-container px-[15px] pb-16 pt-[10.5rem] text-center xl:px-0"
     >

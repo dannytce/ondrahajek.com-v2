@@ -32,15 +32,11 @@ const {
   canonicalPath={canonicalPath}
   hreflangPaths={hreflangPaths}
 >
-  <Page locale={locale}>
+  <Page locale={locale} switchUrl={switchHref}>
     <Header
       slot="header"
       title={t(locale, 'nav.gallery')}
       headerBackground={headerBackground}
-      currentPath={`/${locale}${canonicalPath}`}
-      locale={locale}
-      pagePath={canonicalPath}
-      switchHref={switchHref}
     />
     <GalleryComponent photos={photos} />
   </Page>
