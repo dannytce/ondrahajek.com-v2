@@ -6,18 +6,20 @@ import type { ResponsiveImage } from '~/api/generated/types'
 interface Props {
   isHomepage: boolean
   compact: boolean
+  /** Breadcrumb first segment (e.g. home.title — matches design.pen heroBreadcrumb). */
   title: string
+  /** Breadcrumb third segment (e.g. home.subtitle). */
   subTitle?: string
   homepageHero?: {
     brand: string
     line: string
+    tagline: string
     descriptor: string
   }
   headerBackground: ResponsiveImage
 }
 
-const { isHomepage, compact, title, subTitle, homepageHero, headerBackground } =
-  Astro.props
+const { isHomepage, compact, title, subTitle, homepageHero, headerBackground } = Astro.props
 ---
 
 <header
@@ -89,32 +91,26 @@ const { isHomepage, compact, title, subTitle, homepageHero, headerBackground } =
     {
       isHomepage && homepageHero ? (
         <>
-          <div class="flex items-center gap-2">
-            <span class="font-geist text-[1rem] font-medium uppercase tracking-[0.2em] text-accent-primary">
-              {homepageHero.line}
-            </span>
-            <span class="font-geist text-[1rem] text-foreground-dim">
-              &middot;
-            </span>
-            <span class="font-geist text-[1rem] uppercase tracking-[0.2em] text-foreground-muted">
-              VIDEO & PHOTOGRAPHY
-            </span>
-          </div>
-          <h1 class="m-0 max-w-[11ch] p-0 font-anton text-[4.8rem] uppercase leading-[0.9] tracking-[0.02em] md:text-[9.6rem]">
-            {homepageHero.line}
+          {/* Matches design.pen heroBreadcrumb (Bsxvs): Geist Mono 11px, gap-2, uppercase */}
+          <p
+            class="m-0 flex flex-wrap items-center gap-2 font-geist text-[0.625rem] font-normal uppercase leading-none tracking-[0.14em] text-foreground-muted md:text-[11px] md:tracking-[0.18em]"
+          >
+            <span class="font-medium text-accent-primary">{homepageHero.tagline}</span>
+            <span aria-hidden="true" class="select-none">&middot;</span>
+            <span>{subTitle}</span>
+          </p>
+          <h1
+            class="m-0 max-w-[min(100%,42rem)] whitespace-pre-line p-0 font-anton text-[3rem] leading-[1.05] tracking-[0.01em] md:text-[4.5rem] md:leading-[1.04]"
+          >
+            {homepageHero.line}.
           </h1>
-          <p class="m-0 max-w-[56ch] font-inter text-[1.4rem] leading-relaxed text-foreground-muted md:text-[1.5rem]">
+          <p class="m-0 max-w-[56ch] font-inter text-sm leading-relaxed text-foreground-muted md:text-base">
             {homepageHero.descriptor}
           </p>
           <PlayShowreel />
         </>
       ) : (
         <>
-          {subTitle && (
-            <span class="font-geist text-[1.1rem] uppercase tracking-widest text-foreground-muted">
-              {subTitle}
-            </span>
-          )}
           <h1 class="m-0 p-0 font-anton text-[3.4rem] uppercase leading-[0.95] md:text-[5rem]">
             {title}
           </h1>
