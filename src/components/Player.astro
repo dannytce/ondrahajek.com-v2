@@ -66,6 +66,10 @@ const iframeSrc = buildIframeSrc(video)
             layout="fill"
             objectFit="cover"
           />
+          <div
+            class="player-poster-overlay pointer-events-none absolute inset-0 z-20"
+            style="background: linear-gradient(to top, rgba(10, 10, 10, 1) 0%, rgba(10, 10, 10, 0.94) 28%, rgba(10, 10, 10, 0) 85%);"
+          ></div>
         </div>
       )
     }

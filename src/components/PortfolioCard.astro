@@ -21,7 +21,13 @@ const transitionName = portfolio.id
 
 const firstSubcategory = portfolio.subcategory?.[0]?.name || null
 const location = portfolio.location || null
-const chips = [firstSubcategory, location].filter(Boolean) as string[]
+const year = portfolio.date
+  ? new Date(portfolio.date).getFullYear().toString()
+  : null
+const safeYear = year && year !== 'NaN' ? year : null
+const metaItems = [firstSubcategory, location, safeYear].filter(
+  Boolean
+) as string[]
 ---
 
 {
@@ -48,22 +54,21 @@ const chips = [firstSubcategory, location].filter(Boolean) as string[]
             imgClass="block h-auto w-full"
           />
         </div>
-        <div class="portfolio-card-overlay pointer-events-none absolute inset-0" />
-
-        {/* Title + chips overlaid on image */}
-        <div class="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col gap-2 p-4 md:p-5">
+        <div class="portfolio-card-overlay pointer-events-none absolute inset-x-0 bottom-0 h-[38%]" />
+        <div class="portfolio-card-meta-band relative bg-black px-4 pb-4 pt-8 md:px-5 md:pb-5 md:pt-9">
           <h3
-            class="portfolio-card-title m-0 font-anton text-[2.4rem] uppercase leading-[0.95] text-white md:text-[2.8rem]"
+            class="portfolio-card-title pointer-events-none absolute inset-x-4 top-0 m-0 -translate-y-1/2 font-anton text-[2.4rem] uppercase leading-[0.95] text-white md:inset-x-5 md:text-[2.8rem]"
             style="text-shadow: 0 2px 12px rgba(0,0,0,0.7), 0 1px 3px rgba(0,0,0,0.5);"
           >
             {portfolio.title}
           </h3>
-          {chips.length > 0 && (
-            <div class="flex flex-wrap gap-1.5">
-              {chips.map((chip) => (
-                <span class="rounded-full border border-white/15 bg-black/25 px-2.5 py-0.5 font-geist text-[0.95rem] uppercase tracking-[0.12em] text-white/85 backdrop-blur-md md:text-[1rem]">
-                  {chip}
-                </span>
+          {metaItems.length > 0 && (
+            <div class="portfolio-card-subtitle m-0 flex flex-wrap items-center gap-x-2 gap-y-1 font-geist text-[0.95rem] uppercase tracking-[0.12em] text-white/75 md:text-[1rem]">
+              {metaItems.map((item, index) => (
+                <>
+                  {index > 0 && <span aria-hidden="true" class="text-white/45">/</span>}
+                  <span>{item}</span>
+                </>
               ))}
             </div>
           )}
