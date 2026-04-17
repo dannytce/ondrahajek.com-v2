@@ -1,13 +1,9 @@
 ---
-import { t, projectCountLabel, type Locale } from '~/i18n'
-
 interface Props {
-  locale: Locale
-  totalCount: number
   categoryTitle: string
 }
 
-const { locale, totalCount, categoryTitle } = Astro.props
+const { categoryTitle } = Astro.props
 const titleWords = categoryTitle.split(' ')
 const firstWord = titleWords[0] ?? categoryTitle
 const secondWord = titleWords.slice(1).join(' ')
@@ -24,31 +20,11 @@ const secondWord = titleWords.slice(1).join(' ')
       <h2 class="m-0 font-anton text-[3.2rem] leading-[1.08] text-white">
         <span class="block">{firstWord}</span>
       </h2>
-      <div class="flex w-full items-end justify-between">
-        <h2 class="m-0 font-anton text-[3.2rem] leading-[1.08] text-white">
-          {secondWord}
-        </h2>
-        <span class="font-geist text-[1.2rem] text-[#888888]">{totalCount}</span>
-      </div>
+      <h2 class="m-0 font-anton text-[3.2rem] leading-[1.08] text-white">{secondWord}</h2>
     </div>
     <h2 class="m-0 hidden font-anton text-[3.6rem] leading-[1.08] text-white md:block">
       {categoryTitle}
     </h2>
-  </div>
-
-  <div class="hidden w-full shrink-0 items-center justify-end gap-2 sm:w-auto md:flex">
-    <span class="font-geist text-[1.2rem] text-[#888888]">
-      <span
-        data-filter-result-count
-        data-locale={locale}
-        data-label-one={t(locale, 'filter.project.one')}
-        data-label-few={t(locale, 'filter.project.few')}
-        data-label-other={t(locale, 'filter.project.other')}
-      >
-        {totalCount}
-      </span>{' '}
-      <span data-filter-result-label>{projectCountLabel(locale, totalCount)}</span>
-    </span>
   </div>
 </div>
 
