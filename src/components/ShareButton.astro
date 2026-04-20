@@ -1,0 +1,163 @@
+---
+interface Props {
+  title: string
+  url: string
+  label: string
+  copiedLabel: string
+  class?: string
+}
+
+const { title, url, label, copiedLabel, class: className } = Astro.props
+
+const baseClass =
+  'inline-flex items-center justify-center gap-2 rounded-lg px-4 py-3 font-inter text-[1.2rem] no-underline transition-colors'
+const secondaryClass =
+  'border border-[#222222] text-[#888888] hover:border-white/30 hover:text-white'
+---
+
+<button
+  type="button"
+  data-share-button
+  data-share-title={title}
+  data-share-url={url}
+  data-copied-label={copiedLabel}
+  class:list={[baseClass, secondaryClass, className]}
+>
+  <svg
+    aria-hidden="true"
+    viewBox="0 0 24 24"
+    class="h-4 w-4"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <circle cx="18" cy="5" r="2.5"></circle>
+    <circle cx="6" cy="12" r="2.5"></circle>
+    <circle cx="18" cy="19" r="2.5"></circle>
+    <path d="M8.2 10.9l7.6-4.3"></path>
+    <path d="M8.2 13.1l7.6 4.3"></path>
+  </svg>
+  <span>{label}</span>
+</button>
+
+<script>
+  const TOAST_ID = 'share-toast'
+  const TOAST_VISIBLE_MS = 3000
+  const TOAST_FADE_MS = 200
+
+  const TOAST_BASE_CLASSES = [
+    'fixed',
+    'bottom-6',
+    'left-1/2',
+    '-translate-x-1/2',
+    'z-[100]',
+    'rounded-lg',
+    'bg-black/90',
+    'px-4',
+    'py-3',
+    'font-geist',
+    'text-[1rem]',
+    'text-white',
+    'shadow-lg',
+    'ring-1',
+    'ring-white/10',
+    'transition-opacity',
+    'duration-200',
+    'pointer-events-none',
+  ] as const
+
+  let hideTimer: number | undefined
+
+  function getToast(): HTMLDivElement {
+    const existing = document.getElementById(TOAST_ID)
+    if (existing instanceof HTMLDivElement) return existing
+    const toast = document.createElement('div')
+    toast.id = TOAST_ID
+    toast.setAttribute('role', 'status')
+    toast.setAttribute('aria-live', 'polite')
+    toast.classList.add(...TOAST_BASE_CLASSES, 'opacity-0')
+    document.body.appendChild(toast)
+    return toast
+  }
+
+  function showToast(message: string): void {
+    const toast = getToast()
+    toast.textContent = message
+
+    window.requestAnimationFrame(() => {
+      toast.classList.remove('opacity-0')
+      toast.classList.add('opacity-100')
+    })
+
+    if (hideTimer !== undefined) window.clearTimeout(hideTimer)
+    hideTimer = window.setTimeout(() => {
+      toast.classList.remove('opacity-100')
+      toast.classList.add('opacity-0')
+      window.setTimeout(() => {
+        if (toast.classList.contains('opacity-0')) toast.remove()
+      }, TOAST_FADE_MS)
+    }, TOAST_VISIBLE_MS)
+  }
+
+  async function copyToClipboard(value: string): Promise<boolean> {
+    if (navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(value)
+        return true
+      } catch {
+        // fall through to legacy path
+      }
+    }
+    try {
+      const textarea = document.createElement('textarea')
+      textarea.value = value
+      textarea.setAttribute('readonly', '')
+      textarea.style.position = 'fixed'
+      textarea.style.opacity = '0'
+      document.body.appendChild(textarea)
+      textarea.select()
+      const ok = document.execCommand('copy')
+      document.body.removeChild(textarea)
+      return ok
+    } catch {
+      return false
+    }
+  }
+
+  async function handleShare(button: HTMLElement): Promise<void> {
+    const title = button.dataset.shareTitle ?? document.title
+    const url = button.dataset.shareUrl ?? window.location.href
+    const copiedLabel = button.dataset.copiedLabel ?? 'Link copied'
+
+    if (typeof navigator.share === 'function') {
+      try {
+        await navigator.share({ title, url })
+        return
+      } catch {
+        // User cancelled or share failed - fall back to clipboard silently.
+      }
+    }
+
+    const copied = await copyToClipboard(url)
+    if (copied) showToast(copiedLabel)
+  }
+
+  function onDocumentClick(event: MouseEvent): void {
+    const target = event.target
+    if (!(target instanceof Element)) return
+    const button = target.closest<HTMLElement>('[data-share-button]')
+    if (!button) return
+    event.preventDefault()
+    void handleShare(button)
+  }
+
+  function bind(): void {
+    document.removeEventListener('click', onDocumentClick)
+    document.addEventListener('click', onDocumentClick)
+  }
+
+  bind()
+  document.addEventListener('astro:page-load', bind)
+</script>

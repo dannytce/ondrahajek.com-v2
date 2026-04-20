@@ -141,6 +141,7 @@ export const translations = {
     'detail.description': 'Description',
     'detail.tags': 'Tags',
     'detail.share': 'Share',
+    'detail.linkCopied': 'Link copied',
     'detail.getInTouch': 'Get in Touch',
     'detail.videoTitleFallback': 'Video',
 
@@ -261,6 +262,7 @@ export const translations = {
     'detail.description': 'Popis',
     'detail.tags': 'Štítky',
     'detail.share': 'Sdílet',
+    'detail.linkCopied': 'Odkaz zkopírován',
     'detail.getInTouch': 'Ozvat se',
     'detail.videoTitleFallback': 'Video',
 

@@ -7,6 +7,8 @@ import type { Locale } from '~/i18n'
 const fontsHref =
   'https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Teko:wght@400;600&display=swap'
 
+type OgType = 'website' | 'article' | 'video.other'
+
 interface Props {
   title?: string
   description?: string
@@ -20,6 +22,10 @@ interface Props {
   hreflangPaths?: { en: string; cs: string }
   /** JSON-LD structured data (one or more blocks) */
   jsonLd?: Record<string, unknown> | Record<string, unknown>[]
+  /** Absolute URL or site-root-relative path for social previews. Falls back to /social.jpg. */
+  ogImage?: string
+  /** Open Graph object type. Use 'video.other' for project pages, 'website' elsewhere. */
+  ogType?: OgType
 }
 
 const {
@@ -29,6 +35,8 @@ const {
   canonicalPath,
   hreflangPaths,
   jsonLd,
+  ogImage,
+  ogType = 'website',
 } = Astro.props
 
 const siteUrl = 'https://ondrahajek.com'
@@ -44,7 +52,14 @@ const canonicalHref =
   canonicalPath !== undefined && canonicalPath !== null
     ? `${siteUrl}/${locale}${canonicalPath === '/' ? '' : canonicalPath}`
     : undefined
-const ogImageUrl = `${siteUrl}/social.jpg`
+
+const resolvedOgImage = ogImage
+  ? ogImage.startsWith('http')
+    ? ogImage
+    : `${siteUrl}${ogImage.startsWith('/') ? '' : '/'}${ogImage}`
+  : `${siteUrl}/social.jpg`
+const ogLocale = locale === 'cs' ? 'cs_CZ' : 'en_US'
+const ogLocaleAlt = locale === 'cs' ? 'en_US' : 'cs_CZ'
 const jsonLdBlocks = jsonLd
   ? Array.isArray(jsonLd)
     ? jsonLd
@@ -58,9 +73,21 @@ const jsonLdBlocks = jsonLd
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content={ogImageUrl} />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="Ondra Hajek Cinematography" />
     <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={resolvedOgImage} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:locale:alternate" content={ogLocaleAlt} />
+    {canonicalHref && <meta property="og:url" content={canonicalHref} />}
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={resolvedOgImage} />
+
     <meta
       name="keywords"
       content="aerial, drone, camera, 4k, phantom, phantom4pro, inspire, video, equipment, photography, studio, professional, uav, dji, copter, documentary, film, music video, promo, commercial, architecture, music video, aerial video, aerial photography, 360 photography, 360°,copter vision, coptervision, georgia, bali, indonesia, brazil, rio de janeiro, surf, paragliding, surfing, travel, dron, kamera, letecké záběry, koptéra, na zakázku, výškové práce, ze vzduchu, ucl, dokument, film, hudební klip, architektura"

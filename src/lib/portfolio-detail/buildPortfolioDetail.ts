@@ -57,6 +57,7 @@ export interface PortfolioDetailModel {
   hrefPair: { en: string; cs: string } | undefined
   locationLabel: string
   heroSubtitle: string | undefined
+  thumbnailUrl: string | undefined
 }
 
 export async function buildPortfolioDetailModel(
@@ -237,6 +238,7 @@ export async function buildPortfolioDetailModel(
     hrefPair,
     locationLabel,
     heroSubtitle,
+    thumbnailUrl,
   }
 }
 
