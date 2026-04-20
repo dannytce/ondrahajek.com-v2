@@ -6,6 +6,7 @@ import {
   getAlternateLocale,
   fillTemplate,
   CATEGORY_IDS,
+  type CategorySlug,
   type Locale,
 } from '~/i18n'
 import {
@@ -16,10 +17,6 @@ import {
   type SitePageKey,
 } from '~/i18n/routes'
 import { buildSlugMapsFromPortfolios } from '~/lib/portfolio-filter-slugs'
-import {
-  resolveTagDisplayForLocale,
-  splitPortfolioTags,
-} from '~/lib/portfolio-tags'
 
 const SITE_URL = 'https://ondrahajek.com'
 
@@ -31,14 +28,17 @@ function categoryToPageKey(
   return null
 }
 
-export interface TagLinkPair {
-  key: string
+export type DetailFilterPillType = 'category' | 'client' | 'location' | 'year'
+
+export interface DetailFilterPill {
+  type: DetailFilterPillType
   label: string
+  href: string | undefined
 }
 
 /** Derived data for portfolio detail page (SEO, JSON-LD, nav, related links). */
 export interface PortfolioDetailModel {
-  tagLinkPairs: TagLinkPair[]
+  detailFilterPills: DetailFilterPill[]
   pageKey: SitePageKey | null
   backPath: string
   backLinkText: string
@@ -68,17 +68,39 @@ export async function buildPortfolioDetailModel(
     locale: Locale
   ) => Promise<PortfolioListItem[]>
 ): Promise<PortfolioDetailModel> {
-  const tagKeys = splitPortfolioTags(portfolio.tags)
-  const tagLabels = resolveTagDisplayForLocale(tagKeys, locale)
-  const tagLinkPairs: TagLinkPair[] = tagKeys.map((key, i) => ({
-    key,
-    label: tagLabels[i] ?? key,
-  }))
+  const candidateCategorySlugs = Array.from(
+    new Set(
+      (portfolio.category ?? [])
+        .map((category) => getCategorySlug(category.id))
+        .filter(
+          (slug): slug is CategorySlug =>
+            slug === 'video-production' || slug === 'drone-cinematography'
+        )
+    )
+  )
 
-  const primaryCategoryId = portfolio.category?.[0]?.id
-  const categorySlug = primaryCategoryId
-    ? getCategorySlug(primaryCategoryId)
-    : null
+  const detailSubcategoryIds = new Set(
+    (portfolio.subcategory ?? []).map((subcategory) => subcategory.id?.trim()).filter(Boolean)
+  )
+
+  let categorySlug: CategorySlug | null = null
+  let categoryPortfoliosForLinks: PortfolioListItem[] = []
+  let bestScore = -1
+
+  for (const slug of candidateCategorySlugs) {
+    const items = await getPortfoliosByCategory(CATEGORY_IDS[slug], locale)
+    const hasPortfolioInCategory = items.some((item) => item.id === portfolio.id)
+    const hasMatchingSubcategory = items.some((item) =>
+      item.subcategory.some((subcategory) => detailSubcategoryIds.has(subcategory.id?.trim()))
+    )
+    const score =
+      (hasPortfolioInCategory ? 2 : 0) + (hasMatchingSubcategory ? 1 : 0)
+    if (score > bestScore) {
+      bestScore = score
+      categorySlug = slug
+      categoryPortfoliosForLinks = items
+    }
+  }
 
   const pageKey = categorySlug ? categoryToPageKey(categorySlug) : null
   const backPath =
@@ -96,6 +118,7 @@ export async function buildPortfolioDetailModel(
 
   let moreForClientHref: string | undefined
   let moreInLocationHref: string | undefined
+  let categoryFilterSubSlug: string | undefined
 
   if (
     categoryForLink &&
@@ -103,10 +126,31 @@ export async function buildPortfolioDetailModel(
     (categoryForLink === 'video-production' ||
       categoryForLink === 'drone-cinematography')
   ) {
-    const categoryPortfolios = await getPortfoliosByCategory(
-      CATEGORY_IDS[categoryForLink],
-      locale
-    )
+    const categoryPortfolios =
+      categoryPortfoliosForLinks.length > 0
+        ? categoryPortfoliosForLinks
+        : await getPortfoliosByCategory(CATEGORY_IDS[categoryForLink], locale)
+    const subSlugBySubcategoryId = new Map<string, string>()
+    for (const item of categoryPortfolios) {
+      for (const subcategory of item.subcategory) {
+        const subcategoryId = subcategory.id?.trim()
+        const subcategorySlug = subcategory.slug?.trim()
+        if (subcategoryId && subcategorySlug && !subSlugBySubcategoryId.has(subcategoryId)) {
+          subSlugBySubcategoryId.set(subcategoryId, subcategorySlug)
+        }
+      }
+    }
+
+    for (const subcategory of portfolio.subcategory) {
+      const subcategoryId = subcategory.id?.trim()
+      if (!subcategoryId) continue
+      const candidate = subSlugBySubcategoryId.get(subcategoryId)
+      if (candidate) {
+        categoryFilterSubSlug = candidate
+        break
+      }
+    }
+
     const { locationSlugByValue, clientSlugByValue } =
       buildSlugMapsFromPortfolios(categoryPortfolios)
 
@@ -163,6 +207,7 @@ export async function buildPortfolioDetailModel(
   )
 
   const year = portfolio.date ? new Date(portfolio.date).getFullYear() : null
+  const yearLabel = year != null && !Number.isNaN(year) ? String(year) : ''
 
   const hasDetailMeta =
     year != null ||
@@ -218,8 +263,60 @@ export async function buildPortfolioDetailModel(
     ? `Commercial Drone Filming in ${locationLabel}`
     : undefined
 
+  const detailFilterPills: DetailFilterPill[] = []
+
+  const firstSubcategory = portfolio.subcategory.find(
+    (subcategory) => subcategory.slug?.trim() && subcategory.name?.trim()
+  )
+  if (firstSubcategory?.name?.trim()) {
+    const subSlug = categoryFilterSubSlug ?? firstSubcategory.slug?.trim() ?? ''
+    detailFilterPills.push({
+      type: 'category',
+      label: firstSubcategory.name.trim(),
+      href:
+        pageKey != null && subSlug
+          ? localePath(
+              locale,
+              `${localizedPagePath(locale, pageKey)}?sub=${encodeURIComponent(subSlug)}`
+            )
+          : undefined,
+    })
+  }
+
+  const clientLabel = portfolio.client?.trim()
+  detailFilterPills.push({
+    type: 'client',
+    label: clientLabel ?? '',
+    href:
+      pageKey != null && moreForClientHref != null && clientLabel
+        ? moreForClientHref
+        : undefined,
+  })
+
+  const locationText = portfolio.location?.trim()
+  detailFilterPills.push({
+    type: 'location',
+    label: locationText ?? '',
+    href:
+      pageKey != null && moreInLocationHref != null && locationText
+        ? moreInLocationHref
+        : undefined,
+  })
+
+  detailFilterPills.push({
+    type: 'year',
+    label: yearLabel,
+    href:
+      pageKey != null && yearLabel
+        ? localePath(
+            locale,
+            `${localizedPagePath(locale, pageKey)}?year=${encodeURIComponent(yearLabel)}`
+          )
+        : undefined,
+  })
+
   return {
-    tagLinkPairs,
+    detailFilterPills: detailFilterPills.filter((pill) => pill.label),
     pageKey,
     backPath,
     backLinkText,

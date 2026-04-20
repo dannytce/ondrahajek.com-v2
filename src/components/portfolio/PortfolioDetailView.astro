@@ -8,7 +8,7 @@ import type { PortfolioDetail } from '~/api'
 import { CONTACT_EMAIL } from '~/config'
 import type { PortfolioDetailModel } from '~/lib/portfolio-detail/buildPortfolioDetail'
 import { localePath, t, type Locale } from '~/i18n'
-import { localizedPagePath, type SitePageKey } from '~/i18n/routes'
+import { type SitePageKey } from '~/i18n/routes'
 
 interface Props {
   portfolio: PortfolioDetail
@@ -18,7 +18,7 @@ interface Props {
 
 const { portfolio, locale, detail } = Astro.props
 const {
-  tagLinkPairs,
+  detailFilterPills,
   pageKey,
   backPath,
   backLinkText,
@@ -112,22 +112,23 @@ const shareTitle = portfolio.title ?? t(locale, 'detail.videoTitleFallback')
         />
       </div>
       {
-        tagLinkPairs.length > 0 && (
+        detailFilterPills.length > 0 && (
           <ul class="detail-reveal detail-reveal-delay-3 m-0 mt-8 flex max-w-[70ch] list-none flex-wrap gap-2 p-0">
-            {tagLinkPairs.map(({ key, label }) => (
+            {detailFilterPills.map(({ type, label, href }) => (
               <li>
-                {pageKey != null ? (
+                {href ? (
                   <a
-                    href={localePath(
-                      locale,
-                      `${localizedPagePath(locale, pageKey)}?tag=${encodeURIComponent(key)}`
-                    )}
-                    class="inline-block rounded-full border border-white/20 bg-white/5 px-3 py-1 font-geist text-[1rem] uppercase tracking-[0.12em] text-[#B7B7B7] no-underline transition-colors hover:border-white/30 hover:text-white"
+                    href={href}
+                    class="inline-block rounded-full border border-white/20 bg-white/5 px-3 py-1 font-geist text-[1rem] uppercase tracking-[0.12em] text-[#B7B7B7] no-underline transition-colors hover:border-white/30 hover:text-white md:px-5 md:py-2.5 md:text-[1.35rem]"
+                    data-detail-filter-pill={type}
                   >
                     {label}
                   </a>
                 ) : (
-                  <span class="inline-block rounded-full border border-white/20 bg-white/5 px-3 py-1 font-geist text-[1rem] uppercase tracking-[0.12em] text-[#B7B7B7]">
+                  <span
+                    class="inline-block rounded-full border border-white/20 bg-white/5 px-3 py-1 font-geist text-[1rem] uppercase tracking-[0.12em] text-[#B7B7B7] md:px-5 md:py-2.5 md:text-[1.35rem]"
+                    data-detail-filter-pill={type}
+                  >
                     {label}
                   </span>
                 )}
