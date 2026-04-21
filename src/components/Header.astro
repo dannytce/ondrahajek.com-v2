@@ -46,6 +46,7 @@ const {
           homepageHero={homepageHero}
           headerBackground={headerBackground}
         >
+          <slot name="aboutOverlay" slot="aboutOverlay" />
           <TrustedBy slot="trustedBy" />
         </HeaderHero>
       ) : (

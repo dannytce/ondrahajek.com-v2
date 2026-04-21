@@ -285,7 +285,7 @@ export const translations = {
     'about.credentials.title': 'Údaje',
     'about.credentials.phoneLabel': 'Tel.:',
     'about.credentials.licenseText':
-      'držitel povolení k provozování leteckých prací od Úřadu pro civilní letectví',
+      'Držitel povolení k provozování leteckých prací od Úřadu pro civilní letectví.',
   },
 } as const
 

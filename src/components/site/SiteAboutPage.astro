@@ -19,7 +19,7 @@ const { locale, canonicalPath, hreflangPaths, switchHref, headerBackground } =
   Astro.props
 
 const PERSON_NAME = 'ONDŘEJ HÁJEK'
-const COMPANY_NAME = 'COPTER VISION S.R.O.'
+const COMPANY_NAME = 'COPTER Vision s.r.o.'
 const COMPANY_ICO = '03813452'
 const COMPANY_DIC = 'CZ03813452'
 ---
@@ -36,7 +36,41 @@ const COMPANY_DIC = 'CZ03813452'
       title={t(locale, 'nav.about')}
       headerBackground={headerBackground}
       isAboutPage
-    />
+    >
+      <div slot="aboutOverlay" class="mx-auto max-w-[620px] text-secondary">
+        <h2
+          class="m-0 mb-5 font-anton text-[4rem] font-semibold uppercase leading-[0.95] text-white md:text-[5rem]"
+        >
+          {PERSON_NAME}
+        </h2>
+        <p class="m-0 text-[2rem] leading-[1.4] md:text-[3.2rem]">
+          {t(locale, 'about.credentials.phoneLabel')}{' '}
+          <a href="tel:+420773604400" class="text-secondary no-underline">
+            +420 773 604 400
+          </a>
+          <br />
+          <a
+            href="mailto:info@ondrahajek.com"
+            class="text-secondary no-underline"
+          >
+            info@ondrahajek.com
+          </a>
+        </p>
+        <h2
+          class="m-0 mb-5 mt-12 font-anton text-[4rem] font-semibold leading-[0.95] text-primary md:text-[5rem]"
+        >
+          {COMPANY_NAME}
+        </h2>
+        <p class="m-0 text-[2rem] leading-[1.45] md:text-[3.2rem]">
+          {t(locale, 'about.credentials.licenseText')}
+          <br />
+          <br />
+          ICO: {COMPANY_ICO}
+          <br />
+          DIC: {COMPANY_DIC}
+        </p>
+      </div>
+    </Header>
     <Section title="I can help with" gray>
       <ul class="m-0 list-none p-0">
         <li
@@ -65,39 +99,6 @@ const COMPANY_DIC = 'CZ03813452'
           Music video
         </li>
       </ul>
-    </Section>
-    <Section title={t(locale, 'about.credentials.title')}>
-      <div class="mx-auto max-w-[420px] text-secondary">
-        <h3
-          class="my-[2em] mt-[25px] font-anton text-[4rem] font-semibold uppercase text-white"
-        >
-          {PERSON_NAME}
-        </h3>
-        {t(locale, 'about.credentials.phoneLabel')}{' '}
-        <a href="tel:+420773604400" class="text-secondary no-underline">
-          +420 773 604 400
-        </a>
-        <br />
-        <a
-          href="mailto:info@ondrahajek.com"
-          class="text-secondary no-underline"
-        >
-          info@ondrahajek.com
-        </a>
-        <br />
-        <br />
-        <h3
-          class="my-[2em] mt-[25px] font-anton text-[4rem] font-semibold uppercase text-white"
-        >
-          {COMPANY_NAME}
-        </h3>
-        {t(locale, 'about.credentials.licenseText')}
-        <br />
-        <br />
-        ICO: {COMPANY_ICO}
-        <br />
-        DIC: {COMPANY_DIC}
-      </div>
     </Section>
   </Page>
 </BaseLayout>

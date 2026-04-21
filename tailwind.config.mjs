@@ -5,7 +5,7 @@ export default {
     extend: {
       colors: {
         primary: '#fff',
-        secondary: '#868687',
+        secondary: 'rgba(255,255,255,0.8)',
         background: '#0A0A0A',
         'surface-dark': '#0A0A0A',
         'surface-card': '#111111',
