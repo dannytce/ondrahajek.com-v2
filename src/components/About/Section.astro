@@ -9,7 +9,7 @@ const { title, gray } = Astro.props
 
 <section
   class:list={[
-    'flex min-h-[90vh] flex-col pt-[15vh] text-center',
+    'flex min-h-[90vh] flex-col items-center justify-center gap-12 py-20 text-center',
     gray && 'bg-[#111114]',
   ]}
 >
@@ -18,9 +18,7 @@ const { title, gray } = Astro.props
   >
     {title}
   </h2>
-  <div class="flex flex-1 items-center">
-    <div class="mx-auto w-full max-w-container px-[15px] xl:px-0">
-      <slot />
-    </div>
+  <div class="mx-auto w-full max-w-container px-[15px] xl:px-0">
+    <slot />
   </div>
 </section>

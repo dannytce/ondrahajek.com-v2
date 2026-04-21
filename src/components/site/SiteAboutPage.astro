@@ -6,6 +6,8 @@ import Section from '~/components/About/Section.astro'
 import type { ResponsiveImage } from '~/api/generated/types'
 import type { Locale } from '~/i18n'
 import { t } from '~/i18n'
+import { localizedPagePath } from '~/i18n/routes'
+import type { AboutHelpLinkItem } from '~/lib/about-help-links'
 
 interface Props {
   locale: Locale
@@ -13,15 +15,34 @@ interface Props {
   hreflangPaths: { en: string; cs: string }
   switchHref: string
   headerBackground: ResponsiveImage
+  helpLinks: AboutHelpLinkItem[]
 }
 
-const { locale, canonicalPath, hreflangPaths, switchHref, headerBackground } =
-  Astro.props
+const {
+  locale,
+  canonicalPath,
+  hreflangPaths,
+  switchHref,
+  headerBackground,
+  helpLinks,
+} = Astro.props
 
 const PERSON_NAME = 'ONDŘEJ HÁJEK'
 const COMPANY_NAME = 'COPTER Vision s.r.o.'
 const COMPANY_ICO = '03813452'
 const COMPANY_DIC = 'CZ03813452'
+const fallbackLinks: AboutHelpLinkItem[] = [
+  { label: 'Documentary', subSlug: 'documentary', targetPage: 'drone' },
+  { label: 'Film', subSlug: 'film-production', targetPage: 'drone' },
+  {
+    label: 'Commercial & Promo',
+    subSlug: 'creative-campaign',
+    targetPage: 'drone',
+  },
+  { label: 'Architecture', subSlug: 'architecture', targetPage: 'drone' },
+  { label: 'Interview', subSlug: 'interview', targetPage: 'video' },
+]
+const linksToRender = helpLinks.length > 0 ? helpLinks : fallbackLinks
 ---
 
 <BaseLayout
@@ -73,31 +94,20 @@ const COMPANY_DIC = 'CZ03813452'
     </Header>
     <Section title="I can help with" gray>
       <ul class="m-0 list-none p-0">
-        <li
-          class="my-[10px] py-[10px] font-anton text-[3rem] font-semibold uppercase leading-none text-secondary transition-colors duration-200 hover:text-white md:text-[4rem]"
-        >
-          Documentary
-        </li>
-        <li
-          class="my-[10px] py-[10px] font-anton text-[3rem] font-semibold uppercase leading-none text-secondary transition-colors duration-200 hover:text-white md:text-[4rem]"
-        >
-          Film
-        </li>
-        <li
-          class="my-[10px] py-[10px] font-anton text-[3rem] font-semibold uppercase leading-none text-secondary transition-colors duration-200 hover:text-white md:text-[4rem]"
-        >
-          Commercial promo
-        </li>
-        <li
-          class="my-[10px] py-[10px] font-anton text-[3rem] font-semibold uppercase leading-none text-secondary transition-colors duration-200 hover:text-white md:text-[4rem]"
-        >
-          Architecture
-        </li>
-        <li
-          class="my-[10px] py-[10px] font-anton text-[3rem] font-semibold uppercase leading-none text-secondary transition-colors duration-200 hover:text-white md:text-[4rem]"
-        >
-          Music video
-        </li>
+        {linksToRender.map((item) => {
+          const targetPath = localizedPagePath(locale, item.targetPage)
+          const href = `/${locale}${targetPath}?sub=${encodeURIComponent(item.subSlug)}`
+          return (
+            <li class="my-[10px] py-[10px]">
+              <a
+                href={href}
+                class="font-anton text-[3rem] font-semibold uppercase leading-none text-secondary no-underline transition-colors duration-200 hover:text-white focus-visible:text-white md:text-[4rem]"
+              >
+                {item.label}
+              </a>
+            </li>
+          )
+        })}
       </ul>
     </Section>
   </Page>
