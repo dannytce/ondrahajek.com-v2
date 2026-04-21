@@ -176,6 +176,57 @@
     transition: opacity 180ms ease;
   }
 
+  .portfolio-card-title {
+    transform: translateY(-0.52em);
+  }
+
+  .portfolio-card-title--cs {
+    line-height: 1.12;
+    letter-spacing: 0.015em;
+  }
+
+  .portfolio-card-title--cs-diacritics {
+    line-height: 1.18;
+  }
+
+  .portfolio-card-subtitle {
+    margin-top: 0.5rem;
+  }
+
+  .portfolio-card--one-line-title .portfolio-card-subtitle {
+    margin-top: -1.8rem;
+  }
+
+  .portfolio-card-title--cs-diacritics + .portfolio-card-subtitle {
+    margin-top: 0.95rem;
+  }
+
+  .portfolio-card--one-line-title .portfolio-card-title--cs-diacritics + .portfolio-card-subtitle {
+    margin-top: -1.35rem;
+  }
+
+  @media (min-width: 768px) {
+    .portfolio-card-title--cs-diacritics {
+      line-height: 1.16;
+    }
+
+    .portfolio-card-subtitle {
+      margin-top: 0.75rem;
+    }
+
+    .portfolio-card--one-line-title .portfolio-card-subtitle {
+      margin-top: -2.1rem;
+    }
+
+    .portfolio-card-title--cs-diacritics + .portfolio-card-subtitle {
+      margin-top: 1.1rem;
+    }
+
+    .portfolio-card--one-line-title .portfolio-card-title--cs-diacritics + .portfolio-card-subtitle {
+      margin-top: -1.55rem;
+    }
+  }
+
   .portfolio-card:focus-visible .portfolio-card-title,
   .portfolio-card:focus-visible .portfolio-card-subtitle {
     opacity: 0.82;

@@ -25,9 +25,18 @@ const year = portfolio.date
   ? new Date(portfolio.date).getFullYear().toString()
   : null
 const safeYear = year && year !== 'NaN' ? year : null
-const metaItems = [firstSubcategory, location, safeYear].filter(
-  Boolean
-) as string[]
+const metaItems = [
+  firstSubcategory ? { key: 'cat', label: firstSubcategory } : null,
+  location ? { key: 'loc', label: location } : null,
+  safeYear ? { key: 'year', label: safeYear } : null,
+].filter(Boolean) as Array<{ key: 'cat' | 'loc' | 'year'; label: string }>
+const titleLocaleClass = locale === 'cs' ? 'portfolio-card-title--cs' : ''
+const hasCzechDiacritics = /[áčďéěíňóřšťúůýžÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ]/.test(
+  portfolio.title ?? ''
+)
+const titleDiacriticsClass = hasCzechDiacritics
+  ? 'portfolio-card-title--cs-diacritics'
+  : ''
 ---
 
 {
@@ -55,19 +64,23 @@ const metaItems = [firstSubcategory, location, safeYear].filter(
           />
         </div>
         <div class="portfolio-card-overlay pointer-events-none absolute inset-x-0 bottom-0 h-[38%]" />
-        <div class="portfolio-card-meta-band relative bg-black px-4 pb-4 pt-12 md:px-5 md:pb-5 md:pt-14">
+        <div class="portfolio-card-meta-band relative bg-black px-4 pb-4 pt-14 md:px-5 md:pb-5 md:pt-16">
           <h3
-            class="portfolio-card-title pointer-events-none absolute inset-x-4 top-0 m-0 -translate-y-1/2 font-anton text-[2.4rem] uppercase leading-[0.95] text-white md:inset-x-5 md:text-[2.8rem]"
+            class:list={[
+              'portfolio-card-title pointer-events-none absolute inset-x-4 top-0 z-[2] m-0 overflow-visible font-anton text-[2.4rem] uppercase leading-[1.04] text-white md:inset-x-5 md:text-[2.8rem]',
+              titleLocaleClass,
+              titleDiacriticsClass,
+            ]}
             style="text-shadow: 0 2px 12px rgba(0,0,0,0.7), 0 1px 3px rgba(0,0,0,0.5);"
           >
             {portfolio.title}
           </h3>
           {metaItems.length > 0 && (
-            <div class="portfolio-card-subtitle m-0 flex flex-wrap items-center gap-x-2 gap-y-1 font-geist text-[0.95rem] uppercase tracking-[0.12em] text-white/75 md:text-[1rem]">
+            <div class="portfolio-card-subtitle flex flex-wrap items-center gap-x-2 gap-y-1 font-geist text-[0.95rem] uppercase tracking-[0.12em] text-white/75 md:text-[1rem]">
               {metaItems.map((item, index) => (
                 <>
                   {index > 0 && <span aria-hidden="true" class="text-white/45">/</span>}
-                  <span>{item}</span>
+                  <span>{item.label}</span>
                 </>
               ))}
             </div>
@@ -77,3 +90,40 @@ const metaItems = [firstSubcategory, location, safeYear].filter(
     </a>
   )
 }
+
+<script>
+  if (document.documentElement.dataset.portfolioCardTitleSpacingBound !== '1') {
+    document.documentElement.dataset.portfolioCardTitleSpacingBound = '1'
+
+    const applyCardTitleLineClasses = () => {
+      const cards = document.querySelectorAll('.portfolio-card')
+      cards.forEach((card) => {
+        const title = card.querySelector('.portfolio-card-title')
+        if (!title) return
+
+        const lineHeight = parseFloat(window.getComputedStyle(title).lineHeight)
+        if (!Number.isFinite(lineHeight) || lineHeight <= 0) return
+
+        const lines = Math.round(title.getBoundingClientRect().height / lineHeight)
+        const isTwoLine = lines >= 2
+        card.classList.toggle('portfolio-card--two-line-title', isTwoLine)
+        card.classList.toggle('portfolio-card--one-line-title', !isTwoLine)
+      })
+    }
+
+    let rafId = 0
+    const scheduleApply = () => {
+      window.cancelAnimationFrame(rafId)
+      rafId = window.requestAnimationFrame(applyCardTitleLineClasses)
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', scheduleApply, { once: true })
+    } else {
+      scheduleApply()
+    }
+
+    window.addEventListener('resize', scheduleApply, { passive: true })
+    document.fonts?.ready.then(scheduleApply).catch(() => {})
+  }
+</script>
