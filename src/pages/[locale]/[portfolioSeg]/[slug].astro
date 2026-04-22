@@ -121,6 +121,8 @@ const detail = portfolio
       canonicalPath={portfolioDetailCanonicalPath(locale, resolvedSlug)}
       hreflangPaths={detail.hrefPair}
       jsonLd={detail.jsonLd}
+      ogImage={detail.thumbnailUrl}
+      ogType="video.other"
     >
       <Page locale={locale} switchUrl={detail.switchUrl}>
         <PortfolioDetailView portfolio={portfolio} locale={locale} detail={detail} />

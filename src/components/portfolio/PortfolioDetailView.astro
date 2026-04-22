@@ -3,6 +3,7 @@ import Player from '~/components/Player.astro'
 import PortfolioDescriptions from '~/components/PortfolioDescriptions.astro'
 import PortfolioDetailMeta from '~/components/PortfolioDetailMeta.astro'
 import ActionButton from '~/components/ActionButton.astro'
+import ShareButton from '~/components/ShareButton.astro'
 import type { PortfolioDetail } from '~/api'
 import { CONTACT_EMAIL } from '~/config'
 import type { PortfolioDetailModel } from '~/lib/portfolio-detail/buildPortfolioDetail'
@@ -42,6 +43,13 @@ function getCategoryLabel(pageKey: string): string | undefined {
     categoryNavLabelKeyByPageKey[pageKey as SitePageKey]
   return categoryLabelKey ? t(locale, categoryLabelKey) : undefined
 }
+
+const SITE_ORIGIN = 'https://ondrahajek.com'
+const shareUrl = new URL(
+  Astro.url.pathname,
+  Astro.site ?? SITE_ORIGIN
+).toString()
+const shareTitle = portfolio.title ?? t(locale, 'detail.videoTitleFallback')
 ---
 
 <section class="mx-auto w-full max-w-container px-5 pb-14 pt-[7.8rem] md:pb-16 xl:px-0">
@@ -143,25 +151,12 @@ function getCategoryLabel(pageKey: string): string | undefined {
           moreInLocationLabel={moreInLocationLabel}
         />
         <div class="mt-3 grid grid-cols-2 gap-3">
-          <ActionButton label={t(locale, 'detail.share')} type="button" variant="secondary">
-            <svg
-              slot="icon"
-              aria-hidden="true"
-              viewBox="0 0 24 24"
-              class="h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <circle cx="18" cy="5" r="2.5"></circle>
-              <circle cx="6" cy="12" r="2.5"></circle>
-              <circle cx="18" cy="19" r="2.5"></circle>
-              <path d="M8.2 10.9l7.6-4.3"></path>
-              <path d="M8.2 13.1l7.6 4.3"></path>
-            </svg>
-          </ActionButton>
+          <ShareButton
+            title={shareTitle}
+            url={shareUrl}
+            label={t(locale, 'detail.share')}
+            copiedLabel={t(locale, 'detail.linkCopied')}
+          />
           <ActionButton
             href={`mailto:${CONTACT_EMAIL}`}
             label={t(locale, 'detail.getInTouch')}
