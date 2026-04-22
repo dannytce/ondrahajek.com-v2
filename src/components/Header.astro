@@ -9,6 +9,8 @@ interface Props {
   /** Shorter hero (category pages with compact body layout). */
   compact?: boolean
   isHeroVisible?: boolean
+  /** Full-viewport hero (100svh) with bottom-aligned title. Implied by isAboutPage. */
+  fullViewport?: boolean
   title: string
   subTitle?: string
   /** Homepage: SEO-friendly multi-line H1 (overrides title/subTitle in hero). */
@@ -30,36 +32,27 @@ const {
   isHomepage = false,
   compact = false,
   isHeroVisible = true,
+  fullViewport = false,
   headerBackground,
 } = Astro.props
+
+const useFullViewport = isAboutPage || fullViewport
 ---
 
 <div data-site-header>
   {
-    isHeroVisible &&
-      (isAboutPage ? (
-        <HeaderHero
-          isHomepage={isHomepage}
-          compact={compact}
-          fullViewport
-          title={title}
-          subTitle={subTitle}
-          homepageHero={homepageHero}
-          headerBackground={headerBackground}
-        >
-          <slot name="aboutOverlay" slot="aboutOverlay" />
-          <TrustedBy slot="trustedBy" />
-        </HeaderHero>
-      ) : (
-        <HeaderHero
-          isHomepage={isHomepage}
-          compact={compact}
-          fullViewport={false}
-          title={title}
-          subTitle={subTitle}
-          homepageHero={homepageHero}
-          headerBackground={headerBackground}
-        />
-      ))
+    isHeroVisible && (
+      <HeaderHero
+        isHomepage={isHomepage}
+        compact={compact}
+        fullViewport={useFullViewport}
+        title={title}
+        subTitle={subTitle}
+        homepageHero={homepageHero}
+        headerBackground={headerBackground}
+      >
+        {isAboutPage && <TrustedBy slot="trustedBy" />}
+      </HeaderHero>
+    )
   }
 </div>
