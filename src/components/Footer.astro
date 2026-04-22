@@ -1,6 +1,7 @@
 ---
 import { t, localePath, type Locale } from '~/i18n'
 import { localizedPagePath, portfolioSegment } from '~/i18n/routes'
+import { SOCIAL_LINKS } from '~/config/social'
 
 interface Props {
   locale?: Locale
@@ -95,9 +96,9 @@ const contactHref = localePath(locale, localizedPagePath(locale, 'about'))
       <div class="flex items-center justify-between">
         <p class="m-0 font-geist text-[0.9rem] text-[#555555]">© 2016–{new Date().getFullYear()} Ondřej Hájek</p>
         <div class="flex gap-4">
-          <a href="https://www.linkedin.com/in/ondrahajek/" target="_blank" rel="noopener" class="font-inter text-[1.1rem] text-[#888888] no-underline transition-colors hover:text-white">{t(locale, 'footer.social.linkedin')}</a>
-          <a href="https://www.instagram.com/ondrahajek.drone/" target="_blank" rel="noopener" class="font-inter text-[1.1rem] text-[#888888] no-underline transition-colors hover:text-white">{t(locale, 'footer.social.instagram')}</a>
-          <a href="https://vimeo.com/ondrahajek" target="_blank" rel="noopener" class="font-inter text-[1.1rem] text-[#888888] no-underline transition-colors hover:text-white">{t(locale, 'footer.social.vimeo')}</a>
+          <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener" class="font-inter text-[1.1rem] text-[#888888] no-underline transition-colors hover:text-white">{t(locale, 'footer.social.linkedin')}</a>
+          <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener" class="font-inter text-[1.1rem] text-[#888888] no-underline transition-colors hover:text-white">{t(locale, 'footer.social.instagram')}</a>
+          <a href={SOCIAL_LINKS.vimeo} target="_blank" rel="noopener" class="font-inter text-[1.1rem] text-[#888888] no-underline transition-colors hover:text-white">{t(locale, 'footer.social.vimeo')}</a>
         </div>
       </div>
     </div>
@@ -143,9 +144,9 @@ const contactHref = localePath(locale, localizedPagePath(locale, 'about'))
           +420 773 604 400
         </a>
         <div class="flex gap-4">
-          <a href="https://www.linkedin.com/in/ondrahajek/" target="_blank" rel="noopener" class="font-inter text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">{t(locale, 'footer.social.linkedin')}</a>
-          <a href="https://www.instagram.com/ondrahajek.drone/" target="_blank" rel="noopener" class="font-inter text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">{t(locale, 'footer.social.instagram')}</a>
-          <a href="https://vimeo.com/ondrahajek" target="_blank" rel="noopener" class="font-inter text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">{t(locale, 'footer.social.vimeo')}</a>
+          <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener" class="font-inter text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">{t(locale, 'footer.social.linkedin')}</a>
+          <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener" class="font-inter text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">{t(locale, 'footer.social.instagram')}</a>
+          <a href={SOCIAL_LINKS.vimeo} target="_blank" rel="noopener" class="font-inter text-[1.2rem] text-[#888888] no-underline transition-colors hover:text-white">{t(locale, 'footer.social.vimeo')}</a>
         </div>
       </div>
     </div>
