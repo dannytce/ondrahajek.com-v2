@@ -176,7 +176,7 @@ export const translations = {
     'nav.drone': 'Letecké záběry dronem',
     'nav.video': 'Video Produkce',
     'nav.gallery': 'Galerie',
-    'nav.about': 'O mně',
+    'nav.about': 'About',
     'header.homepageAriaLabel': 'Domovská stránka Ondrahajek',
     'header.menuToggleAriaLabel': 'Přepnout menu',
 
