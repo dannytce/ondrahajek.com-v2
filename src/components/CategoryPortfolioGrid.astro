@@ -48,7 +48,7 @@ const categoryIntroKey =
 ---
 
 <section
-  class="mx-auto w-full max-w-container px-5 pb-12 pt-28 xl:px-0"
+  class="mx-auto w-full max-w-container bg-black px-5 pb-12 pt-28 md:bg-transparent xl:px-0"
   data-portfolio-grid
   data-category-slug={categorySlug}
   data-locale={locale}
@@ -83,7 +83,7 @@ const categoryIntroKey =
   </p>
 
   <ul
-    class="m-0 grid w-full list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3"
+    class="m-0 grid w-full list-none grid-cols-1 gap-x-4 gap-y-7 p-0 sm:grid-cols-2 lg:gap-x-5 lg:gap-y-8"
   >
     {
       gridPortfolios.map((portfolio, index) => {
