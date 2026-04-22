@@ -1,5 +1,5 @@
 {
-  "version": "2.10",
+  "version": "2.11",
   "children": [
     {
       "type": "frame",
@@ -1400,7 +1400,7 @@
                   "type": "text",
                   "id": "GQFPk",
                   "fill": "$accent-primary",
-                  "content": "info@ondrahajek.com",
+                  "content": "ondra@ondrahajek.com",
                   "fontFamily": "Geist Mono",
                   "fontSize": 12,
                   "fontWeight": "normal"
@@ -2338,7 +2338,7 @@
                   "type": "text",
                   "id": "w3S8f",
                   "fill": "$accent-primary",
-                  "content": "info@ondrahajek.com",
+                  "content": "ondra@ondrahajek.com",
                   "fontFamily": "Geist Mono",
                   "fontSize": 11,
                   "fontWeight": "normal"
@@ -3843,7 +3843,7 @@
                   "type": "text",
                   "id": "58wZv",
                   "fill": "$accent-primary",
-                  "content": "info@ondrahajek.com",
+                  "content": "ondra@ondrahajek.com",
                   "fontFamily": "Geist Mono",
                   "fontSize": 12,
                   "fontWeight": "normal"
@@ -4759,7 +4759,7 @@
                   "type": "text",
                   "id": "P2kln",
                   "fill": "$accent-primary",
-                  "content": "info@ondrahajek.com",
+                  "content": "ondra@ondrahajek.com",
                   "fontFamily": "Geist Mono",
                   "fontSize": 11,
                   "fontWeight": "normal"
@@ -6056,7 +6056,7 @@
                   "type": "text",
                   "id": "JTB3l",
                   "fill": "$accent-primary",
-                  "content": "info@ondrahajek.com",
+                  "content": "ondra@ondrahajek.com",
                   "fontFamily": "Geist Mono",
                   "fontSize": 12,
                   "fontWeight": "normal"
@@ -7069,7 +7069,7 @@
                   "type": "text",
                   "id": "QftV9",
                   "fill": "$accent-primary",
-                  "content": "info@ondrahajek.com",
+                  "content": "ondra@ondrahajek.com",
                   "fontFamily": "Geist Mono",
                   "fontSize": 11,
                   "fontWeight": "normal"
@@ -7474,7 +7474,7 @@
                       "type": "text",
                       "id": "97TSw",
                       "fill": "$accent-primary",
-                      "content": "info@ondrahajek.com",
+                      "content": "ondra@ondrahajek.com",
                       "fontFamily": "Geist Mono",
                       "fontSize": 14,
                       "fontWeight": "normal"

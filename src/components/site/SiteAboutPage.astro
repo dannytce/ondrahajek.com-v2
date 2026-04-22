@@ -71,10 +71,10 @@ const linksToRender = helpLinks.length > 0 ? helpLinks : fallbackLinks
           </a>
           <br />
           <a
-            href="mailto:info@ondrahajek.com"
+            href="mailto:ondra@ondrahajek.com"
             class="text-secondary no-underline"
           >
-            info@ondrahajek.com
+            ondra@ondrahajek.com
           </a>
         </p>
         <h2
@@ -94,20 +94,22 @@ const linksToRender = helpLinks.length > 0 ? helpLinks : fallbackLinks
     </Header>
     <Section title="I can help with" gray>
       <ul class="m-0 list-none p-0">
-        {linksToRender.map((item) => {
-          const targetPath = localizedPagePath(locale, item.targetPage)
-          const href = `/${locale}${targetPath}?sub=${encodeURIComponent(item.subSlug)}`
-          return (
-            <li class="my-[10px] py-[10px]">
-              <a
-                href={href}
-                class="font-anton text-[3rem] font-semibold uppercase leading-none text-secondary no-underline transition-colors duration-200 hover:text-white focus-visible:text-white md:text-[4rem]"
-              >
-                {item.label}
-              </a>
-            </li>
-          )
-        })}
+        {
+          linksToRender.map((item) => {
+            const targetPath = localizedPagePath(locale, item.targetPage)
+            const href = `/${locale}${targetPath}?sub=${encodeURIComponent(item.subSlug)}`
+            return (
+              <li class="my-[10px] py-[10px]">
+                <a
+                  href={href}
+                  class="font-anton text-[3rem] font-semibold uppercase leading-none text-secondary no-underline transition-colors duration-200 hover:text-white focus-visible:text-white md:text-[4rem]"
+                >
+                  {item.label}
+                </a>
+              </li>
+            )
+          })
+        }
       </ul>
     </Section>
   </Page>
