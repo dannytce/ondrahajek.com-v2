@@ -19,6 +19,7 @@ import {
   buildCategoryCollectionJsonLd,
   categoryHubSeo,
 } from '~/lib/site-segment'
+import { buildAboutHelpLinks } from '~/lib/about-help-links'
 
 export function getStaticPaths() {
   const keys: SitePageKey[] = ['drone', 'video', 'gallery', 'about']
@@ -66,6 +67,21 @@ const portfolios =
     ? await getPortfoliosByCategory(CATEGORY_IDS[categorySlug], locale)
     : null
 
+const aboutDronePortfolios =
+  pageKey === 'about'
+    ? await getPortfoliosByCategory(CATEGORY_IDS['drone-cinematography'], locale)
+    : null
+
+const aboutVideoPortfolios =
+  pageKey === 'about'
+    ? await getPortfoliosByCategory(CATEGORY_IDS['video-production'], locale)
+    : null
+
+const aboutHelpLinks =
+  pageKey === 'about' && aboutDronePortfolios && aboutVideoPortfolios
+    ? buildAboutHelpLinks(aboutDronePortfolios, aboutVideoPortfolios, locale)
+    : []
+
 const hubSeo =
   pageKey === 'drone' || pageKey === 'video'
     ? categoryHubSeo(locale, pageKey)
@@ -107,6 +123,7 @@ const collectionJsonLd =
       hreflangPaths={href}
       switchHref={switchHref}
       headerBackground={headerBackgroundAbout}
+      helpLinks={aboutHelpLinks}
     />
   )
 }

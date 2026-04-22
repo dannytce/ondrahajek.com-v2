@@ -325,6 +325,12 @@ function readUrlIntoGrid(grid: HTMLElement) {
       .map((b) => b.dataset.filterSubcategory ?? '')
       .filter(Boolean)
   )
+  if (validSubSlugs.size === 0 && categorySelect) {
+    for (const option of Array.from(categorySelect.options)) {
+      const value = option.value?.trim()
+      if (value) validSubSlugs.add(value)
+    }
+  }
 
   const params = new URLSearchParams(window.location.search)
   let sub = params.get('sub') ?? ''
