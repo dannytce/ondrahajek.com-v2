@@ -29,6 +29,7 @@ const {
   homepageHero,
   headerBackground,
 } = Astro.props
+const hasAboutOverlay = Astro.slots.has('aboutOverlay')
 
 const gradientStyle = fullViewport
   ? 'linear-gradient(to bottom, rgba(10,10,10,0.78) 0%, rgba(10,10,10,0.12) 38%, rgba(10,10,10,0.88) 100%)'
@@ -115,21 +116,32 @@ const fullViewportTitlePad =
   {
     fullViewport ? (
       <div class="relative z-[3] flex min-h-0 w-full flex-1 flex-col">
-        <div
-          class:list={[
-            'mx-auto flex w-full max-w-container flex-1 flex-col justify-end gap-5 px-5 xl:px-0',
-            fullViewportTitlePad,
-          ]}
-        >
-          {subTitle && (
-            <span class="font-geist text-[1.1rem] uppercase tracking-widest text-foreground-muted">
-              {subTitle}
-            </span>
-          )}
-          <h1 class="m-0 p-0 font-anton text-[3.4rem] uppercase leading-[0.95] md:text-[5rem]">
-            {title}
-          </h1>
-        </div>
+        {hasAboutOverlay ? (
+          <>
+            <div class="pointer-events-none absolute inset-0 z-[4] flex items-center justify-center px-6">
+              <div class="pointer-events-auto w-full max-w-[640px] text-center">
+                <slot name="aboutOverlay" />
+              </div>
+            </div>
+            <div class="flex-1" aria-hidden="true"></div>
+          </>
+        ) : (
+          <div
+            class:list={[
+              'mx-auto flex w-full max-w-container flex-1 flex-col justify-end gap-5 px-5 xl:px-0',
+              fullViewportTitlePad,
+            ]}
+          >
+            {subTitle && (
+              <span class="font-geist text-[1.1rem] uppercase tracking-widest text-foreground-muted">
+                {subTitle}
+              </span>
+            )}
+            <h1 class="m-0 p-0 font-anton text-[3.4rem] uppercase leading-[0.95] md:text-[5rem]">
+              {title}
+            </h1>
+          </div>
+        )}
         <div class="relative z-[3] w-full shrink-0">
           <slot name="trustedBy" />
         </div>
