@@ -9,20 +9,23 @@ const dialogId = 'showreel-dialog'
     type="button"
     data-showreel-trigger={dialogId}
     title="Play Showreel"
-    class="group flex cursor-pointer items-center gap-2 rounded-full bg-white px-6 py-3 border-0 transition-opacity hover:opacity-90"
+    class="group inline-flex cursor-pointer items-center justify-center gap-3 border border-white bg-transparent px-8 py-3 shadow-[0_0_0_rgba(255,255,255,0)] transition-all duration-250 hover:-translate-y-0.5 hover:shadow-[0_0_18px_rgba(255,255,255,0.55)]"
   >
     <svg
-      width="12"
-      height="14"
+      width="14"
+      height="16"
       viewBox="0 0 14 16"
       fill="none"
+      aria-hidden="true"
     >
       <path
         d="M1.50389526,0.136099186 L13.5032156,7.13615397 L13.5032156,7.13615397 C13.9802597,7.41444764 14.1413788,8.02676989 13.8630851,8.50381399 C13.7761718,8.65279876 13.6522004,8.77677011 13.5032156,8.8636835 L1.50389526,15.8637383 L1.50389526,15.8637383 C1.02685115,16.1420319 0.414528904,15.9809129 0.136235236,15.5038688 C0.0470134485,15.350927 -5.14889621e-16,15.1770377 -2.22044605e-16,14.9999735 L0,0.99986395 L-4.4408921e-16,0.99986395 C-2.66460887e-16,0.4475792 0.44771525,-0.000136050417 1,-0.000136050417 C1.17706415,-0.000136050417 1.35095348,0.0468773981 1.50389526,0.136099186 Z"
-        fill="#0A0A0A"
+        fill="#FFFFFF"
         fill-rule="evenodd"></path>
     </svg>
-    <span class="font-inter text-[1.3rem] font-semibold text-surface-dark">Play Showreel</span>
+    <span class="font-anton text-[3.1rem] uppercase leading-none tracking-[0.06em] text-white">
+      Play Showreel
+    </span>
   </button>
 
   <dialog
