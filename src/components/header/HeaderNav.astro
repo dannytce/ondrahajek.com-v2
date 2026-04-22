@@ -21,7 +21,8 @@ const { locale, currentPath, switchUrl, navLinks } = Astro.props
 <div
   data-site-nav
   data-visible="true"
-  class="site-nav fixed inset-x-0 top-0 z-nav w-full border-b border-white/10 bg-black/30 pt-[env(safe-area-inset-top)] backdrop-blur-md backdrop-saturate-150 supports-[backdrop-filter]:bg-black/25"
+  data-past-header="false"
+  class="site-nav fixed inset-x-0 top-0 z-nav w-full border-b border-transparent pt-[env(safe-area-inset-top)]"
 >
   <div
     class="mx-auto flex h-14 w-full max-w-container items-center justify-between gap-4 px-[15px] md:h-16"
@@ -110,7 +111,24 @@ const { locale, currentPath, switchUrl, navLinks } = Astro.props
   [data-site-nav] {
     transition:
       transform 300ms ease-out,
-      opacity 300ms ease-out;
+      opacity 300ms ease-out,
+      backdrop-filter 200ms ease,
+      -webkit-backdrop-filter 200ms ease,
+      background-color 200ms ease,
+      border-color 200ms ease;
+  }
+
+  [data-site-nav][data-past-header='true'] {
+    -webkit-backdrop-filter: blur(12px) saturate(1.5);
+    backdrop-filter: blur(12px) saturate(1.5);
+    background-color: rgb(0 0 0 / 0.3);
+    border-bottom-color: rgb(255 255 255 / 0.1);
+  }
+
+  @supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+    [data-site-nav][data-past-header='true'] {
+      background-color: rgb(0 0 0 / 0.25);
+    }
   }
 
   [data-site-nav][data-visible='false'] {

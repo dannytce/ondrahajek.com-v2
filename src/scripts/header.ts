@@ -35,7 +35,14 @@ function initHeader() {
     toggleMenu()
   }
 
+  /** Backdrop, bg, and border only when the page is scrolled (not at scroll position 0). */
+  const updatePastHeader = () => {
+    nav.dataset.pastHeader = window.scrollY > 0 ? 'true' : 'false'
+  }
+
   const updateNav = () => {
+    updatePastHeader()
+
     if (menuOpen) return
 
     const currentScrollY = window.scrollY
@@ -73,9 +80,20 @@ function initHeader() {
     })
   }
 
+  const onResize = () => {
+    if (ticking) return
+
+    ticking = true
+    window.requestAnimationFrame(() => {
+      updateNav()
+      ticking = false
+    })
+  }
+
   menuToggle?.addEventListener('click', toggleMenu)
   menuLinks.forEach((link) => link.addEventListener('click', closeMenu))
   window.addEventListener('scroll', onScroll, { passive: true })
+  window.addEventListener('resize', onResize, { passive: true })
 
   updateNav()
 
@@ -83,6 +101,7 @@ function initHeader() {
     menuToggle?.removeEventListener('click', toggleMenu)
     menuLinks.forEach((link) => link.removeEventListener('click', closeMenu))
     window.removeEventListener('scroll', onScroll)
+    window.removeEventListener('resize', onResize)
     if (menuOpen) {
       document.body.style.overflow = ''
     }
