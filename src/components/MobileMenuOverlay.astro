@@ -1,6 +1,6 @@
 ---
 import { t, type Locale } from '~/i18n'
-import { SOCIAL_LINKS } from '~/config/social'
+import { SOCIAL_LINKS_MAP } from '~/config/social'
 import { CONTACT_EMAIL, CONTACT_PHONE } from '~/config'
 
 interface NavLink {
@@ -71,15 +71,7 @@ const { locale, navLinks } = Astro.props
       </div>
       <div class="flex gap-2">
         <a
-          href={SOCIAL_LINKS.linkedin}
-          target="_blank"
-          rel="noopener"
-          class="rounded-full border border-border-subtle px-4 py-2 font-geist text-[1.1rem] text-foreground-muted no-underline transition-colors hover:border-white/40 hover:text-white"
-        >
-          LinkedIn
-        </a>
-        <a
-          href={SOCIAL_LINKS.instagram}
+          href={SOCIAL_LINKS_MAP.instagram}
           target="_blank"
           rel="noopener"
           class="rounded-full border border-border-subtle px-4 py-2 font-geist text-[1.1rem] text-foreground-muted no-underline transition-colors hover:border-white/40 hover:text-white"
@@ -87,7 +79,7 @@ const { locale, navLinks } = Astro.props
           Instagram
         </a>
         <a
-          href={SOCIAL_LINKS.vimeo}
+          href={SOCIAL_LINKS_MAP.vimeo}
           target="_blank"
           rel="noopener"
           class="rounded-full border border-border-subtle px-4 py-2 font-geist text-[1.1rem] text-foreground-muted no-underline transition-colors hover:border-white/40 hover:text-white"
