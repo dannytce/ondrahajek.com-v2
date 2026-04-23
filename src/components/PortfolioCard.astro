@@ -64,10 +64,10 @@ const titleDiacriticsClass = hasCzechDiacritics
           />
         </div>
         <div class="portfolio-card-overlay pointer-events-none absolute inset-x-0 bottom-0 h-[38%]" />
-        <div class="portfolio-card-meta-band relative bg-black px-4 pb-4 pt-14 md:px-5 md:pb-5 md:pt-16">
+        <div class="portfolio-card-meta-band relative z-[2] flex flex-col gap-2 bg-black px-4 pb-4 pt-4 md:gap-3 md:px-5 md:pb-5 md:pt-5">
           <h3
             class:list={[
-              'portfolio-card-title pointer-events-none absolute inset-x-4 top-0 z-[2] m-0 overflow-visible font-anton text-[2.4rem] uppercase leading-[1.04] text-white md:inset-x-5 md:text-[2.8rem]',
+              'portfolio-card-title pointer-events-none -mt-[0.92em] m-0 overflow-visible font-anton text-[2.4rem] uppercase leading-[1.04] text-white md:text-[2.8rem]',
               titleLocaleClass,
               titleDiacriticsClass,
             ]}
@@ -91,39 +91,3 @@ const titleDiacriticsClass = hasCzechDiacritics
   )
 }
 
-<script>
-  if (document.documentElement.dataset.portfolioCardTitleSpacingBound !== '1') {
-    document.documentElement.dataset.portfolioCardTitleSpacingBound = '1'
-
-    const applyCardTitleLineClasses = () => {
-      const cards = document.querySelectorAll('.portfolio-card')
-      cards.forEach((card) => {
-        const title = card.querySelector('.portfolio-card-title')
-        if (!title) return
-
-        const lineHeight = parseFloat(window.getComputedStyle(title).lineHeight)
-        if (!Number.isFinite(lineHeight) || lineHeight <= 0) return
-
-        const lines = Math.round(title.getBoundingClientRect().height / lineHeight)
-        const isTwoLine = lines >= 2
-        card.classList.toggle('portfolio-card--two-line-title', isTwoLine)
-        card.classList.toggle('portfolio-card--one-line-title', !isTwoLine)
-      })
-    }
-
-    let rafId = 0
-    const scheduleApply = () => {
-      window.cancelAnimationFrame(rafId)
-      rafId = window.requestAnimationFrame(applyCardTitleLineClasses)
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', scheduleApply, { once: true })
-    } else {
-      scheduleApply()
-    }
-
-    window.addEventListener('resize', scheduleApply, { passive: true })
-    document.fonts?.ready.then(scheduleApply).catch(() => {})
-  }
-</script>
