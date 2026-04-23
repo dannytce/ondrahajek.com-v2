@@ -1,14 +1,13 @@
 ---
 import { t, type Locale } from '~/i18n'
+import { CONTACT_EMAIL, CONTACT_PHONE } from '~/config'
 
 interface Props {
   locale: Locale
 }
 
 const { locale } = Astro.props
-const email = 'ondra@ondrahajek.com'
-const phone = '+420 773 604 400'
-const telHref = `tel:${phone.replace(/\s/g, '')}`
+const telHref = `tel:${CONTACT_PHONE.replace(/\s/g, '')}`
 ---
 
 <div class="pointer-events-none fixed bottom-0 right-0 z-modal p-4 md:p-6">
@@ -51,10 +50,10 @@ const telHref = `tel:${phone.replace(/\s/g, '')}`
             {t(locale, 'hire.emailLabel')}
           </p>
           <a
-            href={`mailto:${email}`}
+            href={`mailto:${CONTACT_EMAIL}`}
             class="break-all font-anton text-[2rem] uppercase text-white no-underline transition-colors hover:text-primary"
           >
-            {email}
+            {CONTACT_EMAIL}
           </a>
         </div>
         <div>
@@ -65,7 +64,7 @@ const telHref = `tel:${phone.replace(/\s/g, '')}`
             href={telHref}
             class="font-anton text-[2rem] uppercase text-white no-underline transition-colors hover:text-primary"
           >
-            {phone}
+            {CONTACT_PHONE}
           </a>
         </div>
       </div>

@@ -1,6 +1,7 @@
 ---
 import LanguageToggle from '~/components/LanguageToggle.astro'
 import MobileMenuOverlay from '~/components/MobileMenuOverlay.astro'
+import { COMPANY_NAME } from '~/config'
 import { localePath, t, type Locale } from '~/i18n'
 
 interface NavLink {
@@ -34,7 +35,7 @@ const { locale, currentPath, switchUrl, navLinks } = Astro.props
     >
       <img
         src="/logo-ondrahajek.svg"
-        alt="ONDRAHAJEK.COM"
+        alt={COMPANY_NAME}
         width="137"
         height="13"
         class="h-5 w-auto"
