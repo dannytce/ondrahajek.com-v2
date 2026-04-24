@@ -407,6 +407,18 @@ export async function getPortfolioBySlug(
           responsiveImage(imgixParams: {h: "900", w: "1600", fit: crop }) {
             ...responsiveImageFragment
           }
+          ogImage: responsiveImage(
+            imgixParams: {
+              h: "630"
+              w: "1200"
+              fit: crop
+              crop: focalpoint
+              auto: format
+              fm: jpg
+            }
+          ) {
+            ...responsiveImageFragment
+          }
           smartTags
         }
         descriptionCs: description(locale: cs) {
