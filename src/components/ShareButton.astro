@@ -43,62 +43,32 @@ const secondaryClass =
 </button>
 
 <script>
-  const TOAST_ID = 'share-toast'
+  import Toastify from 'toastify-js'
+  import 'toastify-js/src/toastify.css'
+
   const TOAST_VISIBLE_MS = 3000
-  const TOAST_FADE_MS = 200
-
-  const TOAST_BASE_CLASSES = [
-    'fixed',
-    'bottom-6',
-    'left-1/2',
-    '-translate-x-1/2',
-    'z-[100]',
-    'rounded-lg',
-    'bg-black/90',
-    'px-4',
-    'py-3',
-    'font-geist',
-    'text-[1rem]',
-    'text-white',
-    'shadow-lg',
-    'ring-1',
-    'ring-white/10',
-    'transition-opacity',
-    'duration-200',
-    'pointer-events-none',
-  ] as const
-
-  let hideTimer: number | undefined
-
-  function getToast(): HTMLDivElement {
-    const existing = document.getElementById(TOAST_ID)
-    if (existing instanceof HTMLDivElement) return existing
-    const toast = document.createElement('div')
-    toast.id = TOAST_ID
-    toast.setAttribute('role', 'status')
-    toast.setAttribute('aria-live', 'polite')
-    toast.classList.add(...TOAST_BASE_CLASSES, 'opacity-0')
-    document.body.appendChild(toast)
-    return toast
-  }
 
   function showToast(message: string): void {
-    const toast = getToast()
-    toast.textContent = message
-
-    window.requestAnimationFrame(() => {
-      toast.classList.remove('opacity-0')
-      toast.classList.add('opacity-100')
-    })
-
-    if (hideTimer !== undefined) window.clearTimeout(hideTimer)
-    hideTimer = window.setTimeout(() => {
-      toast.classList.remove('opacity-100')
-      toast.classList.add('opacity-0')
-      window.setTimeout(() => {
-        if (toast.classList.contains('opacity-0')) toast.remove()
-      }, TOAST_FADE_MS)
-    }, TOAST_VISIBLE_MS)
+    Toastify({
+      text: message,
+      duration: TOAST_VISIBLE_MS,
+      close: false,
+      gravity: 'bottom',
+      position: 'center',
+      stopOnFocus: true,
+      offset: { x: 0, y: 24 },
+      style: {
+        background: 'rgba(0, 0, 0, 0.9)',
+        color: '#ffffff',
+        fontFamily: 'Geist, Inter, sans-serif',
+        fontSize: '1rem',
+        borderRadius: '0.5rem',
+        padding: '0.75rem 1rem',
+        boxShadow:
+          '0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -4px rgba(0, 0, 0, 0.5)',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+      },
+    }).showToast()
   }
 
   async function copyToClipboard(value: string): Promise<boolean> {
