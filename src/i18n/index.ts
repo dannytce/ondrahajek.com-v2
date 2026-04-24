@@ -1,6 +1,6 @@
 export const LOCALES = ['en', 'cs'] as const
 export type Locale = (typeof LOCALES)[number]
-export const DEFAULT_LOCALE: Locale = 'en'
+export const DEFAULT_LOCALE: Locale = 'cs'
 
 export function isLocale(value: string): value is Locale {
   return LOCALES.includes(value as Locale)
