@@ -8,6 +8,7 @@ import type { Locale } from '~/i18n'
 import { t } from '~/i18n'
 import { localizedPagePath } from '~/i18n/routes'
 import type { AboutHelpLinkItem } from '~/lib/about-help-links'
+import { CONTACT_EMAIL, CONTACT_PHONE } from '~/config'
 
 interface Props {
   locale: Locale
@@ -66,15 +67,15 @@ const linksToRender = helpLinks.length > 0 ? helpLinks : fallbackLinks
         </h2>
         <p class="m-0 text-[2rem] leading-[1.4] md:text-[3.2rem]">
           {t(locale, 'about.credentials.phoneLabel')}{' '}
-          <a href="tel:+420773604400" class="text-secondary no-underline">
-            +420 773 604 400
+          <a href={`tel:${CONTACT_PHONE.replace(/\s/g, '')}`} class="text-secondary no-underline">
+            {CONTACT_PHONE}
           </a>
           <br />
           <a
-            href="mailto:ondra@ondrahajek.com"
+            href={`mailto:${CONTACT_EMAIL}`}
             class="text-secondary no-underline"
           >
-            ondra@ondrahajek.com
+            {CONTACT_EMAIL}
           </a>
         </p>
         <h2

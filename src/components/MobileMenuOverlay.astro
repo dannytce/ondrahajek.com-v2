@@ -1,6 +1,7 @@
 ---
 import { t, type Locale } from '~/i18n'
 import { SOCIAL_LINKS } from '~/config/social'
+import { CONTACT_EMAIL, CONTACT_PHONE } from '~/config'
 
 interface NavLink {
   text: string
@@ -55,16 +56,16 @@ const { locale, navLinks } = Astro.props
             {locale === 'cs' ? 'KONTAKTUJTE NÁS' : 'GET IN TOUCH'}
           </span>
           <a
-            href="mailto:ondra@ondrahajek.com"
+            href={`mailto:${CONTACT_EMAIL}`}
             class="font-inter text-[1.4rem] text-accent-primary no-underline transition-colors hover:text-white"
           >
-            ondra@ondrahajek.com
+            {CONTACT_EMAIL}
           </a>
           <a
-            href="tel:+420773604400"
+            href={`tel:${CONTACT_PHONE.replace(/\s/g, '')}`}
             class="font-inter text-[1.3rem] text-foreground-muted no-underline transition-colors hover:text-white"
           >
-            +420 773 604 400
+            {CONTACT_PHONE}
           </a>
         </div>
       </div>
