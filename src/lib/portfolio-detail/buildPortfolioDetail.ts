@@ -58,6 +58,8 @@ export interface PortfolioDetailModel {
   locationLabel: string
   heroSubtitle: string | undefined
   thumbnailUrl: string | undefined
+  ogImageUrl: string | undefined
+  ogImageAlt: string | undefined
 }
 
 export async function buildPortfolioDetailModel(
@@ -222,13 +224,29 @@ export async function buildPortfolioDetailModel(
     ? `Watch ${portfolio.title ?? ''}, a premier commercial production shot in ${locationLabel}. Featuring 4K FPV drone cinematography by Ondra Hajek.`
     : subtitle ?? portfolio.title ?? ''
 
+  const ogThumbSrc = (
+    portfolio.thumbnail as
+      | (typeof portfolio.thumbnail & {
+          ogImage?: { src?: string | null } | null
+        })
+      | null
+      | undefined
+  )?.ogImage?.src
   const thumbSrc = portfolio.thumbnail?.responsiveImage?.src
+  const resolvedOgSrc = ogThumbSrc || thumbSrc
   const thumbnailUrl =
     thumbSrc && thumbSrc.startsWith('http')
       ? thumbSrc
       : thumbSrc
         ? `${SITE_URL}${thumbSrc.startsWith('/') ? '' : '/'}${thumbSrc}`
         : undefined
+  const ogImageUrl =
+    resolvedOgSrc && resolvedOgSrc.startsWith('http')
+      ? resolvedOgSrc
+      : resolvedOgSrc
+        ? `${SITE_URL}${resolvedOgSrc.startsWith('/') ? '' : '/'}${resolvedOgSrc}`
+        : undefined
+  const ogImageAlt = portfolio.title?.trim() || undefined
 
   const uploadIso =
     portfolio.date != null ? new Date(portfolio.date).toISOString() : undefined
@@ -336,6 +354,8 @@ export async function buildPortfolioDetailModel(
     locationLabel,
     heroSubtitle,
     thumbnailUrl,
+    ogImageUrl,
+    ogImageAlt,
   }
 }
 
