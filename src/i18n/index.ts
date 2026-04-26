@@ -57,8 +57,7 @@ export const translations = {
     'home.title': 'Aerial',
     'home.subtitle': 'Drone Cinematography & Video Production',
     'home.heroBrand': 'Ondra Hajek',
-    'home.heroLine': 'Drone\ncinematography\n& video production',
-    'home.heroLineDesktop': 'Drone cinematography\n& video production',
+    'home.heroLine': 'Drone cinematography & video production',
     'home.heroTagline': '12 years of experience',
     'home.heroDescriptor':
       'Filming for global brands and commercial campaigns with a maximum focus on detail, creativity, and safety. Providing full-service video production—from initial concept and scripting to professional filming, editing, and color grading.',
@@ -183,8 +182,7 @@ export const translations = {
     'home.title': 'Aerial',
     'home.subtitle': 'Letecké záběry dronem & videoprodukce',
     'home.heroBrand': 'Ondra Hajek',
-    'home.heroLine': 'Letecké\nzáběry dronem\n& videoprodukce',
-    'home.heroLineDesktop': 'Letecké záběry\ndronem & videoprodukce',
+    'home.heroLine': 'Letecké záběry dronem & videoprodukce',
     'home.heroTagline': '12 let zkušeností',
     'home.heroDescriptor':
       'Natáčím pro světové značky a reklamní kampaně s maximálním důrazem na detail, kreativitu a bezpečnost. Zajišťuji kompletní realizaci video projektů na klíč – od prvotního nápadu a scénáře přes profesionální natáčení až po finální střih a color grading.',

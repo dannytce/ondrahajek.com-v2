@@ -14,7 +14,6 @@ interface Props {
   homepageHero?: {
     brand: string
     line: string
-    lineDesktop: string
     tagline: string
     descriptor: string
   }
@@ -163,11 +162,8 @@ const fullViewportTitlePad =
                 {homepageHero.tagline}
               </span>
             </div>
-            <h1 class="m-0 mx-auto max-w-[14ch] p-0 font-anton text-[4.8rem] uppercase leading-[1.08] tracking-[0.02em] md:max-w-none md:text-[9.6rem] md:leading-[1.06]">
-              <span class="md:hidden">{homepageHero.line}</span>
-              <span class="hidden whitespace-pre-line md:block">
-                {homepageHero.lineDesktop}
-              </span>
+            <h1 class="m-0 mx-auto max-w-[13ch] p-0 font-anton text-[4.8rem] uppercase leading-[1.08] tracking-[0.02em] text-balance sm:max-w-[15ch] md:max-w-[18ch] md:text-[9.6rem] md:leading-[1.06] lg:max-w-[20ch]">
+              {homepageHero.line}
             </h1>
             <p class="m-0 max-w-[56ch] font-inter text-[1.4rem] leading-relaxed text-[rgb(255_255_255_/_0.9)] md:max-w-[56ch] md:text-[2.5rem]">
               {homepageHero.descriptor}
