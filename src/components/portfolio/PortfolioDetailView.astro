@@ -30,6 +30,7 @@ const {
   year,
   hasDetailMeta,
   heroSubtitle,
+  metaCategoryLabel,
 } = detail
 const categoryNavLabelKeyByPageKey: Partial<
   Record<SitePageKey, 'nav.drone' | 'nav.video'>
@@ -126,7 +127,7 @@ const shareTitle = portfolio.title ?? t(locale, 'detail.videoTitleFallback')
           year={year}
           client={portfolio.client}
           location={portfolio.location}
-          categoryLabel={pageKey ? getCategoryLabel(pageKey) : undefined}
+          categoryLabel={metaCategoryLabel ?? (pageKey ? getCategoryLabel(pageKey) : undefined)}
           moreForClientHref={moreForClientHref}
           moreForClientLabel={moreForClientLabel}
           moreInLocationHref={moreInLocationHref}

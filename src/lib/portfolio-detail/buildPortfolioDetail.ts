@@ -57,6 +57,7 @@ export interface PortfolioDetailModel {
   hrefPair: { en: string; cs: string } | undefined
   locationLabel: string
   heroSubtitle: string | undefined
+  metaCategoryLabel: string | undefined
   thumbnailUrl: string | undefined
   ogImageUrl: string | undefined
   ogImageAlt: string | undefined
@@ -286,6 +287,7 @@ export async function buildPortfolioDetailModel(
   const firstSubcategory = portfolio.subcategory.find(
     (subcategory) => subcategory.slug?.trim() && subcategory.name?.trim()
   )
+  const metaCategoryLabel = firstSubcategory?.name?.trim() || undefined
   if (firstSubcategory?.name?.trim()) {
     const subSlug = categoryFilterSubSlug ?? firstSubcategory.slug?.trim() ?? ''
     detailFilterPills.push({
@@ -353,6 +355,7 @@ export async function buildPortfolioDetailModel(
     hrefPair,
     locationLabel,
     heroSubtitle,
+    metaCategoryLabel,
     thumbnailUrl,
     ogImageUrl,
     ogImageAlt,
