@@ -129,6 +129,20 @@
 }
 
 @layer utilities {
+  .homepage-hero-tagline {
+    display: inline-block;
+  }
+
+  :lang(cs) .homepage-hero-tagline {
+    margin-bottom: 0.18em;
+  }
+
+  @media (min-width: 768px) {
+    :lang(cs) .homepage-hero-tagline {
+      margin-bottom: 1em;
+    }
+  }
+
   .link-animation {
     background: linear-gradient(to right, #ddd, #ddd 50%, #fff 50%);
     background-clip: text;
