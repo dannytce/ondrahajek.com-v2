@@ -8,14 +8,15 @@ interface Props {
   poster?: ResponsiveImage | null
   transitionName?: string
   deferLoad?: boolean
+  autoplay?: boolean
 }
 
-function buildIframeSrc(video: string): string {
+function buildIframeSrc(video: string, autoplay: boolean): string {
   const base = video.trim().replace(/\/$/, '')
 
   try {
     const url = new URL(base)
-    url.searchParams.set('autoplay', '0')
+    url.searchParams.set('autoplay', autoplay ? '1' : '0')
     url.searchParams.set('loop', '1')
     url.searchParams.set('autopause', '0')
 
@@ -31,12 +32,19 @@ function buildIframeSrc(video: string): string {
 
     return url.toString()
   } catch {
-    return `${base}/?autoplay=1&loop=1&autopause=0`
+    return `${base}/?autoplay=${autoplay ? '1' : '0'}&loop=1&autopause=0`
   }
 }
 
-const { title, video, poster, transitionName, deferLoad = false } = Astro.props
-const iframeSrc = buildIframeSrc(video)
+const {
+  title,
+  video,
+  poster,
+  transitionName,
+  deferLoad = false,
+  autoplay = false,
+} = Astro.props
+const iframeSrc = buildIframeSrc(video, autoplay)
 ---
 
 <div class="h-full">
