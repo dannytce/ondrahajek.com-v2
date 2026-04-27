@@ -80,7 +80,6 @@ interface FilterState {
 
 function countActiveFilters(st: FilterState): number {
   let n = 0
-  if (st.sub) n += 1
   if (st.year) n += 1
   if (st.locSlug) n += 1
   if (st.clientSlug) n += 1
@@ -504,6 +503,15 @@ function bindGrid(grid: HTMLElement) {
         button.dataset.active = val === st.sub ? 'true' : 'false'
       })
     }
+    if (clientSelect) {
+      clientSelect.dataset.filterActive = st.clientSlug ? 'true' : 'false'
+    }
+    if (locationSelect) {
+      locationSelect.dataset.filterActive = st.locSlug ? 'true' : 'false'
+    }
+    if (yearSelect) {
+      yearSelect.dataset.filterActive = st.year ? 'true' : 'false'
+    }
 
     items.forEach((item) => {
       const visible = itemMatchesAll(item, st)
@@ -529,6 +537,11 @@ function bindGrid(grid: HTMLElement) {
     if (activeBadge) {
       activeBadge.hidden = !hasActiveFilters
       activeBadge.textContent = String(activeCount)
+    }
+    if (filterToggle) {
+      filterToggle.dataset.filterToggleActive = hasActiveFilters
+        ? 'true'
+        : 'false'
     }
     if (noResults) {
       noResults.hidden = visibleCount !== 0
