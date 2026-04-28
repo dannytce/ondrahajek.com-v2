@@ -101,20 +101,6 @@ const rows = [
                   {row.label}
                 </dt>
                 <dd class="m-0 font-inter text-[1.4rem] text-white">{row.value}</dd>
-                {
-                  row.key === 'client' && moreForClientHref && moreForClientLabel && (
-                    <a href={moreForClientHref} class={linkClass}>
-                      {moreForClientLabel}
-                    </a>
-                  )
-                }
-                {
-                  row.key === 'location' && moreInLocationHref && moreInLocationLabel && (
-                    <a href={moreInLocationHref} class={linkClass}>
-                      {moreInLocationLabel}
-                    </a>
-                  )
-                }
               </div>
               {index < rows.length - 1 && <div class="my-4 h-px w-full bg-[#222222]"></div>}
             </>
