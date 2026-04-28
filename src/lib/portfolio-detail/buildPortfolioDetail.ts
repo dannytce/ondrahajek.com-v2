@@ -83,7 +83,9 @@ export async function buildPortfolioDetailModel(
   )
 
   const detailSubcategoryIds = new Set(
-    (portfolio.subcategory ?? []).map((subcategory) => subcategory.id?.trim()).filter(Boolean)
+    (portfolio.subcategory ?? [])
+      .map((subcategory) => subcategory.id?.trim())
+      .filter(Boolean)
   )
 
   let categorySlug: CategorySlug | null = null
@@ -92,9 +94,13 @@ export async function buildPortfolioDetailModel(
 
   for (const slug of candidateCategorySlugs) {
     const items = await getPortfoliosByCategory(CATEGORY_IDS[slug], locale)
-    const hasPortfolioInCategory = items.some((item) => item.id === portfolio.id)
+    const hasPortfolioInCategory = items.some(
+      (item) => item.id === portfolio.id
+    )
     const hasMatchingSubcategory = items.some((item) =>
-      item.subcategory.some((subcategory) => detailSubcategoryIds.has(subcategory.id?.trim()))
+      item.subcategory.some((subcategory) =>
+        detailSubcategoryIds.has(subcategory.id?.trim())
+      )
     )
     const score =
       (hasPortfolioInCategory ? 2 : 0) + (hasMatchingSubcategory ? 1 : 0)
@@ -106,8 +112,7 @@ export async function buildPortfolioDetailModel(
   }
 
   const pageKey = categorySlug ? categoryToPageKey(categorySlug) : null
-  const backPath =
-    pageKey != null ? localizedPagePath(locale, pageKey) : '/'
+  const backPath = pageKey != null ? localizedPagePath(locale, pageKey) : '/'
   const backLabel =
     categorySlug === 'drone-cinematography'
       ? t(locale, 'nav.drone')
@@ -138,7 +143,11 @@ export async function buildPortfolioDetailModel(
       for (const subcategory of item.subcategory) {
         const subcategoryId = subcategory.id?.trim()
         const subcategorySlug = subcategory.slug?.trim()
-        if (subcategoryId && subcategorySlug && !subSlugBySubcategoryId.has(subcategoryId)) {
+        if (
+          subcategoryId &&
+          subcategorySlug &&
+          !subSlugBySubcategoryId.has(subcategoryId)
+        ) {
           subSlugBySubcategoryId.set(subcategoryId, subcategorySlug)
         }
       }
@@ -223,7 +232,7 @@ export async function buildPortfolioDetailModel(
     : `${portfolio.title ?? ''} | ${t(locale, 'meta.title')}`
   const descSeo = locationLabel
     ? `Watch ${portfolio.title ?? ''}, a premier commercial production shot in ${locationLabel}. Featuring 4K FPV drone cinematography by Ondra Hajek.`
-    : subtitle ?? portfolio.title ?? ''
+    : (subtitle ?? portfolio.title ?? '')
 
   const ogThumbSrc = (
     portfolio.thumbnail as
@@ -362,9 +371,7 @@ export async function buildPortfolioDetailModel(
   }
 }
 
-export function portfolioDetailSwitchUrlWhenMissing(
-  locale: Locale
-): string {
+export function portfolioDetailSwitchUrlWhenMissing(locale: Locale): string {
   return localePath(getAlternateLocale(locale), '/')
 }
 
