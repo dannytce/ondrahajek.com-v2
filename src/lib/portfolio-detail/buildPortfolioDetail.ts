@@ -36,6 +36,29 @@ export interface DetailFilterPill {
   href: string | undefined
 }
 
+function buildCategoryFilterHref(
+  locale: Locale,
+  pageKey: SitePageKey | null,
+  filters: Partial<Record<'sub' | 'cl' | 'loc' | 'year', string>>
+): string | undefined {
+  if (pageKey == null) return undefined
+  const params = new URLSearchParams()
+  for (const [key, rawValue] of Object.entries(filters) as Array<
+    ['sub' | 'cl' | 'loc' | 'year', string | undefined]
+  >) {
+    const value = rawValue?.trim()
+    if (!value) continue
+    params.set(key, value)
+  }
+  const basePath = localizedPagePath(locale, pageKey)
+  const query = params.toString()
+  return localePath(locale, query ? `${basePath}?${query}` : basePath)
+}
+
+function normalizeText(value: string): string {
+  return value.trim().toLowerCase()
+}
+
 /** Derived data for portfolio detail page (SEO, JSON-LD, nav, related links). */
 export interface PortfolioDetailModel {
   detailFilterPills: DetailFilterPill[]
@@ -139,10 +162,13 @@ export async function buildPortfolioDetailModel(
         ? categoryPortfoliosForLinks
         : await getPortfoliosByCategory(CATEGORY_IDS[categoryForLink], locale)
     const subSlugBySubcategoryId = new Map<string, string>()
+    const subSlugBySubcategoryName = new Map<string, string>()
+    const validSubSlugs = new Set<string>()
     for (const item of categoryPortfolios) {
       for (const subcategory of item.subcategory) {
         const subcategoryId = subcategory.id?.trim()
         const subcategorySlug = subcategory.slug?.trim()
+        const subcategoryName = subcategory.name?.trim()
         if (
           subcategoryId &&
           subcategorySlug &&
@@ -150,13 +176,42 @@ export async function buildPortfolioDetailModel(
         ) {
           subSlugBySubcategoryId.set(subcategoryId, subcategorySlug)
         }
+        if (subcategorySlug) {
+          validSubSlugs.add(subcategorySlug)
+        }
+        if (subcategoryName && subcategorySlug) {
+          const normalizedName = normalizeText(subcategoryName)
+          if (!subSlugBySubcategoryName.has(normalizedName)) {
+            subSlugBySubcategoryName.set(normalizedName, subcategorySlug)
+          }
+        }
       }
     }
 
     for (const subcategory of portfolio.subcategory) {
+      const directSlug = subcategory.slug?.trim()
+      if (directSlug && validSubSlugs.has(directSlug)) {
+        categoryFilterSubSlug = directSlug
+        break
+      }
+    }
+
+    for (const subcategory of portfolio.subcategory) {
+      if (categoryFilterSubSlug) break
       const subcategoryId = subcategory.id?.trim()
       if (!subcategoryId) continue
       const candidate = subSlugBySubcategoryId.get(subcategoryId)
+      if (candidate) {
+        categoryFilterSubSlug = candidate
+        break
+      }
+    }
+
+    for (const subcategory of portfolio.subcategory) {
+      if (categoryFilterSubSlug) break
+      const subcategoryName = subcategory.name?.trim()
+      if (!subcategoryName) continue
+      const candidate = subSlugBySubcategoryName.get(normalizeText(subcategoryName))
       if (candidate) {
         categoryFilterSubSlug = candidate
         break
@@ -170,10 +225,7 @@ export async function buildPortfolioDetailModel(
     if (clientTrim) {
       const cl = clientSlugByValue.get(clientTrim)
       if (cl) {
-        moreForClientHref = localePath(
-          locale,
-          `${localizedPagePath(locale, pageKey)}?cl=${encodeURIComponent(cl)}`
-        )
+        moreForClientHref = buildCategoryFilterHref(locale, pageKey, { cl })
       }
     }
 
@@ -181,10 +233,7 @@ export async function buildPortfolioDetailModel(
     if (locTrim) {
       const loc = locationSlugByValue.get(locTrim)
       if (loc) {
-        moreInLocationHref = localePath(
-          locale,
-          `${localizedPagePath(locale, pageKey)}?loc=${encodeURIComponent(loc)}`
-        )
+        moreInLocationHref = buildCategoryFilterHref(locale, pageKey, { loc })
       }
     }
   }
@@ -302,13 +351,7 @@ export async function buildPortfolioDetailModel(
     detailFilterPills.push({
       type: 'category',
       label: firstSubcategory.name.trim(),
-      href:
-        pageKey != null && subSlug
-          ? localePath(
-              locale,
-              `${localizedPagePath(locale, pageKey)}?sub=${encodeURIComponent(subSlug)}`
-            )
-          : undefined,
+      href: buildCategoryFilterHref(locale, pageKey, { sub: subSlug }),
     })
   }
 
@@ -335,13 +378,7 @@ export async function buildPortfolioDetailModel(
   detailFilterPills.push({
     type: 'year',
     label: yearLabel,
-    href:
-      pageKey != null && yearLabel
-        ? localePath(
-            locale,
-            `${localizedPagePath(locale, pageKey)}?year=${encodeURIComponent(yearLabel)}`
-          )
-        : undefined,
+    href: buildCategoryFilterHref(locale, pageKey, { year: yearLabel }),
   })
 
   return {
