@@ -45,11 +45,15 @@ const useFullViewport = isAboutPage || fullViewport
         isHomepage={isHomepage}
         compact={compact}
         fullViewport={useFullViewport}
+        isAboutPage={isAboutPage}
         title={title}
         subTitle={subTitle}
         homepageHero={homepageHero}
         headerBackground={headerBackground}
       >
+        {isAboutPage && (
+          <slot name="aboutOverlay" slot="aboutOverlay" />
+        )}
         {isAboutPage && <TrustedBy slot="trustedBy" />}
       </HeaderHero>
     )

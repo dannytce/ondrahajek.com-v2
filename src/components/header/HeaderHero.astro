@@ -8,6 +8,11 @@ interface Props {
   compact: boolean
   /** Full viewport height (About page hero). */
   fullViewport?: boolean
+  /**
+   * About hero uses the centered credentials overlay slot. Must gate overlay layout:
+   * `Astro.slots.has('aboutOverlay')` can be true without real content when Header is nested under Page slot projection.
+   */
+  isAboutPage?: boolean
   title: string
   /** Breadcrumb third segment (e.g. home.subtitle). */
   subTitle?: string
@@ -24,12 +29,14 @@ const {
   isHomepage,
   compact,
   fullViewport = false,
+  isAboutPage = false,
   title,
   subTitle,
   homepageHero,
   headerBackground,
 } = Astro.props
-const hasAboutOverlay = Astro.slots.has('aboutOverlay')
+const hasAboutOverlay =
+  isAboutPage && Astro.slots.has('aboutOverlay')
 
 const gradientStyle = fullViewport
   ? 'linear-gradient(to bottom, rgba(10,10,10,0.78) 0%, rgba(10,10,10,0.12) 38%, rgba(10,10,10,0.88) 100%)'
@@ -123,7 +130,7 @@ const fullViewportTitlePad =
                 <slot name="aboutOverlay" />
               </div>
             </div>
-            <div class="flex-1" aria-hidden="true"></div>
+            <div class="flex-1" aria-hidden="true" />
           </>
         ) : (
           <div
@@ -162,7 +169,7 @@ const fullViewportTitlePad =
                 {homepageHero.tagline}
               </span>
             </div>
-            <h1 class="m-0 mx-auto max-w-[13ch] p-0 font-anton text-[4.8rem] uppercase leading-[1.08] tracking-[0.02em] text-balance sm:max-w-[15ch] md:max-w-[18ch] md:text-[9.6rem] md:leading-[1.06] lg:max-w-[20ch]">
+            <h1 class="m-0 mx-auto max-w-[13ch] text-balance p-0 font-anton text-[4.8rem] uppercase leading-[1.08] tracking-[0.02em] sm:max-w-[15ch] md:max-w-[18ch] md:text-[9.6rem] md:leading-[1.06] lg:max-w-[20ch]">
               {homepageHero.line}
             </h1>
             <p class="m-0 max-w-[56ch] font-inter text-[1.4rem] leading-relaxed text-[rgb(255_255_255_/_0.9)] md:max-w-[56ch] md:text-[2.5rem]">
