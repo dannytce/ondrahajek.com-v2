@@ -36,6 +36,34 @@ function setSelectFromUrlParam(
   }
 }
 
+/** Resolve subcategory from URL by slug, then by visible label (legacy/bookmarks). */
+function resolveSubcategoryFromUrl(
+  categorySelect: HTMLSelectElement | null | undefined,
+  subcategoryButtons: HTMLButtonElement[],
+  rawParam: string
+): string {
+  const decoded = decodeURIComponent(rawParam.replace(/\+/g, ' ')).trim()
+  if (!decoded) return ''
+
+  if (categorySelect) {
+    for (const option of categorySelect.options) {
+      const value = option.value.trim()
+      if (!value) continue
+      if (value === decoded) return value
+      if ((option.textContent ?? '').trim() === decoded) return value
+    }
+    return ''
+  }
+
+  for (const button of subcategoryButtons) {
+    const value = (button.dataset.filterSubcategory ?? '').trim()
+    if (!value) continue
+    if (value === decoded) return value
+    if ((button.textContent ?? '').trim() === decoded) return value
+  }
+  return ''
+}
+
 /** Year / location / client / search in URL — open advanced filter panel */
 function hasUrlAdvancedFilterParams(): boolean {
   const p = new URLSearchParams(window.location.search)
@@ -317,7 +345,9 @@ function readUrlIntoGrid(grid: HTMLElement) {
     '[data-filter-search]'
   )
 
-  if (!searchInput && !categorySelect) return
+  if (!searchInput && !categorySelect && subcategoryButtons.length === 0) {
+    return
+  }
 
   const validSubSlugs = categorySelect
     ? new Set(
@@ -332,7 +362,8 @@ function readUrlIntoGrid(grid: HTMLElement) {
       )
 
   const params = new URLSearchParams(window.location.search)
-  let sub = params.get('sub') ?? ''
+  const rawSub = params.get('sub') ?? ''
+  let sub = resolveSubcategoryFromUrl(categorySelect, subcategoryButtons, rawSub)
   if (sub && !validSubSlugs.has(sub)) sub = ''
 
   if (categorySelect) {
