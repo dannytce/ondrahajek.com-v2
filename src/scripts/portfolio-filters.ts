@@ -383,7 +383,9 @@ function bindGrid(grid: HTMLElement) {
   const resultCount = grid.querySelector<HTMLElement>(
     '[data-filter-result-count]'
   )
-  const resultLabel = grid.querySelector<HTMLElement>('[data-filter-result-label]')
+  const resultLabel = grid.querySelector<HTMLElement>(
+    '[data-filter-result-label]'
+  )
   const noResults = grid.querySelector<HTMLElement>('[data-filter-empty]')
   const items = Array.from(
     grid.querySelectorAll<HTMLElement>('[data-portfolio-item]')
@@ -524,7 +526,10 @@ function bindGrid(grid: HTMLElement) {
       const locale = resultCount.dataset.locale ?? grid.dataset.locale ?? 'en'
       const labels = {
         one: resultCount.dataset.labelOne ?? 'project',
-        few: resultCount.dataset.labelFew ?? resultCount.dataset.labelOther ?? 'projects',
+        few:
+          resultCount.dataset.labelFew ??
+          resultCount.dataset.labelOther ??
+          'projects',
         other: resultCount.dataset.labelOther ?? 'projects',
       }
       resultLabel.textContent = getResultLabel(locale, visibleCount, labels)
