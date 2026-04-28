@@ -26,7 +26,6 @@ const {
   moreInLocationHref,
   moreForClientLabel,
   moreInLocationLabel,
-  subtitle,
   mediaTransitionName,
   year,
   hasDetailMeta,
@@ -72,24 +71,6 @@ const shareTitle = portfolio.title ?? t(locale, 'detail.videoTitleFallback')
           <h2 class="detail-reveal mt-3 max-w-[70ch] font-geist text-[1rem] font-normal uppercase leading-tight tracking-[0.2em] text-[#4A9FD8] md:text-[1.1rem] lg:mt-4 lg:text-[1rem]">
             {heroSubtitle}
           </h2>
-        )
-      }
-      {
-        (subtitle || hasDetailMeta) && (
-          <div class="detail-reveal detail-reveal-delay-1 mt-4 max-w-[70ch] lg:hidden">
-            <PortfolioDetailMeta
-              variant="inline"
-              locale={locale}
-              year={year}
-              client={portfolio.client}
-              location={portfolio.location}
-              class={subtitle ? 'mt-4' : undefined}
-              moreForClientHref={moreForClientHref}
-              moreForClientLabel={moreForClientLabel}
-              moreInLocationHref={moreInLocationHref}
-              moreInLocationLabel={moreInLocationLabel}
-            />
-          </div>
         )
       }
       {
