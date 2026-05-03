@@ -25,3 +25,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .gstack/
+
+# font subsetting (local Python venv)
+scripts/generate-font-subset/.venv/
