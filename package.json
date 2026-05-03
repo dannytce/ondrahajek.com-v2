@@ -4,6 +4,9 @@
   "private": true,
   "type": "module",
   "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20.18.1"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
