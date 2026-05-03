@@ -17,6 +17,8 @@ const ASCII_PRINTABLE = [...Array(95)]
   .map((_, i) => String.fromCharCode(32 + i))
   .join('')
 const EXTRA = '\u00A0\u2013\u2014\u2018\u2019\u201C\u201D\u2026'
+/** Full Czech alphabet for Anton subset (belt-and-suspenders vs partial dist). */
+const CZECH_LETTERS = 'áčďéěíňóřšťúůýžÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ'
 
 function walkHtmlFiles(dir, acc = []) {
   let names
@@ -38,6 +40,22 @@ function walkHtmlFiles(dir, acc = []) {
 function addChars(set, str) {
   if (!str) return
   for (const ch of str) {
+    if (ch === '\n' || ch === '\r' || ch === '\t') continue
+    set.add(ch)
+  }
+}
+
+/**
+ * Anton headlines use `text-transform: uppercase` (Tailwind), so the browser needs
+ * uppercase glyphs (Ě, Č, …) even when the DOM only contains lowercase Czech text.
+ */
+function addAntonChars(set, str) {
+  if (!str) return
+  for (const ch of str) {
+    if (ch === '\n' || ch === '\r' || ch === '\t') continue
+    set.add(ch)
+  }
+  for (const ch of str.toUpperCase()) {
     if (ch === '\n' || ch === '\r' || ch === '\t') continue
     set.add(ch)
   }
@@ -121,7 +139,9 @@ function collectFromHtml(htmlPaths) {
       })
     }
 
-    addFromSelector('.font-anton', anton)
+    $('.font-anton').each((_, el) => {
+      addAntonChars(anton, $(el).text())
+    })
     addFromSelector('.font-inter', inter)
     addFromSelector('.font-geist', geist)
     addFromSelector('.font-teko', teko)
@@ -136,6 +156,7 @@ function collectFromHtml(htmlPaths) {
 function seedBasics(sets) {
   const seed = ASCII_PRINTABLE + EXTRA
   for (const s of Object.values(sets)) addChars(s, seed)
+  addChars(sets.anton, CZECH_LETTERS)
 }
 
 function toSortedArray(set) {
@@ -159,9 +180,9 @@ function main() {
       'No HTML under dist/. Using src/i18n + .astro text only (run `pnpm build` before generate:fonts for full coverage).',
     )
     addChars(sets.inter, extractTranslationStringsFromI18n())
-    addChars(sets.anton, extractTranslationStringsFromI18n())
+    addAntonChars(sets.anton, extractTranslationStringsFromI18n())
     addChars(sets.inter, extractVisibleTextFromAstroSource())
-    addChars(sets.anton, extractVisibleTextFromAstroSource())
+    addAntonChars(sets.anton, extractVisibleTextFromAstroSource())
   }
 
   seedBasics(sets)
