@@ -1,0 +1,10 @@
+{% for face in faces %}
+@font-face {
+  font-family: 'Anton';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(data:font/woff2;base64,{{ face.base64 }}) format('woff2');
+  unicode-range: {{ face.unicode_range }};
+}
+{% endfor %}
