@@ -1,11 +1,10 @@
 ---
 import { ClientRouter } from 'astro:transitions'
+import '../styles/fonts.css'
 import '../styles/global.css'
 import AnalyticsScripts from '~/components/seo/AnalyticsScripts.astro'
+import AntonCriticalFaces from '~/components/fonts/AntonCriticalFaces.astro'
 import type { Locale } from '~/i18n'
-
-const fontsHref =
-  'https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Teko:wght@400;600&display=swap'
 
 type OgType = 'website' | 'article' | 'video.other'
 
@@ -137,7 +136,22 @@ const jsonLdBlocks = jsonLd
       ))
     }
 
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <AntonCriticalFaces />
+    <link
+      rel="preload"
+      href="/fonts/inter-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/inter-latin-ext.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
     <link rel="preconnect" href="https://www.datocms-assets.com" />
     <link rel="preconnect" href="https://www.youtube.com" />
     <link rel="preconnect" href="https://i.ytimg.com" />
@@ -146,22 +160,6 @@ const jsonLdBlocks = jsonLd
     <link rel="preconnect" href="https://player.vimeo.com" />
     <link rel="preconnect" href="https://i.vimeocdn.com" />
     <link rel="preconnect" href="https://f.vimeocdn.com" />
-
-    <link rel="preload" as="style" href={fontsHref} />
-    <link rel="stylesheet" href={fontsHref} media="print" id="fonts-link" />
-    <script is:inline>
-      ;(function () {
-        var l = document.getElementById('fonts-link')
-        if (l) {
-          l.onload = function () {
-            this.media = 'all'
-          }
-        }
-      })()
-    </script>
-    <noscript>
-      <link rel="stylesheet" href={fontsHref} />
-    </noscript>
 
     <AnalyticsScripts />
 
