@@ -18,7 +18,9 @@ const { locale, totalCount, subcategories, years, locations, clients } = Astro.p
   id="portfolio-filters-panel"
   class="w-full"
 >
-  <div class="flex w-full items-start justify-between gap-2.5">
+  <div
+    class="flex w-full flex-col gap-2.5 md:flex-row md:items-start md:justify-between"
+  >
     <div class="flex min-w-0 flex-1 flex-wrap items-center gap-1.5 md:gap-2.5">
       {
         subcategories.length > 0 && (
@@ -27,7 +29,7 @@ const { locale, totalCount, subcategories, years, locations, clients } = Astro.p
               type="button"
               data-filter-subcategory=""
               data-active="true"
-              class="inline-flex cursor-pointer items-center rounded-full border border-[#222222] bg-transparent px-2.5 py-1.5 font-inter text-[1rem] text-[#888888] transition-colors hover:border-white/30 md:px-5 md:py-2.5 md:text-[1.35rem] data-[active=true]:border-white data-[active=true]:bg-white data-[active=true]:text-black"
+              class="inline-flex cursor-pointer items-center rounded-full border border-[#222222] bg-transparent px-2.5 py-1.5 font-inter text-[1rem] text-[#888888] transition-colors hover:border-white/30 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-[#222222] disabled:hover:bg-transparent disabled:hover:text-[#888888] disabled:data-[active=true]:border-[#222222] disabled:data-[active=true]:bg-transparent disabled:data-[active=true]:text-[#888888] md:px-5 md:py-2.5 md:text-[1.35rem] data-[active=true]:border-white data-[active=true]:bg-white data-[active=true]:text-black"
             >
               {locale === 'cs' ? 'Vše' : 'All'}
             </button>
@@ -36,7 +38,7 @@ const { locale, totalCount, subcategories, years, locations, clients } = Astro.p
                 type="button"
                 data-filter-subcategory={subcategory.value}
                 data-active="false"
-                class="inline-flex cursor-pointer items-center rounded-full border border-[#222222] bg-transparent px-2.5 py-1.5 font-inter text-[1rem] text-[#888888] transition-colors hover:border-white/30 md:px-5 md:py-2.5 md:text-[1.35rem] data-[active=true]:border-white data-[active=true]:bg-white data-[active=true]:text-black"
+                class="inline-flex cursor-pointer items-center rounded-full border border-[#222222] bg-transparent px-2.5 py-1.5 font-inter text-[1rem] text-[#888888] transition-colors hover:border-white/30 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-[#222222] disabled:hover:bg-transparent disabled:hover:text-[#888888] disabled:data-[active=true]:border-[#222222] disabled:data-[active=true]:bg-transparent disabled:data-[active=true]:text-[#888888] md:px-5 md:py-2.5 md:text-[1.35rem] data-[active=true]:border-white data-[active=true]:bg-white data-[active=true]:text-black"
               >
                 {subcategory.label}
               </button>
@@ -46,7 +48,9 @@ const { locale, totalCount, subcategories, years, locations, clients } = Astro.p
       }
     </div>
 
-    <div class="flex shrink-0 items-center gap-2.5 md:gap-3">
+    <div
+      class="flex shrink-0 items-center gap-2.5 self-end md:gap-3 md:self-auto"
+    >
       <span class="shrink-0 pt-1 text-right font-geist text-[1.2rem] text-[#888888] md:text-[1.35rem]">
         <span
           data-filter-result-count
