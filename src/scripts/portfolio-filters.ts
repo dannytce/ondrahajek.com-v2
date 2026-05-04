@@ -183,6 +183,23 @@ function shouldShowSubcategoryButton(
   return false
 }
 
+/** Keeps pills in layout (no `hidden`) so flex-wrap does not jump on mobile; use `disabled` instead. */
+function syncSubcategoryPillAvailability(
+  subcategoryButtons: HTMLButtonElement[],
+  items: HTMLElement[],
+  st: FilterState
+): void {
+  for (const button of subcategoryButtons) {
+    const subSlug = button.dataset.filterSubcategory ?? ''
+    button.hidden = false
+    if (subSlug === '') {
+      button.disabled = false
+      continue
+    }
+    button.disabled = !shouldShowSubcategoryButton(items, st, subSlug)
+  }
+}
+
 function collectAvailableYears(
   items: HTMLElement[],
   st: FilterState
@@ -476,20 +493,17 @@ function bindGrid(grid: HTMLElement) {
     }
 
     if (!categorySelect) {
-      for (const button of subcategoryButtons) {
-        const subSlug = button.dataset.filterSubcategory ?? ''
-        if (subSlug === '') {
-          button.hidden = false
-          continue
-        }
-        button.hidden = !shouldShowSubcategoryButton(items, st, subSlug)
-      }
+      syncSubcategoryPillAvailability(subcategoryButtons, items, st)
     }
 
     const activeBtn = subcategoryButtons.find(
       (b) => b.dataset.active === 'true'
     )
-    if (!categorySelect && activeBtn?.hidden) {
+    const activeSlug = activeBtn?.dataset.filterSubcategory ?? ''
+    const activeSubcategoryInvalid =
+      activeSlug !== '' &&
+      !shouldShowSubcategoryButton(items, st, activeSlug)
+    if (!categorySelect && activeBtn && activeSubcategoryInvalid) {
       const resetBtn = subcategoryButtons.find(
         (b) => (b.dataset.filterSubcategory ?? '') === ''
       )
@@ -518,14 +532,7 @@ function bindGrid(grid: HTMLElement) {
         searchInput,
         grid
       )
-      for (const button of subcategoryButtons) {
-        const subSlug = button.dataset.filterSubcategory ?? ''
-        if (subSlug === '') {
-          button.hidden = false
-          continue
-        }
-        button.hidden = !shouldShowSubcategoryButton(items, st, subSlug)
-      }
+      syncSubcategoryPillAvailability(subcategoryButtons, items, st)
     }
 
     let visibleCount = 0
