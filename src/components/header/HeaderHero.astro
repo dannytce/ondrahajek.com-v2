@@ -52,6 +52,11 @@ const contentPaddingClass = compact
 /** About hero: nav clearance + title only; TrustedBy has its own padding. */
 const fullViewportTitlePad =
   'pt-[calc(max(30px,env(safe-area-inset-top,0px))+5rem)] pb-6 md:pt-[calc(63px+6rem)] md:pb-8'
+
+/** Below md, object-cover + narrow viewport crops differently; Gallery keeps legacy focal (ADO-66: About pulls left so the portrait reads). */
+const nonHomeFullViewportObjectClass = isAboutPage
+  ? 'object-[24%_54%] md:object-center'
+  : 'object-[52%_58%] md:object-center'
 ---
 
 <header
@@ -101,7 +106,7 @@ const fullViewportTitlePad =
         <DatoImageCover
           data={{ ...headerBackground, alt: '' }}
           class="pointer-events-none absolute inset-0 z-[1] block size-full min-h-full min-w-full"
-          imgClass={`h-full w-full object-cover ${fullViewport ? 'object-[52%_58%] md:object-center' : 'object-center'}`}
+          imgClass={`h-full w-full object-cover ${fullViewport ? nonHomeFullViewportObjectClass : 'object-center'}`}
           priority
           layout="fill"
           objectFit="cover"
