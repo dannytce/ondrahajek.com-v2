@@ -1,4 +1,6 @@
 ---
+import Heading from '~/components/Heading.astro'
+
 interface Props {
   categoryTitle: string
 }
@@ -11,15 +13,14 @@ const secondWord = titleWords.slice(1).join(' ')
 
 <div class="flex flex-wrap items-end justify-between gap-4">
   <div class="flex w-full min-w-0 flex-col gap-[6px] md:w-auto">
-    <div class="w-full md:hidden">
-      <h2 class="m-0 font-anton text-[3.2rem] leading-[1.08] text-white">
-        <span class="block">{firstWord}</span>
-      </h2>
-      <h2 class="m-0 font-anton text-[3.2rem] leading-[1.08] text-white">{secondWord}</h2>
-    </div>
-    <h2 class="m-0 hidden font-anton text-[3.6rem] leading-[1.08] text-white md:block">
-      {categoryTitle}
-    </h2>
+    <Heading level={2} size="subtitle-compact" class="m-0 text-white">
+      <span class="block md:inline">{firstWord}</span>
+      {
+        secondWord ? (
+          <span class="block md:ml-2 md:inline">{secondWord}</span>
+        ) : null
+      }
+    </Heading>
   </div>
 </div>
 

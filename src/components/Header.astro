@@ -20,6 +20,8 @@ interface Props {
     tagline: string
     descriptor: string
   }
+  /** When false, hero omits the main title `<h1>` (e.g. location hub uses body `<h1>` only). Homepage always renders its `<h1>`. */
+  showPageTitleInHero?: boolean
   headerBackground: ResponsiveImage
 }
 
@@ -32,6 +34,7 @@ const {
   compact = false,
   isHeroVisible = true,
   fullViewport = false,
+  showPageTitleInHero = true,
   headerBackground,
 } = Astro.props
 
@@ -49,6 +52,7 @@ const useFullViewport = isAboutPage || fullViewport
         title={title}
         subTitle={subTitle}
         homepageHero={homepageHero}
+        showPageTitleInHero={showPageTitleInHero}
         headerBackground={headerBackground}
       >
         {isAboutPage && (

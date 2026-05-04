@@ -1,4 +1,5 @@
 ---
+import Heading from '~/components/Heading.astro'
 import Player from '~/components/Player.astro'
 import PortfolioDescriptions from '~/components/PortfolioDescriptions.astro'
 import PortfolioDetailMeta from '~/components/PortfolioDetailMeta.astro'
@@ -62,16 +63,18 @@ const shareTitle = portfolio.title ?? t(locale, 'detail.videoTitleFallback')
 
   <div class:list={['grid gap-10 lg:gap-16', hasDetailMeta && 'lg:grid-cols-[minmax(0,1fr)_320px]']}>
     <div class="min-w-0">
-      <h1
-        class="detail-reveal m-0 font-anton text-[3.8rem] uppercase leading-[0.92] tracking-[0.01em] text-white md:text-[7.2rem] lg:text-[4.2rem] xl:text-[4.8rem]"
-      >
+      <Heading level={1} size="title-fluid" class="detail-reveal m-0 text-white">
         {portfolio.title}
-      </h1>
+      </Heading>
       {
         heroSubtitle && (
-          <h2 class="detail-reveal mt-3 max-w-[70ch] font-geist text-[1rem] font-normal uppercase leading-tight tracking-[0.2em] text-[#4A9FD8] md:text-[1.1rem] lg:mt-4 lg:text-[1rem]">
+          <Heading
+            level={2}
+            size="meta"
+            class="detail-reveal m-0 mt-3 max-w-[70ch] text-[#4A9FD8] lg:mt-4 lg:text-[1rem]"
+          >
             {heroSubtitle}
-          </h2>
+          </Heading>
         )
       }
       {
