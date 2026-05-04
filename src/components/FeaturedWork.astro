@@ -1,4 +1,5 @@
 ---
+import Heading from '~/components/Heading.astro'
 import PortfolioCard from '~/components/PortfolioCard.astro'
 import { t, type Locale } from '~/i18n'
 import type { PortfolioListItem } from '~/api'
@@ -24,9 +25,9 @@ const projectsLabel = t(locale, 'home.projectsLabel')
       data-locale={locale}
     >
       <div class="portfolio-toolbar-enter mb-8 flex items-end justify-between gap-4">
-        <h2 class="m-0 font-anton text-[3.2rem] text-white md:text-[5rem]">
+        <Heading level={2} size="subtitle" class="m-0 text-white">
           {featuredTitle}
-        </h2>
+        </Heading>
         <div class="hidden font-geist text-[1rem] uppercase tracking-[0.2em] text-[#8F8F8F] md:block">
           {withThumbnails.length} {projectsLabel}
         </div>

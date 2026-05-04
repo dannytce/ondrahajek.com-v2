@@ -1,5 +1,6 @@
 ---
 import DatoImageCover from '~/components/DatoImageCover.astro'
+import Heading from '~/components/Heading.astro'
 import PlayShowreel from '~/components/PlayShowreel.astro'
 import type { ResponsiveImage } from '~/api/generated/types'
 
@@ -22,6 +23,7 @@ interface Props {
     tagline: string
     descriptor: string
   }
+  showPageTitleInHero?: boolean
   headerBackground: ResponsiveImage
 }
 
@@ -33,8 +35,11 @@ const {
   title,
   subTitle,
   homepageHero,
+  showPageTitleInHero = true,
   headerBackground,
 } = Astro.props
+
+const renderHeroHeading = showPageTitleInHero || isHomepage
 const hasAboutOverlay =
   isAboutPage && Astro.slots.has('aboutOverlay')
 
@@ -149,9 +154,13 @@ const nonHomeFullViewportObjectClass = isAboutPage
                 {subTitle}
               </span>
             )}
-            <h1 class="m-0 p-0 font-anton text-[3.4rem] uppercase leading-[0.95] md:text-[5rem]">
-              {title}
-            </h1>
+            {
+              renderHeroHeading && (
+                <Heading level={1} size="hero" class="m-0 p-0 text-white">
+                  {title}
+                </Heading>
+              )
+            }
           </div>
         )}
         <div class="relative z-[3] w-full shrink-0">
@@ -174,9 +183,13 @@ const nonHomeFullViewportObjectClass = isAboutPage
                 {homepageHero.tagline}
               </span>
             </div>
-            <h1 class="m-0 mx-auto max-w-[13ch] text-balance p-0 font-anton text-[clamp(3rem,9vw,9.6rem)] uppercase leading-[1.06] tracking-[0.02em] sm:max-w-[15ch] md:max-w-[18ch] lg:max-w-[20ch]">
+            <Heading
+              level={1}
+              size="display"
+              class="m-0 mx-auto max-w-[13ch] text-balance p-0 text-white sm:max-w-[15ch] md:max-w-[18ch] lg:max-w-[20ch]"
+            >
               {homepageHero.line}
-            </h1>
+            </Heading>
             <p class="m-0 max-w-[56ch] font-inter text-[1.4rem] leading-relaxed text-[rgb(255_255_255_/_0.9)] md:max-w-[56ch] md:text-[2.5rem]">
               {homepageHero.descriptor}
             </p>
@@ -189,9 +202,13 @@ const nonHomeFullViewportObjectClass = isAboutPage
                 {subTitle}
               </span>
             )}
-            <h1 class="m-0 p-0 font-anton text-[3.4rem] uppercase leading-[0.95] md:text-[5rem]">
-              {title}
-            </h1>
+            {
+              renderHeroHeading && (
+                <Heading level={1} size="hero" class="m-0 p-0 text-white">
+                  {title}
+                </Heading>
+              )
+            }
           </>
         )}
       </div>
